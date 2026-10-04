@@ -30,6 +30,8 @@
 #include "Clipboard.h"
 
 #include "core/PWCharPool.h"
+#include "core/PWSrand.h"
+#include "core/Passphrase.h"
 #include "core/PWHistory.h"
 #include "core/PWSAuxParse.h"
 
@@ -159,6 +161,8 @@ BEGIN_EVENT_TABLE( AddEditPropSheetDlg, wxPropertySheetDialog )
   EVT_BUTTON(       ID_BUTTON_SHOWHIDE_TOTP, AddEditPropSheetDlg::OnShowHideTotpClick       )
   EVT_BUTTON(       ID_BUTTON_COPY_TOTP,     AddEditPropSheetDlg::OnCopyAuthCodeClick       )
   EVT_BUTTON(       ID_BUTTON_GENERATE,      AddEditPropSheetDlg::OnGenerateButtonClick     )
+  EVT_BUTTON(       ID_BUTTON_PASSPHRASE,    AddEditPropSheetDlg::OnPassphraseButtonClick   )
+  EVT_SPINCTRL(     ID_SPINCTRL_PASSPHRASE_WORDS, AddEditPropSheetDlg::OnPassphraseWordCountChanged )
   EVT_BUTTON(       ID_BUTTON_ALIAS,         AddEditPropSheetDlg::OnAliasButtonClick        )
   EVT_BUTTON(       ID_GO_BTN,               AddEditPropSheetDlg::OnGoButtonClick           )
   EVT_BUTTON(       ID_SEND_BTN,             AddEditPropSheetDlg::OnSendButtonClick         )
@@ -196,6 +200,8 @@ BEGIN_EVENT_TABLE( AddEditPropSheetDlg, wxPropertySheetDialog )
   EVT_UPDATE_UI(    ID_COMBOBOX_GROUP,       AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_BUTTON_SHOWHIDE,      AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_BUTTON_GENERATE,      AddEditPropSheetDlg::OnUpdateUI                )
+  EVT_UPDATE_UI(    ID_BUTTON_PASSPHRASE,    AddEditPropSheetDlg::OnUpdateUI                )
+  EVT_UPDATE_UI(    ID_SPINCTRL_PASSPHRASE_WORDS, AddEditPropSheetDlg::OnUpdateUI           )
   EVT_UPDATE_UI(    ID_BUTTON_ALIAS,         AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_TEXTCTRL_TITLE,       AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_TEXTCTRL_USERNAME,    AddEditPropSheetDlg::OnUpdateUI                )
@@ -512,6 +518,18 @@ wxScrolledWindow* AddEditPropSheetDlg::CreateBasicPanel()
 
   auto *itemButton21 = new wxButton( panel, ID_BUTTON_GENERATE, _("&Generate"), wxDefaultPosition, wxDefaultSize, 0 );
   m_BasicSizer->Add(itemButton21, wxGBPosition(/*row:*/ 7, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
+
+  m_PassphraseWordCountCtrl = new wxSpinCtrl(panel, ID_SPINCTRL_PASSPHRASE_WORDS, wxEmptyString,
+                                              wxDefaultPosition, wxSize(70, -1), wxSP_ARROW_KEYS,
+                                              1, 99, static_cast<int>(kDefaultPassphraseWords));
+  m_BasicSizer->Add(m_PassphraseWordCountCtrl, wxGBPosition(/*row:*/ 7, /*column:*/ 6), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
+
+  auto *passphraseButton = new wxButton(panel, ID_BUTTON_PASSPHRASE, _("&Passphrase"), wxDefaultPosition, wxDefaultSize, 0);
+  m_BasicSizer->Add(passphraseButton, wxGBPosition(/*row:*/ 7, /*column:*/ 7), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
+
+  const StringX entropyLine = PassphraseEntropyLine(kDefaultPassphraseWords, EffLongWordCount());
+  m_PassphraseEntropyText = new wxStaticText(panel, ID_STATICTEXT_PASSPHRASE_ENTROPY, entropyLine.c_str(), wxDefaultPosition, wxDefaultSize, 0);
+  m_BasicSizer->Add(m_PassphraseEntropyText, wxGBPosition(/*row:*/ 8, /*column:*/ 3), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
 
   m_BasicStrengthMeter = new StrengthMeter(panel);
   m_BasicSizer->Add(m_BasicStrengthMeter, wxGBPosition(/*row:*/ 8, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
@@ -2069,6 +2087,39 @@ void AddEditPropSheetDlg::OnGenerateButtonClick(wxCommandEvent& WXUNUSED(evt))
     }
     UpdatePasswordStrengthMeter();
   }
+}
+
+namespace {
+unsigned int DrawWithRangeRand(size_t n)
+{
+  return PWSrand::GetInstance()->RangeRand(n);
+}
+}
+
+void AddEditPropSheetDlg::OnPassphraseButtonClick(wxCommandEvent& WXUNUSED(evt))
+{
+  if (!(Validate() && TransferDataFromWindow()) || m_Item.IsAlias())
+    return;
+
+  const size_t wordCount = static_cast<size_t>(m_PassphraseWordCountCtrl->GetValue());
+  const StringX phrase = MakePassphrase(EffLongWords(), EffLongWordCount(),
+                                         wordCount, DrawWithRangeRand);
+  if (phrase.empty())
+    return;
+
+  m_Password = phrase.c_str();
+  m_BasicPasswordTextCtrl->ChangeValue(m_Password.c_str());
+  if (m_IsPasswordHidden) {
+    m_BasicPasswordConfirmationTextCtrl->ChangeValue(m_Password.c_str());
+  }
+  UpdatePasswordStrengthMeter();
+}
+
+void AddEditPropSheetDlg::OnPassphraseWordCountChanged(wxSpinEvent& WXUNUSED(evt))
+{
+  const size_t wordCount = static_cast<size_t>(m_PassphraseWordCountCtrl->GetValue());
+  const StringX line = PassphraseEntropyLine(wordCount, EffLongWordCount());
+  m_PassphraseEntropyText->SetLabel(line.c_str());
 }
 
 /*!
@@ -3629,6 +3680,10 @@ void AddEditPropSheetDlg::OnUpdateUI(wxUpdateUIEvent& event)
       break;
     case ID_BUTTON_GENERATE:
       event.Enable(!dbIsReadOnly && !m_Item.IsAlias()); // Do not generate password for alias entry
+      break;
+    case ID_BUTTON_PASSPHRASE:
+    case ID_SPINCTRL_PASSPHRASE_WORDS:
+      event.Enable(!dbIsReadOnly && !m_Item.IsAlias());
       break;
     case ID_TEXTCTRL_TITLE:
     case ID_TEXTCTRL_USERNAME:

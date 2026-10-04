@@ -16,6 +16,8 @@ set (CORE_SRCS
   Match.cpp
   PolicyManager.cpp
   PWCharPool.cpp
+  Passphrase.cpp
+  EffLongWordlist.cpp
   PWHistory.cpp
   PWPolicy.cpp
   PWSAuxParse.cpp

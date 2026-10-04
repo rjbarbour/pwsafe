@@ -74,6 +74,9 @@ class wxNotebook;
 #define ID_TEXTCTRL_PASSWORD 10089
 #define ID_BUTTON_SHOWHIDE 10090
 #define ID_BUTTON_GENERATE 10097
+#define ID_SPINCTRL_PASSPHRASE_WORDS 11230
+#define ID_BUTTON_PASSPHRASE 11231
+#define ID_STATICTEXT_PASSPHRASE_ENTROPY 11232
 #define ID_TEXTCTRL_PASSWORD2 10091
 #define ID_STATICTEXT_PASSWORD2 10191
 #define ID_TEXTCTRL_TOTP 11191
@@ -194,6 +197,12 @@ protected:
 
   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_GENERATE
   void OnGenerateButtonClick(wxCommandEvent &event);
+
+  /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_PASSPHRASE
+  void OnPassphraseButtonClick(wxCommandEvent &event);
+
+  /// wxEVT_SPINCTRL event handler for ID_SPINCTRL_PASSPHRASE_WORDS
+  void OnPassphraseWordCountChanged(wxSpinEvent &event);
   
   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ALIAS
   void OnAliasButtonClick(wxCommandEvent &event);
@@ -445,6 +454,8 @@ private:
   wxStaticText *m_BasicPasswordTextLabel = nullptr;
   wxStaticBitmap *m_BasicPasswordBitmap = nullptr;
   wxBitmapButton *m_BasicShowHideCtrl = nullptr;
+  wxSpinCtrl *m_PassphraseWordCountCtrl = nullptr;
+  wxStaticText *m_PassphraseEntropyText = nullptr;
   wxTextCtrl *m_BasicPasswordConfirmationTextCtrl = nullptr;
   wxStaticText *m_BasicPasswordConfirmationTextLabel = nullptr;
   wxStaticBitmap *m_BasicPasswordConfirmationBitmap = nullptr;
