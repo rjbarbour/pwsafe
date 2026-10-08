@@ -7,7 +7,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 16:58'
-updated_date: '2026-10-08 17:10'
+updated_date: '2026-10-08 17:12'
 labels:
   - quality
 dependencies:
@@ -71,4 +71,27 @@ Non-blocking:
 No vulnerability or CodeQL specifics appear.
 
 Addendum 2026-10-08 (Fred Brooks) to my DoR note: e8e0dd2e3 has since made PWS-22 AC 13 give §11 row 1 (100% on new code in gate_changed.py) and the judgement exemptions to PWS-07, through a tracker change by Margaret Hamilton after Robert Barbour approves the document. Gap 2 here therefore closes when PWS-07's ACs carry branch (and later condition) checks on changed lines and the exemption file. If they don't, Fred Brooks moves those gates here. The verdict is unchanged: fail on gap 1, with gap 2 open until that is settled. Status To Do.
+
+DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at d7b877ac7, against backlog/docs/test-strategy.md at c74bce23e: fail on one blocking gap; status unchanged (To Do).
+Gaps from 38323c693, now closed:
+- Gap 1 (executable-lines rule) is closed. AC 6 fails a missing measured .c/.cpp. AC 7 lists a missing .h for Fred Brooks and Dennis Ritchie against the §6 header rule, judged on its new or changed lines, matching §5.
+- Gap 2 (PWS-07 ownership) is closed. This task now owns the branch (AC 9), condition (AC 10) and exemption-file (AC 11 and AC 12) gates, and PWS-07 keeps only the line gate, with its scope unchanged. That matches §11 and PWS-22 AC 13.
+Earlier non-blocking points, all taken:
+- AC 5 uses the §5 labels.
+- AC 8 and AC 12 name coverage.py with branch measurement at 100% line and branch, in a fork-*.yml job, which fits the fork-only scope of AC 13.
+- AC 1 links R-05 and R-09.
+- The dependencies are PWS-07, PWS-18 and PWS-22.
+- Edsger Dijkstra is named as QA owner.
+Also checked:
+- AC 3 allows only the two flags, the vendored filters and the exemption-file entries.
+- The standard merge AC is last (AC 14).
+- The description and ACs use §11 gate names, not row numbers.
+- RD-01, RD-02, RD-05, RD-06 and RD-07 are met.
+Gap A, blocking (RD-03, consistency with §11): AC 9 checks branch coverage only on changed lines in .c/.cpp files, but §11's "100% branch coverage on changed lines" and AC 10's condition check cover any measured file. A header that is in the report with new inline logic would get line and condition checks but no branch check, and the §5 review step only covers missing headers. Proposed AC 9 start: 'Given a pull request that changes lines in a measured file (.c, .cpp or .h) under src/core or src/os/unix, or directly under src/os, that is in the coverage report, ...'.
+Non-blocking:
+(1) AC 7 says 'the gate does not fail on it' and then calls a header with new logic 'a gate failure'. Suggest 'a review failure that blocks the merge'. The same wording is in §5 and the §11 row.
+(2) AC 3 is worded as if gcovr applies the exemption-file entries, but AC 11's gate applies them. Suggest '... and no gcovr exclusion beyond these two flags and the vendored-directory filters; exemption-file entries are applied only by the gate (AC 11)'.
+(3) Pin the coverage.py version in the fork-*.yml job, as for gcovr under R-07.
+Ready: once AC 9 is fixed, this can go to Ready after PWS-07 has merged and Robert Barbour has approved PWS-22, provided Ready has room. The dependencies field also lists PWS-18, which is still To Do, and this task extends coverage.sh 'from PWS-18 once merged'. So either PWS-18 lands first, or Fred Brooks agrees to drop that dependency and take coverage.sh as it stands.
+No vulnerability or CodeQL specifics appear.
 <!-- SECTION:NOTES:END -->
