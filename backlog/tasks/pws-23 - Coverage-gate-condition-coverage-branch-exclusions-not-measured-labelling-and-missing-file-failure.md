@@ -7,7 +7,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 16:58'
-updated_date: '2026-10-08 17:07'
+updated_date: '2026-10-08 17:08'
 labels:
   - quality
 dependencies:
@@ -21,7 +21,7 @@ ordinal: 23000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-Fred Brooks decided on 2026-10-08 that this one platform task owns gates 2, 4, 5 and 6 in §11 of `backlog/docs/test-strategy.md` (PWS-22). PWS-07's scope is unchanged. PWS-18 only sets the suspicious-hits threshold and may only touch `coverage.sh`, so it cannot take these gates. This task extends `tools/quality/gate_changed.py` (from PWS-07) and `tools/quality/coverage.sh` (from PWS-18) once those have merged.
+Fred Brooks decided on 2026-10-08 that this one platform task owns §11 rows 2, 4, 5 and 6 of `backlog/docs/test-strategy.md` (PWS-22), the branch, condition and exemption-file part of row 1, and row 7 (the reviewed exemption file); PWS-07 keeps the line-coverage gate on changed lines. PWS-07's scope is unchanged. PWS-18 only sets the suspicious-hits threshold and may only touch `coverage.sh`, so it cannot take these gates. This task extends `tools/quality/gate_changed.py` (from PWS-07) and `tools/quality/coverage.sh` (from PWS-18) once those have merged.
 
 It is a fork-only change limited to `.github/workflows/fork-*.yml` and `tools/quality/`, with no upstream workflow or `src/` change. It does not set the coverage percentage limit: raising PWS-07 AC 2's limit is a separate tracker change after Robert Barbour approves PWS-22. Once PWS-22 is approved, `backlog/docs/test-strategy.md` defines how these measures work.
 
