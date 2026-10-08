@@ -14,6 +14,7 @@
 #include "core/PWSfileV3.h"
 #include "os/file.h"
 #include "core/PWScore.h"
+#include "core/PWSprefs.h"
 #include <cstdio>
 
 #include "gtest/gtest.h"
@@ -304,6 +305,100 @@ TEST_F(FileV3Test, PasskeyTest)
   ASSERT_EQ(PWSfile::SUCCESS, fr.Open(passphrase));
   EXPECT_EQ(PWSfile::SUCCESS, fr.ReadRecord(item));
   EXPECT_EQ(ci, item);
+  EXPECT_EQ(PWSfile::END_OF_FILE, fr.ReadRecord(item));
+  EXPECT_EQ(PWSfile::SUCCESS, fr.Close());
+}
+
+static void ExpectSamePolicy(const PWPolicy &a, const PWPolicy &b)
+{
+  EXPECT_EQ(a.flags, b.flags);
+  EXPECT_EQ(a.length, b.length);
+  EXPECT_EQ(a.lowerminlength, b.lowerminlength);
+  EXPECT_EQ(a.upperminlength, b.upperminlength);
+  EXPECT_EQ(a.digitminlength, b.digitminlength);
+  EXPECT_EQ(a.symbolminlength, b.symbolminlength);
+}
+
+TEST_F(FileV3Test, PolicyCarriersTest)
+{
+  // An entry's own policy (field 0x10), including a reserved flag bit
+  PWPolicy entryPol;
+  entryPol.flags = PWPolicy::UseLowercase | PWPolicy::UseUppercase |
+                   PWPolicy::UseDigits | PWPolicy::UseSymbols | 0x0001;
+  entryPol.length = 21;
+  entryPol.lowerminlength = 2;
+  entryPol.upperminlength = 3;
+  entryPol.digitminlength = 4;
+  entryPol.symbolminlength = 5;
+  CItemData inlineItem;
+  inlineItem.CreateUUID();
+  inlineItem.SetTitle(_T("inline policy"));
+  inlineItem.SetPassword(_T("possible"));
+  inlineItem.SetPWPolicy(entryPol);
+
+  // An entry that refers to a named policy (field 0x18)
+  CItemData namedItem;
+  namedItem.CreateUUID();
+  namedItem.SetTitle(_T("named policy"));
+  namedItem.SetPassword(_T("possible"));
+  namedItem.SetPolicyName(polname);
+
+  // The named policy itself, held in the file header
+  PWPolicy namedPol;
+  namedPol.flags = PWPolicy::UseLowercase | PWPolicy::UseDigits |
+                   PWPolicy::UseEasyVision | 0x0001;
+  namedPol.length = 17;
+  namedPol.lowerminlength = 6;
+  namedPol.digitminlength = 7;
+  namedPol.symbols = symbols;
+  PSWDPolicyMap policies;
+  policies[polname] = namedPol;
+
+  // The safe's default policy, held in the preferences header string
+  PWSprefs *prefs = PWSprefs::GetInstance();
+  PWPolicy defPol;
+  defPol.flags = PWPolicy::UseUppercase | PWPolicy::UseSymbols |
+                 PWPolicy::MakePronounceable;
+  defPol.length = 14;
+  defPol.upperminlength = 3;
+  defPol.symbolminlength = 2;
+  prefs->SetupCopyPrefs();
+  prefs->SetDefaultPolicy(defPol, true);
+  PWSfileHeader hdr;
+  hdr.m_prefString = prefs->Store(true);
+
+  PWSfileV3 fw(fname.c_str(), PWSfile::Write, PWSfile::V30);
+  fw.SetHeader(hdr);
+  fw.SetPasswordPolicies(policies);
+  ASSERT_EQ(PWSfile::SUCCESS, fw.Open(passphrase));
+  EXPECT_EQ(PWSfile::SUCCESS, fw.WriteRecord(inlineItem));
+  EXPECT_EQ(PWSfile::SUCCESS, fw.WriteRecord(namedItem));
+  ASSERT_EQ(PWSfile::SUCCESS, fw.Close());
+
+  PWSfileV3 fr(fname.c_str(), PWSfile::Read, PWSfile::V30);
+  ASSERT_EQ(PWSfile::SUCCESS, fr.Open(passphrase));
+
+  PWPolicy readPol;
+  EXPECT_EQ(PWSfile::SUCCESS, fr.ReadRecord(item));
+  EXPECT_EQ(inlineItem, item);
+  item.GetPWPolicy(readPol);
+  ExpectSamePolicy(entryPol, readPol);
+
+  EXPECT_EQ(PWSfile::SUCCESS, fr.ReadRecord(item));
+  EXPECT_EQ(namedItem, item);
+  EXPECT_EQ(polname, item.GetPolicyName());
+
+  const PSWDPolicyMap *readPolicies = fr.GetPasswordPolicies();
+  ASSERT_EQ(1u, readPolicies->size());
+  const auto it = readPolicies->find(polname);
+  ASSERT_TRUE(it != readPolicies->end());
+  ExpectSamePolicy(namedPol, it->second);
+  EXPECT_EQ(symbols, it->second.symbols);
+
+  EXPECT_EQ(hdr.m_prefString, fr.GetHeader().m_prefString);
+  prefs->Load(fr.GetHeader().m_prefString, true);
+  ExpectSamePolicy(defPol, prefs->GetDefaultPolicy(true));
+
   EXPECT_EQ(PWSfile::END_OF_FILE, fr.ReadRecord(item));
   EXPECT_EQ(PWSfile::SUCCESS, fr.Close());
 }
