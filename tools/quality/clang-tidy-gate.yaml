@@ -1,0 +1,41 @@
+# PWS-07: clang-tidy configuration for the changed-line gate (fork-only; never part of an upstream PR).
+# Passed with -config-file by tools/quality/clang_tidy_gate.py; it is not a .clang-tidy file, so it
+# never applies outside the gate. Runs through clang-tidy-diff on the pull request's changed lines,
+# in new and modified files alike. Only the bugprone-, cert- and clang-analyzer- groups (PWS-07 AC 4);
+# no readability- or modernize- check runs here (those run on added files only, from
+# clang-tidy-new-files.yaml). Complexity is gated by lizard, not by clang-tidy.
+#
+# Disabled checks and why (counts, where given, are unique hits over src/core, src/os/unix and src/ui/wxWidgets at
+# fork master f24fd88):
+#   bugprone-easily-swappable-parameters             flags most multi-parameter signatures; an API style
+#                                                    question, not a defect; very noisy upstream
+#   bugprone-narrowing-conversions                   size_t/int conversions are pervasive upstream; noise
+#   bugprone-implicit-widening-of-multiplication-result  noise on ordinary size arithmetic
+#   bugprone-reserved-identifier, and its CERT aliases cert-dcl37-c and cert-dcl51-cpp
+#                                                    491 hits: upstream include guards and macros use
+#                                                    reserved names throughout
+#   bugprone-macro-parentheses                       136 hits in upstream macro style
+#   cert-err58-cpp                                   fires on every googletest TEST() and on static
+#                                                    std::string/wxString objects; not actionable
+#   cert-dcl16-c                                     alias of readability-uppercase-literal-suffix; AC 4
+#                                                    allows no readability- check on modified files
+#   cert-int09-c                                     alias of readability-enum-initial-value (clang-tidy
+#                                                    19 and later); same reason
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  -bugprone-implicit-widening-of-multiplication-result,
+  -bugprone-reserved-identifier,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
+  -bugprone-macro-parentheses,
+  -cert-err58-cpp,
+  -cert-dcl16-c,
+  -cert-int09-c
+WarningsAsErrors: '*'
+# Findings in headers are reported too (clang-tidy-diff's line filter still limits them to changed lines).
+HeaderFilterRegex: '.*/src/(core|os|ui|test)/.*'

@@ -1,0 +1,45 @@
+# PWS-07: include-layering edge list (fork-only; never part of an upstream pull request).
+# Exactly the 39 edges of backlog/decisions/decision-01 (PWS-04), taken at fork master f24fd88,
+# one "<including file> -> <header as written>" per line, tagged with the decision's edge number.
+# Read by tools/quality/layering.py; any edge not listed here fails the gate as NEW.
+# Any change to this file (addition, removal, or a move from a rename) is a design change: the
+# architect or Fred Brooks reviews it before merge, and decision-01 is superseded, not edited.
+src/core/PwsPlatform.h -> ../ui/Windows/stdafx.h  # E1
+src/core/StringX.cpp -> wx/intl.h  # E2
+src/core/XML/Pugi/PFileXMLProcessor.cpp -> wx/wxprec.h  # E3
+src/core/XML/Pugi/PFileXMLProcessor.cpp -> wx/wx.h  # E4
+src/core/XML/Pugi/PFileXMLProcessor.cpp -> wx/msw/msvcrt.h  # E5
+src/core/XML/Pugi/PFilterXMLProcessor.cpp -> wx/wxprec.h  # E6
+src/core/XML/Pugi/PFilterXMLProcessor.cpp -> wx/wx.h  # E7
+src/core/XML/Pugi/PFilterXMLProcessor.cpp -> wx/msw/msvcrt.h  # E8
+src/os/KeySend.h -> ../core/StringX.h  # E9
+src/os/UUID.h -> ../core/StringX.h  # E10
+src/os/file.h -> ../core/StringX.h  # E11
+src/os/mac/KeySend.cpp -> ../../core/UTF8Conv.h  # E12
+src/os/mac/UUID.cpp -> ../../core/Util.h  # E13
+src/os/mac/UUID.cpp -> ../../core/StringXStream.h  # E14
+src/os/mac/debug.cpp -> ../../core/StringX.h  # E15
+src/os/mac/file.cpp -> ../../core/core.h  # E16
+src/os/mac/file.cpp -> ../../core/Util.h  # E17
+src/os/mac/file.cpp -> ../../core/StringXStream.h  # E18
+src/os/mac/file.cpp -> ../../core/PwsPlatform.h  # E19
+src/os/mac/macsendstring.cpp -> ../../core/PwsPlatform.h  # E20
+src/os/run.h -> ../core/StringX.h  # E21
+src/os/typedefs.h -> ../core/PwsPlatform.h  # E22
+src/os/unix/KeySend.cpp -> ../../core/Util.h  # E23
+src/os/unix/KeySend.cpp -> ../../core/PWSprefs.h  # E24
+src/os/unix/UUID.cpp -> ../../core/Util.h  # E25
+src/os/unix/UUID.cpp -> ../../core/StringXStream.h  # E26
+src/os/unix/debug.cpp -> ../../core/StringX.h  # E27
+src/os/unix/file.cpp -> core/core.h  # E28
+src/os/unix/file.cpp -> core/StringXStream.h  # E29
+src/os/unix/file.cpp -> core/Util.h  # E30
+src/os/unix/xsendstring.cpp -> ../../core/PwsPlatform.h  # E31
+src/os/unix/xsendstring.cpp -> ../../core/StringX.h  # E32
+src/os/unix/xsendstring.h -> ../../core/StringX.h  # E33
+src/os/windows/UUID.cpp -> ../../core/Util.h  # E34
+src/os/windows/UUID.cpp -> ../../core/StringXStream.h  # E35
+src/os/windows/debug.cpp -> ../../core/util.h  # E36
+src/os/windows/debug.cpp -> ../../core/StringX.h  # E37
+src/os/windows/file.cpp -> ../../core/core.h  # E38
+src/os/unix/run.cpp -> wx/process.h  # E39
