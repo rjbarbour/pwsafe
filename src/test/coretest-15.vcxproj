@@ -148,6 +148,7 @@
     <ClCompile Include="OSTest.cpp" />
     <ClCompile Include="PassphraseTest.cpp" />
     <ClCompile Include="PWPolicyTest.cpp" />
+    <ClCompile Include="PWSprefsTest.cpp" />
     <ClCompile Include="SHA256Test.cpp" />
     <ClCompile Include="StringXTest.cpp" />
     <ClCompile Include="TwoFishTest.cpp" />

@@ -402,3 +402,50 @@ TEST_F(FileV3Test, PolicyCarriersTest)
   EXPECT_EQ(PWSfile::END_OF_FILE, fr.ReadRecord(item));
   EXPECT_EQ(PWSfile::SUCCESS, fr.Close());
 }
+
+TEST_F(FileV3Test, PassphraseSwitchLeavesSafeUnchangedTest)
+{
+  // Save the same safe with this computer's passphrase policy off and on;
+  // the preferences header and the policies read back must be identical.
+  PWSprefs *prefs = PWSprefs::GetInstance();
+  PWPolicy namedPol;
+  namedPol.flags = PWPolicy::UseLowercase | PWPolicy::UseDigits;
+  namedPol.length = 15;
+  namedPol.lowerminlength = 2;
+  namedPol.digitminlength = 3;
+  PSWDPolicyMap policies;
+  policies[polname] = namedPol;
+
+  StringX readPrefs[2];
+  PSWDPolicyMap readPolicies[2];
+  PWPolicy readDefault[2];
+  for (int on = 0; on < 2; on++) {
+    prefs->SetupCopyPrefs();
+    prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, on != 0, true);
+    prefs->SetPref(PWSprefs::PassphraseWordCount, on ? 9u : 6u, true);
+    PWSfileHeader hdr;
+    hdr.m_prefString = prefs->Store(true);
+
+    PWSfileV3 fw(fname.c_str(), PWSfile::Write, PWSfile::V30);
+    fw.SetHeader(hdr);
+    fw.SetPasswordPolicies(policies);
+    ASSERT_EQ(PWSfile::SUCCESS, fw.Open(passphrase));
+    EXPECT_EQ(PWSfile::SUCCESS, fw.WriteRecord(fullItem));
+    ASSERT_EQ(PWSfile::SUCCESS, fw.Close());
+
+    PWSfileV3 fr(fname.c_str(), PWSfile::Read, PWSfile::V30);
+    ASSERT_EQ(PWSfile::SUCCESS, fr.Open(passphrase));
+    EXPECT_EQ(PWSfile::SUCCESS, fr.ReadRecord(item));
+    EXPECT_EQ(fullItem, item);
+    EXPECT_EQ(PWSfile::END_OF_FILE, fr.ReadRecord(item));
+    readPrefs[on] = fr.GetHeader().m_prefString;
+    readPolicies[on] = *fr.GetPasswordPolicies();
+    EXPECT_EQ(PWSfile::SUCCESS, fr.Close());
+    prefs->Load(readPrefs[on], true);
+    readDefault[on] = prefs->GetDefaultPolicy(true);
+  }
+  EXPECT_EQ(readPrefs[0], readPrefs[1]);
+  EXPECT_EQ(readPolicies[0], readPolicies[1]);
+  ExpectSamePolicy(readDefault[0], readDefault[1]);
+  EXPECT_EQ(readDefault[0].symbols, readDefault[1].symbols);
+}
