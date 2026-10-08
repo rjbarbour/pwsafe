@@ -4,7 +4,7 @@ title: ASan and UBSan coretest job
 status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:04'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies: []
@@ -44,5 +44,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): fail. Decision supplied: sanitiser flags (-fsanitize=address,undefined) are set in the fork-only workflow; CMakePresets.json and CMakeLists.txt are not edited, and the linux-ubsan-debug preset gap is out of scope. Gap: state what happens if Coretests on master already reports an AddressSanitizer or UBSan error (escalation and stop condition, given src/ fixes are not in scope), and name the workflow file the job goes in.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+Awaiting content: first sanitiser run happens locally on the platform engineer's machine; the workflow lands on master only once master is clean, because Actions logs are public.
 ---
 <!-- COMMENTS:END -->
