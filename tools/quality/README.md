@@ -55,9 +55,16 @@ From the root of a clone, on the branch to check, with a coverage build of coret
     BASE=origin/master
     python3 tools/quality/layering.py
     LIZARD=lizard python3 tools/quality/gate_changed.py --base $BASE --coverage coverage/coverage.json
-    diff-cover coverage/coverage.cobertura.xml --compare-branch=$BASE --include 'src/core/*' 'src/os/*'
+    diff-cover coverage/coverage.cobertura.xml --compare-branch=$BASE --include 'src/core/**' 'src/os/**'
     CLANG_TIDY=clang-tidy CLANG_TIDY_DIFF=clang-tidy-diff.py python3 tools/quality/clang_tidy_gate.py --base $BASE --build build --out q
     CPPCHECK=cppcheck DIFF_QUALITY=diff-quality python3 tools/quality/cppcheck_gate.py --base $BASE --build build --out q
 
 clang-tidy-diff takes the diff's relative paths from the working directory, so the scripts change to
 the repository root first.
+
+`git diff --no-renames` (used by `gitdiff.py`) treats a moved or renamed file as a deletion plus an
+addition, so the gate judges the whole of the new path as new code rather than as a rename of the old
+one.
+
+Pull requests from other forks receive a read-only `GITHUB_TOKEN`, so the SARIF upload steps cannot
+write to code scanning for those PRs; the gate itself still runs and fails the job on findings.

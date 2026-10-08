@@ -68,9 +68,16 @@ def lizard_functions(path):
     for extra in ([], ['-m']):
         r = subprocess.run([LIZARD, '-l', 'cpp', '-Ecognitive', '--csv', *extra, path],
                            capture_output=True, text=True)
-        runs.append([row for row in csv.reader(io.StringIO(r.stdout)) if len(row) >= 12])
+        rows = [row for row in csv.reader(io.StringIO(r.stdout)) if len(row) >= 12]
+        if r.returncode != 0 and not rows:
+            msg = f'lizard exited {r.returncode} with no findings parsed'
+            print(f'### Complexity and CRAP\n\n**Complexity, CRAP and coverage: FAIL** ({msg})')
+            if r.stderr.strip():
+                print(r.stderr.strip(), file=sys.stderr)
+            sys.exit(1)
+        runs.append(rows)
     return [dict(ccn=int(p[1]), mccn=int(m[1]), name=p[7], long=p[8], start=int(p[9]), end=int(p[10]),
-                 cog=int(p[11])) for p, m in zip(*runs)]
+                 cog=int(p[11])) for p, m in zip(*runs, strict=True)]
 
 
 def base_functions(repo, mb, path):
@@ -297,9 +304,16 @@ def compress(nums):
 def duplicates(repo, changed):
     """Duplicate blocks (lizard -Eduplicate over src/) with a location on a changed line."""
     cmd = [LIZARD, '-l', 'cpp', '-Eduplicate', '-w', '-C', '9999', '-L', '999999', '-a', '999',
-           '-x', './src/core/pugixml/*', '-x', './src/core/crypto/external/*', 'src']
+           '-x', 'src/core/pugixml/*', '-x', 'src/core/crypto/external/*', 'src']
     # No -t: lizard's duplicate extension is very slow with worker processes.
-    out = subprocess.run(cmd, cwd=repo, capture_output=True, text=True).stdout
+    r = subprocess.run(cmd, cwd=repo, capture_output=True, text=True)
+    out = r.stdout
+    if r.returncode != 0 and 'Duplicate block:' not in out:
+        msg = f'lizard exited {r.returncode} with no findings parsed'
+        print(f'\n### Duplication (lizard -Eduplicate, report only)\n\n**FAIL** ({msg})')
+        if r.stderr.strip():
+            print(r.stderr.strip(), file=sys.stderr)
+        sys.exit(1)
     found = []
     for block in out.split('Duplicate block:')[1:]:
         locs = re.findall(r'^(\S+):(\d+) ~ (\d+)$', block, re.M)

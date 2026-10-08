@@ -70,7 +70,7 @@ def main():
     # SARIF: keep native rules; keep results with any location on a changed line.
     with open(f'{out}/cppcheck-full.sarif', encoding='utf-8') as fh:
         sarif = json.load(fh)
-    total = kept = 0
+    total = kept = rules = 0
     for run in sarif.get('runs', []):
         results = []
         for res in run.get('results', []):

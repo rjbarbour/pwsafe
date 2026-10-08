@@ -84,7 +84,16 @@ def main():
                            input=diff, capture_output=True, text=True)
         gate_raw = r.stdout + r.stderr
         log.append(f'clang-tidy-diff exit status {r.returncode}')
-    gate = [d for d in parse(gate_raw, root) if d['line'] in changed.get(d['file'], ())
+        gate_parsed = parse(gate_raw, root)
+        if r.returncode != 0 and not gate_parsed:
+            msg = f'clang-tidy-diff exited {r.returncode} with no findings parsed'
+            print(f'### clang-tidy\n\n**clang-tidy: FAIL** ({msg})')
+            if r.stderr.strip():
+                print(r.stderr.strip(), file=sys.stderr)
+            sys.exit(1)
+    else:
+        gate_parsed = []
+    gate = [d for d in gate_parsed if d['line'] in changed.get(d['file'], ())
             or d['rule'] == 'clang-diagnostic-error']
 
     # 2. Added files (whole file, new-files configuration).
@@ -96,7 +105,16 @@ def main():
                             '-extra-arg=-Wno-error', *added], capture_output=True, text=True)
         new_raw = r.stdout + r.stderr
         log.append(f'clang-tidy (added files) exit status {r.returncode}')
-    new = [d for d in parse(new_raw, root) if d['file'] in added or d['rule'] == 'clang-diagnostic-error']
+        new_parsed = parse(new_raw, root)
+        if r.returncode != 0 and not new_parsed:
+            msg = f'clang-tidy exited {r.returncode} with no findings parsed'
+            print(f'### clang-tidy\n\n**clang-tidy: FAIL** ({msg})')
+            if r.stderr.strip():
+                print(r.stderr.strip(), file=sys.stderr)
+            sys.exit(1)
+    else:
+        new_parsed = []
+    new = [d for d in new_parsed if d['file'] in added or d['rule'] == 'clang-diagnostic-error']
 
     with open(os.path.join(a.out, 'clang-tidy-raw.txt'), 'w', encoding='utf-8') as fh:
         fh.write(gate_raw + '\n' + new_raw)
