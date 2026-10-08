@@ -4,10 +4,13 @@ title: 'Fail a pull request that adds a *.psafe3 file, with a fork-only check'
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:13'
-updated_date: '2026-10-08 16:15'
+updated_date: '2026-10-08 16:17'
 labels:
   - quality
 dependencies: []
+modified_files:
+  - .github/workflows/fork-hygiene.yml
+  - tools/quality/check-no-psafe3.sh
 type: chore
 ordinal: 21000
 ---
@@ -15,20 +18,24 @@ ordinal: 21000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-Longer-term mitigation for RAID R-11 (`backlog/docs/raid-log.md`): nothing in the repository stops a `*.psafe3` password database being committed. A fork-only check under `tools/quality/`, run from a `.github/workflows/fork-*.yml` workflow, fails a pull request to fork `master` that adds such a file or renames a file to such a name. The local `.git/info/exclude` entry stays as it is.
+Longer-term mitigation for RAID R-11 (`backlog/docs/raid-log.md`): nothing in the repository stops a `*.psafe3` password database being committed. A new fork-only workflow, `.github/workflows/fork-hygiene.yml`, with the fork repository guard (`github.repository == 'rjbarbour/pwsafe'`), calls a new script, `tools/quality/check-no-psafe3.sh`. On a pull request to fork `master` it fails the pull request if a file whose name ends in `.psafe3` is added or a file is renamed to such a name. On a push to fork `master`, where tracker-only commits land directly with no pull request (decision-02), it fails the run and names the file: it detects such a file but cannot prevent it, so RAID R-11 keeps that residual risk. Whether the check becomes a required status check is Robert Barbour's decision (AC 5). The local `.git/info/exclude` entry stays as it is.
+
+The check is kept separate from `fork-quality.yml` and `tools/quality/coverage.sh` so that it does not collide with PWS-07, PWS-17 or PWS-18.
 
 From Dennis Ritchie's retrospective review of PR #1 (finding 4, recorded on PWS-01 in 68d429b93) and RAID R-11.
 
-Exclusions: upstream `.gitignore` and upstream workflows are not edited; no file under `src/` changes; fork-only, never part of an upstream pull request; the RAID log is not edited by this task; no real safe data in any test file; no secrets.
+Exclusions: upstream `.gitignore` and upstream workflows are not edited; `fork-quality.yml` and `coverage.sh` are not edited; no file under `src/` changes; fork-only, never part of an upstream pull request; the RAID log is not edited by this task; no branch protection or ruleset change without Robert Barbour's decision; no `*.psafe3` file ever reaches fork `master`, and no real safe data in any test file; no secrets.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Given a pull request to fork `master` that adds a file whose name ends in `.psafe3` (in any directory and in any letter case), or renames a file to such a name, when the fork-only check runs, then it fails and its log names each such file
-- [ ] #2 Given a pull request to fork `master` that adds or renames no such file, when the fork-only check runs, then it passes
-- [ ] #3 Given the evidence for AC 1 and AC 2, when QA reads the task notes, then they link one failing and one passing run, the failing run used an empty placeholder file with no safe data, and that file was never merged
-- [ ] #4 Given the pull request diff, when it is inspected, then it touches only `tools/quality/` and `.github/workflows/fork-*.yml`, and `.gitignore`, the upstream workflows and `src/` are unchanged
-- [ ] #5 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
+- [ ] #2 Given a push to fork `master` (where tracker commits land directly with no pull request) that adds a file whose name ends in `.psafe3` (in any directory and in any letter case), or renames a file to such a name, when the fork-only check runs, then it fails and its log names each such file; and the task notes state that on push the check detects the file but does not prevent it, so RAID R-11 keeps that residual risk
+- [ ] #3 Given a pull request to fork `master`, or a push to fork `master`, that adds or renames no such file, when the fork-only check runs, then it passes
+- [ ] #4 Given the evidence for AC 1 to AC 3, when QA reads the task notes, then they link one failing and one passing pull-request run and one passing push run on fork `master`; the failing push case is shown by running `tools/quality/check-no-psafe3.sh` on the box against the failing test branch's commit range, with its output in the notes, so that no `*.psafe3` file ever reaches fork `master`; the failing cases use an empty placeholder file with no safe data; and the test pull request is closed unmerged and its branch deleted
+- [ ] #5 Given the check is working, when Grace Hopper puts it to Robert Barbour, then Robert decides whether it becomes a required status check on fork `master`; Grace gives him the exact branch-protection or ruleset setting, including how tracker-only direct pushes to `master` stay possible (the owner's admin bypass with "include administrators" off, or a ruleset bypass), and states that blocking direct pushes would reverse decision-02 and need a superseding decision record; and the task notes record his answer
+- [ ] #6 Given the pull request diff, when it is inspected, then it adds only `.github/workflows/fork-hygiene.yml` and `tools/quality/check-no-psafe3.sh`, the workflow has the repository guard `github.repository == 'rjbarbour/pwsafe'`, and `fork-quality.yml`, `tools/quality/coverage.sh`, `.gitignore`, the upstream workflows and `src/` are unchanged
+- [ ] #7 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Implementation Notes
