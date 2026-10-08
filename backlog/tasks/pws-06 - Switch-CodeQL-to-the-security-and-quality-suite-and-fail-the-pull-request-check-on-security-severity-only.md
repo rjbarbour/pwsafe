@@ -3,10 +3,10 @@ id: PWS-06
 title: >-
   Switch CodeQL to the security-and-quality suite and fail the pull request
   check on security severity only
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 12:50'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies:
@@ -34,3 +34,13 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 - [ ] #5 Given a test pull request to `master` that introduces an alert with a security severity at or above the level recorded in the task notes, when CodeQL runs, then the CodeQL check fails
 - [ ] #6 Given both test pull requests, when the task is finished, then they are closed unmerged and their run URLs are in the task notes
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Decision to add: the pull request check fails on security severity high and above; quality-only alerts are reported but do not block. AC #5 should name that level rather than a level recorded in the task notes. Also name who changes the repository's code-scanning check-failure setting, which needs admin rights on rjbarbour/pwsafe.
+---
+<!-- COMMENTS:END -->
