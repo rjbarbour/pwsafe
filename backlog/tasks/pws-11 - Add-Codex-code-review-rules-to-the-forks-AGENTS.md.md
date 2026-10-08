@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:59'
-updated_date: '2026-10-08 16:13'
+updated_date: '2026-10-08 16:15'
 labels:
   - quality
 dependencies: []
@@ -48,6 +48,12 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 - [ ] #8 Given the pull request head, when QA reads the fork-only file list in the root `AGENTS.md`, then, outside the `## Code Review Rules` section, it names `backlog/`, `backlog.config.yml`, `AGENTS.md`, `.github/workflows/fork-*.yml` and `tools/quality/`, matching decision-02, and says that no upstream-bound pull request may touch any of them
 - [ ] #9 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) after AC 8 (56493b180): pass; stays in Shaping (no status change while Ready holds 3). The earlier fail (13:06) is closed: the rules are now limited to layering and scope. RD-01: the outcome is explicit (Codex flags layering and scope breaks; the fork-only list is complete), for reviewers and Robert. RD-02: scope and exclusions are explicit, and AC 6 sends a failed Codex trial back to Fred Brooks. RD-03: AC 1-9 are concrete. AC 8 matches decision-02, which already names .github/workflows/fork-*.yml and tools/quality/. RD-04: the known risk is RAID R-08, and decision-02 is the source. Rebase dependency: PWS-20 also edits the root AGENTS.md, so whichever merges second rebases on the other and keeps both changes. RD-05: low risk, reversible, Build commitment (project default). RD-06: AGENTS.md only; Barbara Liskov drafts, Grace Hopper runs the Codex trial, QA by Edsger Dijkstra, two code reviews (AC 9). RD-07: Robert's agreement to an @codex review comment posted under his name is reserved to him and must be recorded before AC 5 starts. Proposed tidy for Margaret, non-blocking: AC 4 'the commit changes no file other than AGENTS.md and the PWS task file' becomes 'the pull request changes only the root AGENTS.md; task notes go to fork master as tracker-only commits (decision-02, point 5)', to match PWS-20 AC 4.
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
