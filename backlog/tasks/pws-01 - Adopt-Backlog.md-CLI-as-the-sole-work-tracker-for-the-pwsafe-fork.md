@@ -1,11 +1,11 @@
 ---
 id: PWS-01
 title: Adopt Backlog.md CLI as the sole work tracker for the pwsafe fork
-status: In Progress
+status: Done
 assignee:
   - '@fred-brooks'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 13:40'
+updated_date: '2026-10-08 13:35'
 labels: []
 dependencies: []
 references:
@@ -41,9 +41,7 @@ Decision (owner Robert Barbour, 2026-10-08 12:42 BST): option A. Fork `master` i
 Rejected: B (separate fork tracker branch, keeping master a pure upstream mirror) and C (separate tracker repository).
 2026-10-08: initialised Backlog.md CLI 1.50.1 (project pwsafe, prefix PWS, zero-padded 2, backlog/ directory, root config, CLI integration, no agent-instruction files). AGENTS.md written by hand, minimal and fork-specific. No README edit, to keep upstream files unchanged.
 Capability gap: `backlog config set` cannot set statuses, so Shaping, Ready and Review from the SOP are not configured; defaults are To Do, In Progress, Done (Draft is native).
-State: one local commit on fork `master`; local-only, not pushed.
-Blocker for push and pull request: GitHub command line on the box is not signed in.
-Remaining: GitHub sign-in under GH-01; push an adoption branch and open one reviewed pull request into fork `master`; after merge, synchronise local `master` and record evidence.
+Superseded 2026-10-08: the earlier local-only state, the GitHub sign-in blocker and the remaining-steps list no longer apply. The adoption branch was pushed and integrated through PR #1 (merge f24fd88); see the evidence below.
 
 Evidence 2026-10-08 (Margaret Hamilton): PR #1 https://github.com/rjbarbour/pwsafe/pull/1 merged by rjbarbour at 12:54 BST, merge commit f24fd88. Adoption commit 48fbf4f adds AGENTS.md, backlog.config.yml and backlog/ only, no upstream source (AGENTS.md is in the same commit). PR #2 file list checked: no backlog/, backlog.config.yml or AGENTS.md. backlog task list shows PWS-01 and PWS-02. GitHub access used a repo-scoped token passed as GH_TOKEN; no secret written to any file. Accepted by Fred Brooks, 2026-10-08.
 
@@ -51,11 +49,19 @@ CI evidence 2026-10-08 (checked via the GitHub Actions API by Fred Brooks): both
 - Build pwsafe with CMake on macOS (.github/workflows/macos-cmake-latest.yml), run 37773748187, 12:59 to 13:19 BST: https://github.com/rjbarbour/pwsafe/actions/runs/37773748187
 - mac-pwsafe (.github/workflows/macos-latest.yml), run 37773751736, 12:59 to 13:15 BST: https://github.com/rjbarbour/pwsafe/actions/runs/37773751736
 
-Status correction 2026-10-08 (Fred Brooks): set back from Done to In Progress. The board rule for Done needs coordinator acceptance, the merged PR, and QA checks and CI recorded in the task; Edsger Dijkstra's QA check for PWS-01 is not recorded in this task or on PR #1. QA evidence pending; moves to Review when the Review status lands (PR #4).
+QA evidence 2026-10-08 (Edsger Dijkstra), checked against fork `master` f24fd88: all 5 acceptance criteria pass.
+- AC1 fork-only: diff 3996b15..f24fd88 adds only AGENTS.md, backlog.config.yml and the two task files. Upstream-bound branch codex/PWS-02-diceware-passphrase (db9dab1) has merge-base 3996b15 and contains no backlog/, backlog.config.yml or AGENTS.md. No PRs by rjbarbour on pwsafe/pwsafe.
+- AC2: 48fbf4f (parent 3996b15) is a single tracker-only commit with the four files (AGENTS.md included; no source files).
+- AC3: AGENTS.md names Backlog.md as the sole tracker, PWS-NN IDs, the backlog instructions guides, the one-task-one-branch-one-PR rule and the fork-only rule.
+- AC4: Backlog.md 1.50.1 in a clean worktree of f24fd88: `backlog task list` (json and plain), `backlog board export` and `backlog browser` (GET / returns 200; /api/tasks lists PWS-01 and PWS-02) all work.
+- Secrets: no *.psafe3 in the tree; a secret-pattern search of added lines found only AGENTS.md's policy text.
+- AC5 caveat: PR #1 has no GitHub approving review. Review consisted of the owner's merge by rjbarbour at 12:54 BST (merge f24fd88) plus the Codex bot's automated review of 48fbf4f, which had no findings.
+
+Status 2026-10-08 (Fred Brooks): QA and CI are now recorded in this task. With acceptance by Fred Brooks and PR #1 merged, PWS-01 meets the board rule for Done.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Adopted Backlog.md CLI 1.50.1 as the fork's sole work tracker on fork master (fork-only AGENTS.md, backlog/, backlog.config.yml). Integrated through PR #1, reviewed and merged by Robert Barbour on 2026-10-08. Verified from the merged PR, the adoption commit's file list, PR #2's file list and backlog task list.
+Adopted Backlog.md CLI 1.50.1 as the fork's sole work tracker on fork master (fork-only AGENTS.md, backlog/, backlog.config.yml). Integrated through PR #1, merged by Robert Barbour on 2026-10-08 (merge f24fd88); PR #1 had no GitHub approving review, only the owner's merge and the Codex bot's automated review of 48fbf4f with no findings. CI: macOS runs 37773748187 and 37773751736 on f24fd88 succeeded. QA: Edsger Dijkstra checked all 5 acceptance criteria against f24fd88 and they pass.
 <!-- SECTION:FINAL_SUMMARY:END -->
