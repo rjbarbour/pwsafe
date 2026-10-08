@@ -132,6 +132,11 @@ class wxBookCtrlEvent;
 #define ID_CHECKBOX44 10211
 #define ID_CHECKBOX45 10213
 #define ID_CHECKBOX46 10250
+#define ID_PANEL8 10251
+#define ID_PWGENSAFEPOLICY 10252
+#define ID_PWGENLOCALPOLICY 10253
+#define ID_PWGENWORDCOUNT 10254
+#define ID_PWGENBITS 10255
 #define SYMBOL_COPTIONS_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxDIALOG_MODAL
 #define SYMBOL_COPTIONS_TITLE _("Options")
 #define SYMBOL_COPTIONS_IDNAME ID_OPTIONS
@@ -193,6 +198,12 @@ protected:
   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PWHISTAPPLY
   void OnPWHistApply( wxCommandEvent& event );
 
+  /// wxEVT_SPINCTRL event handler for ID_PWGENWORDCOUNT
+  void OnPassphraseWordCountSpin( wxSpinEvent& event );
+
+  /// wxEVT_TEXT event handler for ID_PWGENWORDCOUNT
+  void OnPassphraseWordCountText( wxCommandEvent& event );
+
   /// wxEVT_UPDATE_UI event handler for all command ids
   void OnUpdateUI(wxUpdateUIEvent& evt);
 
@@ -217,12 +228,14 @@ private:
   void PrefsToPropSheet();
   void PropSheetToPrefs();
   int GetRequiredPWLength() const;
+  void UpdatePassphraseBits(int wordCount);
 
   wxPanel* CreateHeaderPanel(wxWindow* parent, const wxString& title);
   wxPanel* CreateBackupsPanel(const wxString& title);
   wxPanel* CreateDisplayPanel(const wxString& title);
   wxPanel* CreateMiscellaneousPanel(const wxString& title);
   wxPanel* CreatePasswordHistoryPanel(const wxString& title);
+  wxPanel* CreatePasswordGenerationPanel(const wxString& title);
   wxPanel* CreateSecurityPanel(const wxString& title);
   wxPanel* CreateShortcutsPanel(const wxString& title);
   wxPanel* CreateSystemPanel(const wxString& title);
@@ -271,6 +284,13 @@ private:
   wxRadioButton*  m_PasswordHistory_ClearRB = nullptr;
   wxButton*       m_PasswordHistory_ApplyBN = nullptr;
   wxCheckBox*     m_PasswordHistory_Apply2ProtectedCB = nullptr;
+
+  // Tab: "Password Generation"
+  wxPanel*        m_PasswordGeneration_Panel = nullptr;
+  wxRadioButton*  m_PasswordGeneration_SafePolicyRB = nullptr;
+  wxRadioButton*  m_PasswordGeneration_LocalPolicyRB = nullptr;
+  wxSpinCtrl*     m_PasswordGeneration_WordCountSB = nullptr;
+  wxStaticText*   m_PasswordGeneration_BitsST = nullptr;
 
   // Tab: "Security"
   wxPanel*        m_Security_Panel = nullptr;

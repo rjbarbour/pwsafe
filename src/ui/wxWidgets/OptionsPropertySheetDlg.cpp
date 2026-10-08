@@ -30,10 +30,13 @@
 #include <wx/debug.h>
 #include <wx/taskbar.h>
 
+#include <algorithm>
+
 #include "core/PWSprefs.h"
 #include "core/Util.h" // for datetime string
 #include "core/PWSAuxParse.h" // for DEFAULT_AUTOTYPE
 #include "core/PWHistory.h" // for history actions
+#include "core/Passphrase.h" // for the passphrase bits line
 
 #if defined(__X__) || defined(__WXGTK__)
 #include "Clipboard.h"
@@ -78,6 +81,8 @@ BEGIN_EVENT_TABLE( OptionsPropertySheetDlg, wxPropertySheetDialog )
   EVT_CHECKBOX(    ID_CHECKBOX24,      OptionsPropertySheetDlg::OnUseDefaultUserClick )
   EVT_BUTTON(      ID_BUTTON8,         OptionsPropertySheetDlg::OnBrowseLocationClick )
   EVT_BUTTON(      ID_PWHISTAPPLY,     OptionsPropertySheetDlg::OnPWHistApply )
+  EVT_SPINCTRL(    ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnPassphraseWordCountSpin )
+  EVT_TEXT(        ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnPassphraseWordCountText )
 ////@end OptionsPropertySheetDlg event table entries
 
   EVT_BOOKCTRL_PAGE_CHANGING(wxID_ANY, OptionsPropertySheetDlg::OnPageChanging)
@@ -105,6 +110,9 @@ BEGIN_EVENT_TABLE( OptionsPropertySheetDlg, wxPropertySheetDialog )
   EVT_UPDATE_UI(   ID_PWHISTSTART,     OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_PWHISTSETMAX,    OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_PWHISTCLEAR,     OptionsPropertySheetDlg::OnUpdateUI )
+
+  EVT_UPDATE_UI(   ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnUpdateUI )
+  EVT_UPDATE_UI(   ID_PWGENBITS,       OptionsPropertySheetDlg::OnUpdateUI )
 
   EVT_UPDATE_UI(   ID_CHECKBOX35,      OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_CHECKBOX29,      OptionsPropertySheetDlg::OnUpdateUI )
@@ -236,6 +244,17 @@ void OptionsPropertySheetDlg::CreateControls()
   m_PasswordHistory_Panel = CreatePasswordHistoryPanel(passwordHistoryTabTitle);
 
   GetBookCtrl()->AddPage(m_PasswordHistory_Panel, passwordHistoryTabTitle, false, 3);
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Tab: "Password Generation"
+  /////////////////////////////////////////////////////////////////////////////
+
+  wxString passwordGenerationTabTitle = _("Password Generation");
+
+  m_PasswordGeneration_Panel = CreatePasswordGenerationPanel(passwordGenerationTabTitle);
+
+  // Shares the Password History icon
+  GetBookCtrl()->AddPage(m_PasswordGeneration_Panel, passwordGenerationTabTitle, false, 3);
 
   /////////////////////////////////////////////////////////////////////////////
   // Tab: "Security"
@@ -726,6 +745,40 @@ wxPanel* OptionsPropertySheetDlg::CreatePasswordHistoryPanel(const wxString& tit
   return itemPanel74;
 }
 
+wxPanel* OptionsPropertySheetDlg::CreatePasswordGenerationPanel(const wxString& title)
+{
+  wxPanel* panel = new wxPanel( GetBookCtrl(), ID_PANEL8, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, "Password Generation" );
+  auto *panelSizer = new wxBoxSizer(wxVERTICAL);
+  panel->SetSizer(panelSizer);
+
+  panelSizer->Add(CreateHeaderPanel(panel, title), 0, wxEXPAND|wxALL, 5);
+
+  m_PasswordGeneration_SafePolicyRB = new wxRadioButton( panel, ID_PWGENSAFEPOLICY, _("Use the safe's password policy"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+  panelSizer->Add(m_PasswordGeneration_SafePolicyRB, 0, wxALIGN_LEFT|wxALL, 5);
+
+  m_PasswordGeneration_LocalPolicyRB = new wxRadioButton( panel, ID_PWGENLOCALPOLICY, _("Use this computer's policy"), wxDefaultPosition, wxDefaultSize, 0 );
+  panelSizer->Add(m_PasswordGeneration_LocalPolicyRB, 0, wxALIGN_LEFT|wxALL, 5);
+
+  auto *wordCountSizer = new wxBoxSizer(wxHORIZONTAL);
+  panelSizer->Add(wordCountSizer, 0, wxEXPAND|wxLEFT, 20);
+
+  m_PasswordGeneration_WordCountSB = new wxSpinCtrl(
+    panel, ID_PWGENWORDCOUNT, _T("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
+    PWSprefs::GetInstance()->GetPrefMinVal(PWSprefs::PassphraseWordCount),
+    PWSprefs::GetInstance()->GetPrefMaxVal(PWSprefs::PassphraseWordCount),
+    PWSprefs::GetInstance()->GetPrefDefVal(PWSprefs::PassphraseWordCount)
+  );
+
+  FixInitialSpinnerSize(m_PasswordGeneration_WordCountSB);
+
+  wordCountSizer->Add(m_PasswordGeneration_WordCountSB, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+  m_PasswordGeneration_BitsST = new wxStaticText( panel, ID_PWGENBITS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+  wordCountSizer->Add(m_PasswordGeneration_BitsST, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+  return panel;
+}
+
 wxPanel* OptionsPropertySheetDlg::CreateSecurityPanel(const wxString& title)
 {
   wxPanel* itemPanel86 = new wxPanel( GetBookCtrl(), ID_PANEL5, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, "Security" );
@@ -1043,6 +1096,13 @@ void OptionsPropertySheetDlg::PrefsToPropSheet()
   m_PasswordHistory_NumDefaultSB->Enable(m_PasswordHistory_Save);
   m_PasswordHistory_DefaultExpiryDays = prefs->GetPref(PWSprefs::DefaultExpiryDays);
 
+  // Password Generation preferences
+  const bool useLocalPolicy = prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy);
+  m_PasswordGeneration_SafePolicyRB->SetValue(!useLocalPolicy);
+  m_PasswordGeneration_LocalPolicyRB->SetValue(useLocalPolicy);
+  m_PasswordGeneration_WordCountSB->SetValue(prefs->GetPref(PWSprefs::PassphraseWordCount));
+  UpdatePassphraseBits(m_PasswordGeneration_WordCountSB->GetValue());
+
   // Security Preferences
   m_Security_ClearClipboardOnMinimize   = prefs->GetPref(PWSprefs::ClearClipboardOnMinimize);
   m_Security_ClearClipboardOnExit       = prefs->GetPref(PWSprefs::ClearClipboardOnExit);
@@ -1145,6 +1205,10 @@ void OptionsPropertySheetDlg::PropSheetToPrefs()
   prefs->SetPref(PWSprefs::SavePasswordHistory, m_PasswordHistory_Save);
   prefs->SetPref(PWSprefs::NumPWHistoryDefault, m_PasswordHistory_NumDefault);
   prefs->SetPref(PWSprefs::DefaultExpiryDays, m_PasswordHistory_DefaultExpiryDays);
+
+  // Password Generation preferences
+  prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, m_PasswordGeneration_LocalPolicyRB->GetValue());
+  prefs->SetPref(PWSprefs::PassphraseWordCount, m_PasswordGeneration_WordCountSB->GetValue());
 
   // Security Preferences
   prefs->SetPref(PWSprefs::ClearClipboardOnMinimize   , m_Security_ClearClipboardOnMinimize);
@@ -1407,6 +1471,33 @@ void OptionsPropertySheetDlg::OnPWHistApply(wxCommandEvent& WXUNUSED(evt))
 }
 
 /*!
+ * wxEVT_SPINCTRL event handler for ID_PWGENWORDCOUNT
+ */
+
+void OptionsPropertySheetDlg::OnPassphraseWordCountSpin(wxSpinEvent& evt)
+{
+  UpdatePassphraseBits(evt.GetPosition());
+}
+
+/*!
+ * wxEVT_TEXT event handler for ID_PWGENWORDCOUNT, so that a typed count
+ * updates the bits line before the spin control commits it
+ */
+
+void OptionsPropertySheetDlg::OnPassphraseWordCountText(wxCommandEvent& evt)
+{
+  UpdatePassphraseBits(evt.GetInt());
+}
+
+void OptionsPropertySheetDlg::UpdatePassphraseBits(int wordCount)
+{
+  // Show the count the spin control will commit, which is clamped to its range
+  wordCount = std::clamp(wordCount, m_PasswordGeneration_WordCountSB->GetMin(),
+                                    m_PasswordGeneration_WordCountSB->GetMax());
+  m_PasswordGeneration_BitsST->SetLabel(PassphraseEntropyLine(wordCount, EffLongWordCount()).c_str());
+}
+
+/*!
  * wxEVT_UPDATE_UI event handler for all command ids
  */
 
@@ -1492,6 +1583,13 @@ void OptionsPropertySheetDlg::OnUpdateUI(wxUpdateUIEvent& evt)
       break;
     case ID_PWHISTCLEAR:
       evt.Enable(!dbIsReadOnly);
+      break;
+  /////////////////////////////////////////////////////////////////////////////
+  // Tab: "Password Generation"
+  /////////////////////////////////////////////////////////////////////////////
+    case ID_PWGENWORDCOUNT:
+    case ID_PWGENBITS:
+      evt.Enable(m_PasswordGeneration_LocalPolicyRB->GetValue());
       break;
   /////////////////////////////////////////////////////////////////////////////
   // Tab: "Security"
