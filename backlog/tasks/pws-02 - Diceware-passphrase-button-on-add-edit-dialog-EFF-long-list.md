@@ -1,11 +1,11 @@
 ---
 id: PWS-02
 title: Diceware passphrase button on add/edit dialog (EFF long list)
-status: In Progress
+status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 12:52'
+updated_date: '2026-10-08 13:27'
 labels: []
 dependencies: []
 references:
@@ -96,4 +96,6 @@ Findings (none block the design):
 3. Mac check for Robert's run: type a number into the spin, without the arrows, then click Passphrase. The word count and the entropy line should agree. Only EVT_SPINCTRL updates the entropy line, and when a native spin control sends that event while someone is typing varies between platforms.
 4. For the maintainer's judgement, not a change now: `PassphraseEntropyLine` builds UI text, including "bits", in core, so it can't be translated through _(). It's acceptable for milestone 1. If upstream asks, the formatting moves to the dialog and core keeps `PassphraseEntropyBits`.
 Verdict: db9dab1 implements the agreed design. No ADR is needed and nothing here changes a contract.
+
+2026-10-08 14:27 BST: Robert tested the 5beca97 dmg on his Mac; the feature works, but he wants the passphrase controls off the Basic tab and set once as a policy-level setting. PR #2 stays open and unmerged for rework on the same branch; the core (MakePassphrase, word list, notice, tests) carries over. Criteria to be rewritten once Robert picks where the setting is saved. Moved back to Shaping by Fred Brooks.
 <!-- SECTION:NOTES:END -->
