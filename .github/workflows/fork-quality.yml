@@ -161,6 +161,9 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
           -DUSE_INTERPROCEDURAL_OPTIMIZATION=OFF
+        # Generated sources named in compile_commands.json (cppcheck refuses a
+        # project whose files are missing; clang-tidy needs core_st.h).
+        cmake --build build --target src/core/core_st.cpp src/core/core_st.h
         echo "Values in build/CMakeCache.txt:"
         grep -E '^(CMAKE_BUILD_TYPE|CMAKE_EXPORT_COMPILE_COMMANDS):' build/CMakeCache.txt
         ls -l build/compile_commands.json
