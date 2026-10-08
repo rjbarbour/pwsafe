@@ -81,7 +81,8 @@ jobs:
     - name: Upload coverage artefact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: coverage-${{ github.sha }}
+        # Named after the commit that was tested: the PR head on pull requests, the pushed commit otherwise.
+        name: coverage-${{ github.event.pull_request.head.sha || github.sha }}
         path: |
           coverage/coverage.json
           coverage/coverage.cobertura.xml
