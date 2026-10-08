@@ -4,7 +4,7 @@ title: Fork-only quality gate workflow for new and changed code (fork-quality.ym
 status: To Do
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:50'
+updated_date: '2026-10-08 15:51'
 labels:
   - quality
 dependencies:
@@ -51,6 +51,12 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #11 Given `tools/quality/clang-tidy-new-files.yaml` enables the `readability-` and `modernize-` groups, with each rule it disables carrying a comment that gives the reason, when a pull request adds a C++ source or header file, then clang-tidy runs that configuration on the whole of each file `git diff --diff-filter=A` lists against the pull request's base, any finding fails the job, and the job summary names the file, line and rule
 - [ ] #12 Given a pull request that adds a new file with a `readability-` finding, when the gate runs, then the job fails; and given a pull request whose only `readability-` finding is the same finding on a changed line of an existing file, when the gate runs, then that finding does not fail the job
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+DoR re-check 2026-10-08 (Fred Brooks): pass. 65fd69c (readability/modernize on added files only, AC 11-12, AC 4 negative) and 7cc6b1f (AC 10 git ls-files resolution, one allow-list entry) match Robert's ruling and the agreed version.h handling. Moves to Ready once PWS-05 is Done (PR #6 merged as 35c62e7; AC 4 pending).
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
