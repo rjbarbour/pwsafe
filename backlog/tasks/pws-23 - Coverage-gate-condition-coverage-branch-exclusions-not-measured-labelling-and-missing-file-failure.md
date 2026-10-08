@@ -7,7 +7,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 16:58'
-updated_date: '2026-10-08 17:03'
+updated_date: '2026-10-08 17:04'
 labels:
   - quality
 dependencies:
@@ -62,4 +62,6 @@ Non-blocking:
 (4) The dependencies field could add PWS-22, because the description relies on its approval.
 (5) Name a QA owner.
 No vulnerability or CodeQL specifics appear.
+
+Addendum 2026-10-08 (Fred Brooks) to my DoR note: e8e0dd2e3 has since made PWS-22 AC 13 give §11 row 1 (100% on new code in gate_changed.py) and the judgement exemptions to PWS-07, through a tracker change by Margaret Hamilton after Robert Barbour approves the document. Gap 2 here therefore closes when PWS-07's ACs carry branch (and later condition) checks on changed lines and the exemption file. If they don't, Fred Brooks moves those gates here. The verdict is unchanged: fail on gap 1, with gap 2 open until that is settled. Status To Do.
 <!-- SECTION:NOTES:END -->
