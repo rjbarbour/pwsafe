@@ -1,9 +1,10 @@
 ---
 id: PWS-11
 title: Add Codex code review rules to the fork's AGENTS.md
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:59'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies: []
@@ -41,3 +42,13 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 - [ ] #6 Given Codex does not apply the rules on that pull request, when Grace Hopper records the result, then the task notes say so and the task goes back to Fred Brooks for a decision rather than adding a nested or branch copy of `AGENTS.md`
 - [ ] #7 Given the representative pull request, when the check is finished, then it is closed unmerged and its branch deleted
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+DoR re-check 2026-10-08 (Fred Brooks): fail. hold the crypto/randomness/clipboard rule until owner decision; start with layering and scope only.
+---
+<!-- COMMENTS:END -->
