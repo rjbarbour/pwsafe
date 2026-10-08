@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 13:19'
-updated_date: '2026-10-08 13:43'
+updated_date: '2026-10-08 15:58'
 labels: []
 dependencies:
   - PWS-02
@@ -34,6 +34,7 @@ Exclusions: layout only, with no change to what any control does; no change to `
 - [ ] #2 Given Show Password and a password of up to 50 characters in the field, when QA looks at the field at the dialog's default size, then the whole password is visible without scrolling
 - [ ] #3 Given the controls that sat beside the Password field before the change, when QA uses each one after the change, then every control is still present, visible and does what it did before
 - [ ] #4 Given the change, when QA compares the Basic tab with the build before it, then no field other than Password, and no control other than those rearranged beside it, has moved or changed size, and `coretest` passes
+- [ ] #5 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
