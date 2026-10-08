@@ -2,9 +2,10 @@
 id: PWS-14
 title: Retry Create DMG on hdiutil Resource busy in the macOS CMake workflow
 status: To Do
-assignee: []
+assignee:
+  - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:40'
+updated_date: '2026-10-08 13:43'
 labels: []
 dependencies: []
 modified_files:
@@ -29,3 +30,19 @@ Exclusions: fork-only, never part of an upstream pull request; no other step or 
 - [ ] #2 Given a run where the first attempt fails with `hdiutil: Resource busy` and a later attempt succeeds, when the job finishes, then it passes and the log shows the retry; the task notes give that run's URL, or say a simulated failure on a throwaway branch was used instead
 - [ ] #3 Given a run where the step fails with any other error, when the job finishes, then it fails without retrying
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Name the retry count in the description and AC #1 (for example 3 attempts), rather than leaving it to be stated later in the task notes.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. Retry count named. Held in To Do while Ready is at its limit of 3.
+---
+<!-- COMMENTS:END -->
