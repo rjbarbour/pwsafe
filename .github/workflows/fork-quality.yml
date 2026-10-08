@@ -1,0 +1,90 @@
+# Fork-only quality workflow for rjbarbour/pwsafe.
+# Never part of an upstream pull request: upstream-bound branches are cut from upstream/master and
+# must not contain .github/workflows/fork-*.yml or tools/quality/.
+# Every job carries `if: github.repository == 'rjbarbour/pwsafe'`, so in any other repository the
+# jobs are skipped and nothing is uploaded.
+#
+# coverage (PWS-05): builds coretest with GCC coverage instrumentation, runs Coretests and uploads
+# gcovr 8.6 coverage for src/core and src/os (vendored pugixml and crypto/external excluded).
+# Report only; no coverage gate here (the changed-line gate is PWS-07).
+# The coverage flags live only in this workflow's configure step; CMakePresets.json and
+# CMakeLists.txt are not changed.
+name: Fork quality
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded pull request runs only; every push to master keeps its own run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    name: Coverage (coretest, gcovr)
+    if: github.repository == 'rjbarbour/pwsafe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7.0.1
+      with:
+        persist-credentials: false
+
+    - name: Install packages
+      run: |
+        sudo apt-get update
+        sudo ./Misc/setup-linux-dev-env.sh
+        python3 -m venv "$RUNNER_TEMP/venv"
+        "$RUNNER_TEMP/venv/bin/pip" install gcovr==8.6
+        "$RUNNER_TEMP/venv/bin/gcovr" --version
+
+    - name: Configure (coverage flags)
+      run: |
+        cmake -S . -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          -DUSE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+          -DCMAKE_C_FLAGS="--coverage -O0" \
+          -DCMAKE_CXX_FLAGS="--coverage -O0" \
+          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
+        echo "Coverage-relevant values in build/CMakeCache.txt:"
+        grep -E '^(CMAKE_BUILD_TYPE|CMAKE_EXPORT_COMPILE_COMMANDS|USE_INTERPROCEDURAL_OPTIMIZATION|CMAKE_C_FLAGS|CMAKE_CXX_FLAGS|CMAKE_EXE_LINKER_FLAGS):' build/CMakeCache.txt
+        ls -l build/compile_commands.json
+
+    - name: Build coretest
+      run: cmake --build build --target coretest
+
+    - name: Run Coretests
+      run: ctest --test-dir build -R Coretests --output-on-failure
+
+    - name: gcovr coverage report
+      env:
+        GCOVR: ${{ runner.temp }}/venv/bin/gcovr
+      run: |
+        tools/quality/coverage.sh . build coverage
+        {
+          echo '### Coverage (coretest, gcovr 8.6)'
+          echo '```'
+          sed -n '1,/^branches:/p' coverage/coverage_summary.txt
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload coverage artefact
+      uses: actions/upload-artifact@v7.0.1
+      with:
+        # Named after the commit that was tested: the PR head on pull requests, the pushed commit otherwise.
+        name: coverage-${{ github.event.pull_request.head.sha || github.sha }}
+        path: |
+          coverage/coverage.json
+          coverage/coverage.cobertura.xml
+          coverage/coverage_summary.txt
+        if-no-files-found: error
