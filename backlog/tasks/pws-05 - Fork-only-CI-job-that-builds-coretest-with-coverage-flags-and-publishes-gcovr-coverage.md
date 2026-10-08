@@ -7,7 +7,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:54'
+updated_date: '2026-10-08 15:55'
 labels:
   - quality
 dependencies: []
@@ -63,6 +63,22 @@ Run https://github.com/rjbarbour/pwsafe/actions/runs/37804161642 (job 1134039250
 - src/os/unix lines: 431/1988 = 21.7% (baseline 430/1988 = 21.6%; delta +1 covered, 0 total, +0.05 pp)
 - src/os/unix functions: 54/196 = 27.6% (baseline 54/196 = 27.6%; no change)
 Same figures as the PR #6 run 37787860322 that Edsger read, so CI is stable run to run. No file under src/ changed between f24fd88 and 35c62e7 (git diff --stat f24fd88 35c62e7 -- src is empty). Comparing per-file lines in the two coverage.json files, the differences sit in three files only: src/core/Command.cpp (baseline 349/760, CI 348/759), src/core/PWSprefs.cpp (261/979 vs 259/979) and src/os/unix/utf8conv.cpp (33/48 vs 34/48). Likely cause is the toolchain and environment: baseline built on the team box (Debian 13, GCC 14.2), CI on ubuntu-24.04 (g++ 13.2). Not a code change. AC 4 checkbox left for QA and Fred; status unchanged.
+
+Retrospective code review 2026-10-08 16:56 BST (Dennis Ritchie): second review of PR #6 under Robert's two-review rule of 16:52 (PR #6 was merged at 16:51 on Fred's review alone).
+
+Verdict: pass with findings. No blockers.
+
+Scope: squash commit 35c62e7 (parent 7cc6b1fa4) adds exactly two files, `.github/workflows/fork-quality.yml` and `tools/quality/coverage.sh`. Both blobs are identical at PR head 83cf89f, at 35c62e7 and on master. No change under `src/`, to `CMakeLists.txt` or `CMakePresets.json`, or to any upstream workflow.
+
+What was checked: both files read in full; shellcheck reports nothing on `coverage.sh`; actionlint reports nothing on `fork-quality.yml`; check-run annotations on 83cf89f read. `coverage.sh` has `set -euo pipefail`, quotes every expansion and writes only to the output directory it is given. The workflow uses `pull_request` (not `pull_request_target`), `permissions: contents: read`, `persist-credentials: false`, references no secrets, guards the job on `github.repository`, and writes only to `build/`, `coverage/` and `$RUNNER_TEMP`.
+
+Findings (all non-blocking):
+1. The concurrency comment ("every push to master keeps its own run") does not hold. GitHub keeps at most one running and one pending run per group, so a newer master push cancels the pending one whatever `cancel-in-progress` says. Seen on run 37804187626 (9b3e6a5ad): cancelled before any job started. Proposed: follow-up task (with 2): per-commit group for push events, or correct the comment.
+2. Every push to master, including tracker-only commits, runs the full Debug coverage build. Proposed: same follow-up task: `paths-ignore: ['backlog/**']` on push; on `pull_request` only if the job is never made a required check, as a path-filtered required check stays pending.
+3. The coverage job's own automated findings: gcovr "suspicious hits" warnings (4 hits, for example `src/core/crypto/bitops.h:285`). With `suspicious_hits` ignored, gcovr leaves those lines out of the report, so a few in-scope crypto lines are under-reported. Proposed: follow-up task to set `--gcov-suspicious-hits-threshold` in `coverage.sh` above the observed count (about 1.0e10) so the lines are counted and the check still catches real counter overflow; or a RAID entry if we accept the gap.
+4. Runner notice on the same job: the `ubuntu-latest` label moves to Ubuntu 26 from 19 October 2026. A GCC/gcov change can shift the figures and the gcovr JSON shape (it already did once during PR #6). Proposed: RAID risk, linked to PWS-15 (ubuntu-26.04 spike); re-baseline after the migration, or pin `ubuntu-24.04`.
+5. Actions are pinned by tag rather than SHA, and gcovr by version without hashes (extends Fred's nit). Mitigated by the read-only token, no secrets and `persist-credentials: false`; matches the upstream workflows. Proposed: RAID risk.
+6. Observation, no action: the "UNEXPECTED files" check prints but does not fail. That is consistent with report-only and with AC 3.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
