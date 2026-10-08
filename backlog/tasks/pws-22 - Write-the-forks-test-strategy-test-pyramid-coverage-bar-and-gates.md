@@ -5,7 +5,7 @@ status: Ready
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:38'
+updated_date: '2026-10-08 16:40'
 labels:
   - docs
   - test
@@ -30,7 +30,7 @@ Robert Barbour set the fork's test policy on 2026-10-08. New code needs 100% lin
 - [ ] #6 Given the document, when it is read, then it states that the coverage bar is measured on the code coretest instruments, that new `src/ui` and `src/os/mac` code is not measured by it, and that the coverage report lists such files as not measured (GUI or platform wiring, reviewed by hand) rather than leaving them out silently, so the strategy does not read as if GUI or platform code meets the 100% bar
 - [ ] #7 Given the document, when it is read, then it states that a changed file under `src/core` or `src/os/unix` that the coverage job is meant to measure but which is missing from the coverage report fails the coverage gate, rather than being treated as covered or skipped
 - [ ] #8 Given the document, when it is read, then it states whether the coverage measurement uses gcovr's exclusions for exception-throw branches and unreachable branches (`--exclude-throw-branches`, `--exclude-unreachable-branches`), why, and how any excluded branches are reported, so the 100% branch figure means the same thing in every report
-- [ ] #9 Given the document, when it is read, then it sets out the two options for covering new macOS-only code (a macOS coverage job, or leaving it not measured and exercised by Robert Barbour's Mac run), gives Edsger Dijkstra's recommendation between them with its reason, and records Robert Barbour's choice; until he chooses, it names that as an open point with Robert as owner, and the task notes record his answer
+- [ ] #9 Given the document, when it is read, then it sets out the two options for covering new macOS-only code (a macOS coverage job, or leaving it not measured and exercised by Robert Barbour's Mac run), gives Edsger Dijkstra's recommendation between them with its reason, and records Robert Barbour's choice; until he chooses, it names that as an open point with Robert as owner, and the task notes record his answer; the document also states that the macOS coverage job runs only when a pull request changes `src/os/mac`, and that the not-measured route includes review by hand
 - [ ] #10 Given the document, when it is read, then it defines automated UAT for this fork (GUI checks on Linux/GTK traced to a task's acceptance criteria) and Robert Barbour's Mac run, saying when the Mac run is required, naming the platform-native behaviours that need it (at least native spin-control events, the macOS location of `pwsafe.cfg` and clipboard clearing on minimise), and saying how its result is recorded in task notes
 - [ ] #11 Given the document, when it is read, then it states when integration tests are warranted (only around key interfaces, to confirm wiring), names the interfaces that qualify in this codebase, and states that integration tests are not used to reach coverage of logic
 - [ ] #12 Given the document, when it is read, then it states that existing code carries no obligation to raise coverage, and that when a pull request changes existing lines, its notes state which changed lines are covered and why any are not, and both code reviewers accept that
