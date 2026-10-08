@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 17:03'
+updated_date: '2026-10-08 17:04'
 labels:
   - docs
   - test
@@ -87,4 +87,17 @@ Non-blocking points:
 (6) §4's 'no other coverage exclusions' should add 'beyond the vendored-directory filters in §2'. There are no GCOVR_EXCL or LCOV_EXCL markers under src/ today.
 (7) §8 should name macos-latest.yml as the source of the Mac run's dmg (PasswordSafe-macOS*.dmg), because macos-cmake-latest.yml builds passwordsafe-*.dmg.
 2026-10-08 (Edsger Dijkstra): revised backlog/docs/test-strategy.md in 054c0ab29 (from draft 1a318010b). Blocking: B1 §11 rows 2, 4, 5 and 6 now name PWS-23 as sole owner (removed every "PWS-18 or a new task" / "PWS-07 or a new task"); B2 §4 states the gcovr exclusion flags remove branch records only, condition coverage is unaffected, and the coverage job computes and prints the excluded-branch count. Scope change §5/§6: measured = src/core, src/os/unix and shared files directly under src/os; not measured = src/ui and src/os/mac (GUI or platform wiring, reviewed by hand) and src/os/windows (not built in fork CI); missing-file fails for those measured paths, with the no-executable-lines review exception. Non-blocking taken: (1) §11 row 1 line+branch first, condition once data is in the report, PWS-07 AC 2 raise remains Margaret's after Robert approves; (2) §6 keeps GenerateMakesPassphrase and adds ClampPassphraseWords with kMinPassphraseWords/kMaxPassphraseWords (§3 worked example); (3) §7 dialog→core moved to GUI checks; (4) §8 fresh mktemp -d scratch home, path in notes, pwsafe.cfg absent at start; (5) §1/§8 harness off-repo / RAID R-12; (6) §4 exclusions beyond vendored filters in §2; (7) §8 Mac build is PasswordSafe-macOS*.dmg in artefact PasswordSafe-macOS.<sha> from macos-latest.yml. Status, ACs and assignee unchanged; AC 14 still awaiting Robert.
+
+Re-review 2026-10-08 (Fred Brooks) of backlog/docs/test-strategy.md at 054c0ab29, against the ACs at e8e0dd2e3: Fred's review passes, and the document goes to Robert Barbour for approval (AC 14) via Edsger Dijkstra. Status stays Review.
+AC results: AC 1-13 and AC 15 are met; AC 14 is pending.
+- B1 is closed. §11 rows 2, 4, 5 and 6 each name PWS-23 alone, and no 'X or a new task' remains. AC 13's single-owner map matches §11 and the task ACs: PWS-07 for row 1 and the exemptions, PWS-18 for suspicious hits, PWS-23 for rows 2, 4, 5 and 6 (its AC 1-7), a new task only for Mac option (a), and no gate task for option (b), automated UAT or the Mac run.
+- B2 is closed. §4 says the exclusions affect branches only, and that the job computes and prints the excluded count.
+- The src/os split is as agreed: shared files directly under src/os are measured, src/os/windows is 'not measured (not built in fork CI)', and the 'not in coverage report: no executable code, confirm in review' exception is included. The AC 6 labels match §5 word for word.
+- Non-blocking points 1 and 3-7 are taken.
+- Every PWS-22 commit is tracker-only: 054c0ab29 touches only the document, and 923e088a5 and e8e0dd2e3 touch only this task file. In e8e0dd2e3, the only non-AC changes are the description's gate owners and one dropped blank line before the end-of-notes marker. No note text changed, so that is cosmetic.
+- No security specifics appear.
+Non-blocking, for Robert's read and the follow-ups:
+(a) PWS-07 AC 2 checks only line coverage, at 80% of changed lines, and PWS-07 has no exemption-file AC. Margaret Hamilton's follow-up tracker change after approval therefore needs to add branch coverage (and later condition coverage) on changed lines, plus the exemption file, not just raise the limit. Otherwise Fred Brooks moves them to PWS-23. This is PWS-23 DoR gap 2 (38323c693).
+(b) §5 does not say how the gate tells a missing file with executable lines from one without. Suggested rule: a missing source file fails, and a missing header is listed for review confirmation. This is PWS-23 DoR gap 1.
+(c) Non-blocking point 2 is still open. §3 and §6 name GenerateMakesPassphrase, ClampPassphraseWords and kMinPassphraseWords/kMaxPassphraseWords, and say the PWSprefs table uses those constants, but PWS-02's ACs name none of these. Mark them as illustrative, or have PWS-02 adopt them.
 <!-- SECTION:NOTES:END -->
