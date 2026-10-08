@@ -3,11 +3,11 @@ id: PWS-05
 title: >-
   Fork-only CI job that builds coretest with coverage flags and publishes gcovr
   coverage
-status: Review
+status: Done
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:55'
+updated_date: '2026-10-08 15:58'
 labels:
   - quality
 dependencies: []
@@ -29,11 +29,11 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a clean checkout of fork `master` on `ubuntu-latest`, when the coverage job's configure step runs and `coretest` is built, then the step's log shows `CMAKE_BUILD_TYPE=Debug`, `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, `USE_INTERPROCEDURAL_OPTIMIZATION=OFF`, `--coverage -O0` in both `CMAKE_C_FLAGS` and `CMAKE_CXX_FLAGS`, and `--coverage` in `CMAKE_EXE_LINKER_FLAGS`; and given the pull request that adds the job, when QA reads its diff, then `CMakePresets.json` and `CMakeLists.txt` are unchanged
-- [ ] #2 Given a push to `master` or a pull request to `master` in rjbarbour/pwsafe, when the coverage job runs, then `ctest -R Coretests` passes and the run uploads `coverage.json`, `coverage.cobertura.xml` and a text summary produced by gcovr 8.6 as an artefact
-- [ ] #3 Given that artefact, when QA reads the text summary, then it lists files under `src/core` and `src/os` only and no file under `src/core/pugixml` or `src/core/crypto/external`
-- [ ] #4 Given the first job run on `master`, when QA reads the task notes, then they record its line and function coverage for `src/core` and `src/os/unix` next to Grace Hopper's baseline at f24fd88 (`src/core` lines 7659/19424 = 39.4%, functions 930/1495 = 62.2%; `src/os/unix` lines 430/1988 = 21.6%, functions 54/196 = 27.6%)
-- [ ] #5 Given the same workflow runs in any repository other than rjbarbour/pwsafe, when it is triggered, then the coverage job is skipped and no coverage artefact is produced
+- [x] #1 Given a clean checkout of fork `master` on `ubuntu-latest`, when the coverage job's configure step runs and `coretest` is built, then the step's log shows `CMAKE_BUILD_TYPE=Debug`, `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, `USE_INTERPROCEDURAL_OPTIMIZATION=OFF`, `--coverage -O0` in both `CMAKE_C_FLAGS` and `CMAKE_CXX_FLAGS`, and `--coverage` in `CMAKE_EXE_LINKER_FLAGS`; and given the pull request that adds the job, when QA reads its diff, then `CMakePresets.json` and `CMakeLists.txt` are unchanged
+- [x] #2 Given a push to `master` or a pull request to `master` in rjbarbour/pwsafe, when the coverage job runs, then `ctest -R Coretests` passes and the run uploads `coverage.json`, `coverage.cobertura.xml` and a text summary produced by gcovr 8.6 as an artefact
+- [x] #3 Given that artefact, when QA reads the text summary, then it lists files under `src/core` and `src/os` only and no file under `src/core/pugixml` or `src/core/crypto/external`
+- [x] #4 Given the first job run on `master`, when QA reads the task notes, then they record its line and function coverage for `src/core` and `src/os/unix` next to Grace Hopper's baseline at f24fd88 (`src/core` lines 7659/19424 = 39.4%, functions 930/1495 = 62.2%; `src/os/unix` lines 430/1988 = 21.6%, functions 54/196 = 27.6%)
+- [x] #5 Given the same workflow runs in any repository other than rjbarbour/pwsafe, when it is triggered, then the coverage job is skipped and no coverage artefact is produced
 <!-- AC:END -->
 
 ## Implementation Notes
@@ -79,6 +79,8 @@ Findings (all non-blocking):
 4. Runner notice on the same job: the `ubuntu-latest` label moves to Ubuntu 26 from 19 October 2026. A GCC/gcov change can shift the figures and the gcovr JSON shape (it already did once during PR #6). Proposed: RAID risk, linked to PWS-15 (ubuntu-26.04 spike); re-baseline after the migration, or pin `ubuntu-24.04`.
 5. Actions are pinned by tag rather than SHA, and gcovr by version without hashes (extends Fred's nit). Mitigated by the read-only token, no secrets and `persist-credentials: false`; matches the upstream workflows. Proposed: RAID risk.
 6. Observation, no action: the "UNEXPECTED files" check prints but does not fail. That is consistent with report-only and with AC 3.
+
+DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass: AC 1, 2, 3 and 5 are ticked on Edsger Dijkstra's QA verdicts (6ce79a0: run 37787860322 and its coverage artefact; 131 files, all under src/core and src/os; the job-level github.repository guard). AC 5 was checked by reading the workflow, not by running it in another repository (RAID A-01). AC 4 is ticked on Grace Hopper's record (11a338604): master run 37804161642 on 35c62e7, with all four figures within 0.12 points of the f24fd88 baseline. Fred Brooks checked those figures against that run's coverage_summary.txt artefact (src/core 7656/19423 lines, 927/1493 functions; src/os/unix 431/1988 lines, 54/196 functions); Edsger has not separately QA'd AC 4. DD-02 pass: PR #6 was squash-merged as 35c62e7 on fork master, and the first master run 37804161642 (Fork quality, push) succeeded, with Coretests passing and the coverage artefact uploaded. DD-03 pass: two code reviews, Fred Brooks (848e07d) and Dennis Ritchie's retrospective review (2449a58, pass with findings, no blockers), plus Edsger Dijkstra's independent QA (6ce79a0). DD-04 pass: .github/workflows/fork-quality.yml and tools/quality/coverage.sh are the documentation, no upstream file changed, and residual risks are in backlog/docs/raid-log.md. DD-05 pass: residual risk and follow-up are logged as RAID R-05 (baseline difference, accepted), R-07 (pinned by tag and version, accepted), R-09 (Ubuntu 26 move), R-10 (gcovr suspicious hits; I-03 moved there) and I-04 (concurrency and coverage runs on tracker-only pushes); the next gate is Margaret Hamilton's follow-up platform tasks, PWS-18 for R-10 and PWS-17 for I-04. Overlay DO-04 (CI operations): the deployment evidence is the merge plus the first master run; the job reports coverage on every run as an artefact and a job summary; rollback is reverting the two fork-only files, with no upstream file involved. Result: meets DoD. Moved to Done by Fred Brooks.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
