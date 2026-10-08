@@ -1,11 +1,11 @@
 ---
 id: PWS-04
 title: 'Decision record: include layering between core, os and ui'
-status: Shaping
+status: Ready
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 12:57'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies: []
@@ -42,5 +42,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): fail. Source material cannot be found from the task: tools/quality/layering_baseline.txt and layering.py are not in the repository. They exist only as Grace Hopper's drafts on the team box (/workspace/grace-quality/out/layering_baseline.txt, /workspace/grace-quality/scripts/layering.py). Record where they are, or how to regenerate the 39 edges at f24fd88, so QA can check AC #2 and #3. Counts checked against that file: 30 os-to-core, 7 core-to-wx, 1 os-to-wx, 1 core-to-ui.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. Prior gap closed: the 39 edges are listed inline; QA checks against f24fd88 with no draft needed. Assigned to Barbara Liskov. Build commitment (project default).
 ---
 <!-- COMMENTS:END -->
