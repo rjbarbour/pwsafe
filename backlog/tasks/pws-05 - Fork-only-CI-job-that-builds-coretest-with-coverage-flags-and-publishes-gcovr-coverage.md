@@ -3,10 +3,10 @@ id: PWS-05
 title: >-
   Fork-only CI job that builds coretest with coverage flags and publishes gcovr
   coverage
-status: Shaping
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 12:57'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies: []
@@ -42,5 +42,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): fail. Decision to add: coverage flags (--coverage -O0 and the coverage linker flags) are set in the fork-only workflow's configure step; CMakePresets.json and other upstream files are not edited. The title, description and AC #1 still call for a coverage preset; reword AC #1 to the workflow's configure step. Also record where the drafts (coverage.sh, fork-quality.yml) are, as they are not in the repository.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. Prior gaps closed: coverage flags live in the fork-only workflow's configure step; CMakePresets.json and CMakeLists.txt stay untouched; draft locations recorded. Build commitment (project default).
 ---
 <!-- COMMENTS:END -->
