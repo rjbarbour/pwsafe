@@ -118,6 +118,9 @@ TEST(PassphraseTest, word_count_from_text)
   EXPECT_EQ(current, PassphraseWordCountFromText(L"1 2", current));
   EXPECT_EQ(current, PassphraseWordCountFromText(L"+", current));
   EXPECT_EQ(current, PassphraseWordCountFromText(L"\uFF15", current)); // full-width 5
+  // A non-digit after the count has passed the maximum is still rejected
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"999x", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"-999x", current));
 }
 
 TEST(PassphraseTest, word_below_A_and_no_words)
