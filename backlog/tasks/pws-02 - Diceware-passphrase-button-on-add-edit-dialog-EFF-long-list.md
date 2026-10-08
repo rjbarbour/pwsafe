@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 13:27'
+updated_date: '2026-10-08 15:58'
 labels: []
 dependencies: []
 references:
@@ -63,6 +63,7 @@ Exclusions: Generate, the password field, CPasswordCharPool and PWPolicy unchang
 - [ ] #4 Given Pronounceable is selected, when the user clicks Generate Password, then the existing pronounceable generator runs, unaffected by this change
 - [ ] #5 Given Easy Vision is selected, when the user clicks Generate Password, then the existing easy-vision generator runs, unaffected by this change
 - [ ] #6 Given the add/edit dialog is open, then the word-count spin and the entropy line sit on their own row, aligned like the other fields in that dialog, and not on the password row; Generate, the password field and the policy controls are where they were; no new dialog is opened
+- [ ] #7 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Implementation Notes
