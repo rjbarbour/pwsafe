@@ -3,9 +3,9 @@ id: PWS-02
 title: >-
   Diceware passphrase generation as an app-scope Preferences setting (EFF long
   list)
-status: Shaping
+status: Ready
 assignee:
-  - '@dennis-ritchie'
+  - '@ken-thompson'
 created_date: '2026-10-08 11:40'
 updated_date: '2026-10-08 16:41'
 labels: []
@@ -144,4 +144,6 @@ Robert's Mac-run scope for AC 8 to AC 10: Edsger Dijkstra's GUI checks on Linux 
 Moves not made because of the two gaps: PWS-06 stays in Ready, PWS-02 stays in Shaping, and RAID D-03 stays open.
 
 DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 27630d3c2: pass, no blocking gap. Gap 1 (file list) is closed. modified_files adds src/test/FileV3Test.cpp and the new src/test/PWPolicyTest.cpp and src/test/PWSprefsTest.cpp. The 'Test files:' paragraph maps each file to its ACs: FileV3Test.cpp to AC 1(b) and AC 5, PWPolicyTest.cpp to AC 1(a) and AC 2, and PWSprefsTest.cpp to AC 3 and AC 4. It also names the coretest build lists: CMakeLists.txt, coretest-15.vcxproj(.filters), coretest-16.vcxproj and the Xcode project, which already lists the test sources one by one. Checked: src/test/Makefile (line 21) and src/test/Makefile.macos (line 36) both use $(wildcard *Test.cpp), so they pick up the new files without changes. Gap 2 (conflicting boundaries) is closed. The exclusion now reads 'no change to EffLongWordlist.* or to the existing functions in Passphrase.* (MakePassphrase, PassphraseEntropyBits, PassphraseEntropyLine); AC 18 adds the generate decision to Passphrase.*', and the carried-over bullet reads 'Passphrase.* (plus the AC 18 generate decision)'. ACs 1 to 20 are unchanged from f16635133. RD-01 to RD-07 are met. The non-blocking points from my f16635133 note still apply: the AC 1 'both commits' wording, and pushing 3b7afd068 to the PR #2 branch at handover.
+
+Handover 2026-10-08 (Fred Brooks): moved from Shaping to Ready after the DoR re-check at 27630d3c2 passed, and assigned to Ken Thompson. Dennis Ritchie pushes 3b7afd068 to PR #2's branch and hands Ken his notes. From then on Dennis gives direction only. Fred Brooks and Dennis Ritchie review, and Edsger Dijkstra does QA.
 <!-- SECTION:NOTES:END -->
