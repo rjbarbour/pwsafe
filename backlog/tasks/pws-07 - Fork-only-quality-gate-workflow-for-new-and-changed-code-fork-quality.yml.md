@@ -1,10 +1,11 @@
 ---
 id: PWS-07
 title: Fork-only quality gate workflow for new and changed code (fork-quality.yml)
-status: To Do
-assignee: []
+status: Ready
+assignee:
+  - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:57'
+updated_date: '2026-10-08 15:58'
 labels:
   - quality
 dependencies:
@@ -57,6 +58,10 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 
 <!-- SECTION:NOTES:BEGIN -->
 DoR re-check 2026-10-08 (Fred Brooks): pass. 65fd69c (readability/modernize on added files only, AC 11-12, AC 4 negative) and 7cc6b1f (AC 10 git ls-files resolution, one allow-list entry) match Robert's ruling and the agreed version.h handling. Moves to Ready once PWS-05 is Done (PR #6 merged as 35c62e7; AC 4 pending).
+
+2026-10-08 (Fred Brooks): moved to Ready and assigned to Grace Hopper. The DoR re-check passed in 43e1401, and its dependencies PWS-04 and PWS-05 are Done. Ready now holds PWS-06, PWS-13 and PWS-07 (limit 3).
+
+Robert's 2026-10-08 rule applies: two code reviews (Fred Brooks, Dennis Ritchie); every automated-check finding addressed before merge or logged in backlog/docs/raid-log.md.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
