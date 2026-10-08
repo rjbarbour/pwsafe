@@ -1,3 +1,10 @@
+// EFF long wordlist: 7776 words, in source order, without the dice prefixes.
+// This file is the only copy of the list in the repository.
+// Source: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
+// SHA-256 of the source file:
+//   addd35536511597a02fa0a9ff1e5284677b8883b83e986e43f15a3db996b903e
+// Each entry is the second (tab-separated) column of that file.
+// Licence: CC BY 4.0 International. See docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt.
 static const char * const kEffLongWords[] = {
   "abacus",
   "abdomen",

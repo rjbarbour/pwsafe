@@ -6,8 +6,8 @@
 * http://www.opensource.org/licenses/artistic-license-2.0.php
 */
 // Bundled EFF long wordlist. Words only; dice prefixes are not included.
-// The readable copy is eff-long-wordlist.txt. EffLongWordlist.inc is that
-// file as a string table and must stay in step with it.
+// EffLongWordlist.inc is the only copy of the list. Its header gives the
+// source URL and the SHA-256 of EFF's original file.
 #include "Passphrase.h"
 
 #include "EffLongWordlist.inc"
