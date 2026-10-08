@@ -4,6 +4,7 @@ title: Skip CodeQL on pushes that change only backlog files
 status: To Do
 assignee: []
 created_date: '2026-10-08 13:11'
+updated_date: '2026-10-08 13:33'
 labels: []
 dependencies:
   - PWS-03
@@ -27,6 +28,6 @@ Exclusions: fork-only, never part of an upstream pull request; the `pull_request
 <!-- AC:BEGIN -->
 - [ ] #1 Given the change on fork `master`, when QA reads `.github/workflows/codeql-analysis.yml`, then the `push` trigger has `paths-ignore` with `backlog/**`, and the `pull_request` and `schedule` triggers and every job step are unchanged
 - [ ] #2 Given a push to `master` that changes only files under `backlog/`, when it lands, then no CodeQL run starts for it and a CodeQL run already in progress on `master` is not cancelled
-- [ ] #3 Given a push to `master` that changes a file outside `backlog/`, when it lands, then a CodeQL run starts as before
+- [ ] #3 Given a push to `master` that changes a file outside `backlog/`, when it lands, then a CodeQL run starts as before and its uploaded analysis lists a non-zero rule count (an analysis with 0 rules and 0 results is not a real scan)
 - [ ] #4 Given the task notes, when QA reads them, then they give the run URLs or commit SHAs for both checks above
 <!-- AC:END -->
