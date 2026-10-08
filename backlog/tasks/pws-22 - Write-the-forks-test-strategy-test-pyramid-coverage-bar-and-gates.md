@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:36'
+updated_date: '2026-10-08 16:38'
 labels:
   - docs
   - test
@@ -60,4 +60,6 @@ Gap B (AC 9 macOS, partial): AC 9 has Robert make the choice, but it doesn't sta
 Non-blocking: (1) AC 7 could name its scope ('a changed file under src/core or src/os/unix', as in Grace's note in 07ee21502) so 'meant to measure' can't be read differently. (2) The docs-rule and GCC 13.3.0 points from my 508e58008 note still apply.
 
 DoR verdict correction, 2026-10-08 (Fred Brooks), still at 079d1d9e3 because there is no later PWS-22 content commit. Gap B (AC 9, macOS) moves to non-blocking. AC 9 should name the two Mac options, (a) a fork-only macOS coverage job triggered only on src/os/mac changes and (b) a not-measured label with hand review plus Robert Barbour's Mac run, and have Edsger Dijkstra recommend one for Robert to approve. Robert's open Mac choice doesn't block Ready. AC 5-9 cover the four coverage-gate points and Barbara Liskov's src/os/mac layering wording. One blocking gap remains, Gap A: AC 13 and the description say 'PWS-18 or a new task' and leave out PWS-07, which owns gate_changed.py and the changed-line coverage limit. The fix is the proposed wording in my 079d1d9e3 note. Once that lands, the task passes DoR v1.3. Status is unchanged (To Do), and Ready already holds 3 tasks (PWS-06, PWS-07 and PWS-13).
+
+DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 4841b96c2, the newest PWS-22 commit: pass, no blocking gap. AC 13 closes the blocking gap: it names PWS-07 (including raising its AC 2 coverage limit to the new bar), PWS-18 and a new task as gate owners, and the description now says 'PWS-07, PWS-18 or a new task'. AC 7 took the suggestion and is scoped to changed files under src/core or src/os/unix. AC 9 took the suggestion: it sets out the two Mac options and Edsger Dijkstra's recommendation, and records Robert Barbour's choice, with an open point owned by Robert until he decides. Robert's open choice does not block Ready. RD-01 to RD-07 are met. Non-blocking: AC 9's options could also say that the Mac coverage job runs only when a pull request touches src/os/mac, and that the not-measured route includes hand review by both code reviewers. Edsger can cover both in the document.
 <!-- SECTION:NOTES:END -->
