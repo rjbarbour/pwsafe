@@ -5,7 +5,7 @@ status: Ready
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 15:58'
+updated_date: '2026-10-08 15:59'
 labels: []
 dependencies:
   - PWS-03
@@ -33,6 +33,12 @@ Exclusions: fork-only, never part of an upstream pull request; the `pull_request
 - [ ] #4 Given the task notes, when QA reads them, then they give the run URLs or commit SHAs for both checks above
 - [ ] #5 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+DoR re-check after standard merge AC: pass. AC 5 is testable (two recorded code reviews, and a stated disposition for each automated-check finding), and it doesn't conflict with AC 1-4 or the paths-ignore-only scope. Any finding is recorded by disposition, and a CodeQL alert by alert number only. Stays in Ready.
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
