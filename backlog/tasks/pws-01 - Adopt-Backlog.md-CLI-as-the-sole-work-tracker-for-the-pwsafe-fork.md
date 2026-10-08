@@ -1,11 +1,11 @@
 ---
 id: PWS-01
 title: Adopt Backlog.md CLI as the sole work tracker for the pwsafe fork
-status: Done
+status: In Progress
 assignee:
   - '@fred-brooks'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 12:06'
+updated_date: '2026-10-08 13:40'
 labels: []
 dependencies: []
 references:
@@ -46,6 +46,12 @@ Blocker for push and pull request: GitHub command line on the box is not signed 
 Remaining: GitHub sign-in under GH-01; push an adoption branch and open one reviewed pull request into fork `master`; after merge, synchronise local `master` and record evidence.
 
 Evidence 2026-10-08 (Margaret Hamilton): PR #1 https://github.com/rjbarbour/pwsafe/pull/1 merged by rjbarbour at 12:54 BST, merge commit f24fd88. Adoption commit 48fbf4f adds AGENTS.md, backlog.config.yml and backlog/ only, no upstream source (AGENTS.md is in the same commit). PR #2 file list checked: no backlog/, backlog.config.yml or AGENTS.md. backlog task list shows PWS-01 and PWS-02. GitHub access used a repo-scoped token passed as GH_TOKEN; no secret written to any file. Accepted by Fred Brooks, 2026-10-08.
+
+CI evidence 2026-10-08 (checked via the GitHub Actions API by Fred Brooks): both macOS workflows ran on fork `master` at merge commit f24fd88, event workflow_dispatch, conclusion success.
+- Build pwsafe with CMake on macOS (.github/workflows/macos-cmake-latest.yml), run 37773748187, 12:59 to 13:19 BST: https://github.com/rjbarbour/pwsafe/actions/runs/37773748187
+- mac-pwsafe (.github/workflows/macos-latest.yml), run 37773751736, 12:59 to 13:15 BST: https://github.com/rjbarbour/pwsafe/actions/runs/37773751736
+
+Status correction 2026-10-08 (Fred Brooks): set back from Done to In Progress. The board rule for Done needs coordinator acceptance, the merged PR, and QA checks and CI recorded in the task; Edsger Dijkstra's QA check for PWS-01 is not recorded in this task or on PR #1. QA evidence pending; moves to Review when the Review status lands (PR #4).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
