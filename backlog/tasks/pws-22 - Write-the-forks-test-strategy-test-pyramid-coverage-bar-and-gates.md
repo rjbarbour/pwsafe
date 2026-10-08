@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:34'
+updated_date: '2026-10-08 16:36'
 labels:
   - docs
   - test
@@ -17,7 +17,7 @@ ordinal: 22000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-Robert Barbour set the fork's test policy on 2026-10-08. New code needs 100% line, branch and condition coverage, with parameter and boundary tests, unit tests and automated UAT, and light integration tests only around key interfaces to confirm wiring. There is no obligation to raise coverage of existing code, and judgement applies in modified files. Edsger Dijkstra writes it up as `backlog/docs/test-strategy.md`, a tracker-only change committed straight to fork `master` with no pull request, and Robert approves it. Out of scope: implementing gates (PWS-18 or a new task does that), changing any workflow, `src/` or `tools/` file, and raising coverage of existing code.
+Robert Barbour set the fork's test policy on 2026-10-08. New code needs 100% line, branch and condition coverage, with parameter and boundary tests, unit tests and automated UAT, and light integration tests only around key interfaces to confirm wiring. There is no obligation to raise coverage of existing code, and judgement applies in modified files. Edsger Dijkstra writes it up as `backlog/docs/test-strategy.md`, a tracker-only change committed straight to fork `master` with no pull request, and Robert approves it. Out of scope: implementing gates (PWS-07, PWS-18 or a new task does that), changing any workflow, `src/` or `tools/` file, and raising coverage of existing code.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
@@ -28,13 +28,13 @@ Robert Barbour set the fork's test policy on 2026-10-08. New code needs 100% lin
 - [ ] #4 Given the document, when it is read, then it states the boundary and parameter policy: every new function with a numeric or enumerated input is tested at each boundary and just outside it, with a parameterised test over each equivalence class, using PWS-02's word count of 1 to 99 as a worked example
 - [ ] #5 Given the document, when it is read, then it states the layering policy: new decision logic lives in `src/core`, where coretest can reach it, and not in `src/ui` or `src/os/mac`; GUI and platform code may contain only wiring that the GUI checks and Robert Barbour's Mac run exercise; it gives one allowed and one disallowed example, so a reviewer can tell whether a given branch in a dialog or in `src/os/mac` is allowed
 - [ ] #6 Given the document, when it is read, then it states that the coverage bar is measured on the code coretest instruments, that new `src/ui` and `src/os/mac` code is not measured by it, and that the coverage report lists such files as not measured (GUI or platform wiring, reviewed by hand) rather than leaving them out silently, so the strategy does not read as if GUI or platform code meets the 100% bar
-- [ ] #7 Given the document, when it is read, then it states that a file the coverage job is meant to measure but which is missing from the coverage report fails the coverage gate, rather than being treated as covered or skipped
+- [ ] #7 Given the document, when it is read, then it states that a changed file under `src/core` or `src/os/unix` that the coverage job is meant to measure but which is missing from the coverage report fails the coverage gate, rather than being treated as covered or skipped
 - [ ] #8 Given the document, when it is read, then it states whether the coverage measurement uses gcovr's exclusions for exception-throw branches and unreachable branches (`--exclude-throw-branches`, `--exclude-unreachable-branches`), why, and how any excluded branches are reported, so the 100% branch figure means the same thing in every report
-- [ ] #9 Given the document, when it is read, then it records Robert Barbour's choice on how new macOS-only code is covered (for example a macOS coverage job, or left not measured and exercised by his Mac run); until he chooses, it names that as an open point with Robert as owner, and the task notes record his answer
+- [ ] #9 Given the document, when it is read, then it sets out the two options for covering new macOS-only code (a macOS coverage job, or leaving it not measured and exercised by Robert Barbour's Mac run), gives Edsger Dijkstra's recommendation between them with its reason, and records Robert Barbour's choice; until he chooses, it names that as an open point with Robert as owner, and the task notes record his answer
 - [ ] #10 Given the document, when it is read, then it defines automated UAT for this fork (GUI checks on Linux/GTK traced to a task's acceptance criteria) and Robert Barbour's Mac run, saying when the Mac run is required, naming the platform-native behaviours that need it (at least native spin-control events, the macOS location of `pwsafe.cfg` and clipboard clearing on minimise), and saying how its result is recorded in task notes
 - [ ] #11 Given the document, when it is read, then it states when integration tests are warranted (only around key interfaces, to confirm wiring), names the interfaces that qualify in this codebase, and states that integration tests are not used to reach coverage of logic
 - [ ] #12 Given the document, when it is read, then it states that existing code carries no obligation to raise coverage, and that when a pull request changes existing lines, its notes state which changed lines are covered and why any are not, and both code reviewers accept that
-- [ ] #13 Given the document, when it is read, then it maps each policy to a gate (the check, whether it blocks or advises, and the workflow it belongs in) and names whether PWS-18 or a new task implements each gate
+- [ ] #13 Given the document, when it is read, then it maps each policy to a gate (the check, whether it blocks or advises, and the workflow it belongs in) and names the task that implements each gate: PWS-07 (fork quality gate, including raising its AC 2 coverage limit to the new bar), PWS-18 (coverage accuracy and condition coverage in `tools/quality/coverage.sh`), or a new task
 - [ ] #14 Given the document, when Robert Barbour has read it, then the task notes record his approval, or the changes he asked for and the commit that made them, with the date and the commit he approved
 - [ ] #15 Given the commits for this task, when they are inspected, then they change only `backlog/docs/test-strategy.md` and this task's file, each carries the PWS-22 ID, and no `src/`, `.github/` or `tools/` file changes
 <!-- AC:END -->
