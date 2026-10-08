@@ -6,8 +6,10 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 13:19'
+updated_date: '2026-10-08 13:40'
 labels: []
-dependencies: []
+dependencies:
+  - PWS-02
 modified_files:
   - src/ui/wxWidgets/AddEditPropSheetDlg.cpp
 type: chore
