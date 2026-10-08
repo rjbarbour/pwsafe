@@ -322,6 +322,10 @@
 		<Unit filename="../../src/core/Match.h" />
 		<Unit filename="../../src/core/PWCharPool.cpp" />
 		<Unit filename="../../src/core/PWCharPool.h" />
+		<Unit filename="../../src/core/Passphrase.cpp" />
+		<Unit filename="../../src/core/Passphrase.h" />
+		<Unit filename="../../src/core/EffLongWordlist.cpp" />
+		<Unit filename="../../src/core/EffLongWordlist.inc" />
 		<Unit filename="../../src/core/PWHistory.cpp" />
 		<Unit filename="../../src/core/PWHistory.h" />
 		<Unit filename="../../src/core/PWPolicy.cpp" />

@@ -79,6 +79,8 @@
     <File Name="../src/core/PWSfileV1V2.cpp"/>
     <File Name="../src/core/StringXStream.h"/>
     <File Name="../src/core/PWCharPool.h"/>
+    <File Name="../src/core/Passphrase.h"/>
+    <File Name="../src/core/EffLongWordlist.inc"/>
     <File Name="../src/core/Proxy.h"/>
     <File Name="../src/core/SysInfo.h"/>
     <File Name="../src/core/PWSfileV3.h"/>
@@ -116,6 +118,8 @@
     <File Name="../src/core/Match.cpp"/>
     <File Name="../src/core/PwsPlatform.h"/>
     <File Name="../src/core/PWCharPool.cpp"/>
+    <File Name="../src/core/Passphrase.cpp"/>
+    <File Name="../src/core/EffLongWordlist.cpp"/>
     <File Name="../src/core/ItemField.cpp"/>
     <File Name="../src/core/XMLprefs.h"/>
     <File Name="../src/core/Command.cpp"/>

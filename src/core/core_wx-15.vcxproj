@@ -237,6 +237,8 @@
     <ClCompile Include="PWSfileV4.cpp" />
     <ClCompile Include="PWSLog.cpp" />
     <ClCompile Include="PWCharPool.cpp" />
+    <ClCompile Include="Passphrase.cpp" />
+    <ClCompile Include="EffLongWordlist.cpp" />
     <ClCompile Include="PWHistory.cpp" />
     <ClCompile Include="PWPolicy.cpp" />
     <ClCompile Include="PWSAuxParse.cpp" />
@@ -299,6 +301,8 @@
     <ClInclude Include="PWSLog.h" />
     <ClInclude Include="Proxy.h" />
     <ClInclude Include="PWCharPool.h" />
+    <ClInclude Include="Passphrase.h" />
+    <ClInclude Include="EffLongWordlist.inc" />
     <ClInclude Include="PWHistory.h" />
     <ClInclude Include="PWPolicy.h" />
     <ClInclude Include="PWSAuxParse.h" />

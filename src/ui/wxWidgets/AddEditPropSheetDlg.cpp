@@ -532,7 +532,7 @@ wxScrolledWindow* AddEditPropSheetDlg::CreateBasicPanel()
   m_BasicSizer->Add(passphraseWordsLabel, wxGBPosition(/*row:*/ 9, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
 
   m_PassphraseWordCountCtrl = new wxSpinCtrl(panel, ID_SPINCTRL_PASSPHRASE_WORDS, wxEmptyString,
-                                              wxDefaultPosition, wxSize(70, -1), wxSP_ARROW_KEYS,
+                                              wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
                                               1, 99, static_cast<int>(kDefaultPassphraseWords));
   const StringX entropyLine = PassphraseEntropyLine(kDefaultPassphraseWords, EffLongWordCount());
   m_PassphraseEntropyText = new wxStaticText(panel, ID_STATICTEXT_PASSPHRASE_ENTROPY, entropyLine.c_str(), wxDefaultPosition, wxDefaultSize, 0);

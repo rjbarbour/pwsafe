@@ -29,6 +29,7 @@ NOTSRC          = PWSclipboard.cpp
 LIBSRC          = CheckVersion.cpp \
                   CustomFields.cpp Item.cpp ItemData.cpp ItemAtt.cpp ItemField.cpp \
                   Match.cpp PolicyManager.cpp PWCharPool.cpp CoreImpExp.cpp \
+                  Passphrase.cpp EffLongWordlist.cpp \
                   PWPolicy.cpp PWHistory.cpp PWSAuxParse.cpp \
                   PWScore.cpp PWSdirs.cpp PWSfile.cpp PWSfileHeader.cpp \
                   PWSfileV1V2.cpp PWSfileV3.cpp PWSfileV4.cpp \

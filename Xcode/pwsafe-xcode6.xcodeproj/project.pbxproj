@@ -68,6 +68,7 @@
 		57E952402DE93B7A00DE9640 /* ValidateTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E9522E2DE93B7A00DE9640 /* ValidateTest.cpp */; };
 		57E952412DE93B7A00DE9640 /* TOTPTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E9522B2DE93B7A00DE9640 /* TOTPTest.cpp */; };
 		57E952422DE93B7A00DE9640 /* SHA256Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E952282DE93B7A00DE9640 /* SHA256Test.cpp */; };
+		981EAD58A52765A1379095DC /* PassphraseTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B91FEE7265C7B7B94356A /* PassphraseTest.cpp */; };
 		57E952432DE93B7A00DE9640 /* StringXTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E952292DE93B7A00DE9640 /* StringXTest.cpp */; };
 		57E952442DE93B7A00DE9640 /* Base32Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E9520D2DE93B7A00DE9640 /* Base32Test.cpp */; };
 		57E952452DE93B7A00DE9640 /* ItemAttTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E952212DE93B7A00DE9640 /* ItemAttTest.cpp */; };
@@ -226,6 +227,8 @@
 		E6EE842211E87E9800B01518 /* ItemField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83A911E87E9700B01518 /* ItemField.cpp */; };
 		E6EE842411E87E9800B01518 /* Match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83AC11E87E9700B01518 /* Match.cpp */; };
 		E6EE842511E87E9800B01518 /* PWCharPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83B011E87E9700B01518 /* PWCharPool.cpp */; };
+		0731C7AABA071D8021109F1F /* Passphrase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB57D2A81D25BD57201EB84D /* Passphrase.cpp */; };
+		7E6F96C679658756D0E811F3 /* EffLongWordlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB3E58A9261C2DCC2B8F9B38 /* EffLongWordlist.cpp */; };
 		E6EE842611E87E9800B01518 /* PWHistory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83B211E87E9700B01518 /* PWHistory.cpp */; };
 		E6EE842711E87E9800B01518 /* PWPolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83B411E87E9700B01518 /* PWPolicy.cpp */; };
 		E6EE842811E87E9800B01518 /* PWSAuxParse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6EE83B611E87E9700B01518 /* PWSAuxParse.cpp */; };
@@ -434,6 +437,7 @@
 		57E952262DE93B7A00DE9640 /* OSTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSTest.cpp; path = ../src/test/OSTest.cpp; sourceTree = SOURCE_ROOT; };
 		57E952272DE93B7A00DE9640 /* SHA1Test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SHA1Test.cpp; path = ../src/test/SHA1Test.cpp; sourceTree = SOURCE_ROOT; };
 		57E952282DE93B7A00DE9640 /* SHA256Test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SHA256Test.cpp; path = ../src/test/SHA256Test.cpp; sourceTree = SOURCE_ROOT; };
+		233B91FEE7265C7B7B94356A /* PassphraseTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PassphraseTest.cpp; path = ../src/test/PassphraseTest.cpp; sourceTree = SOURCE_ROOT; };
 		57E952292DE93B7A00DE9640 /* StringXTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StringXTest.cpp; path = ../src/test/StringXTest.cpp; sourceTree = SOURCE_ROOT; };
 		57E9522A2DE93B7A00DE9640 /* TestCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestCommon.h; path = ../src/test/TestCommon.h; sourceTree = SOURCE_ROOT; };
 		57E9522B2DE93B7A00DE9640 /* TOTPTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TOTPTest.cpp; path = ../src/test/TOTPTest.cpp; sourceTree = SOURCE_ROOT; };
@@ -947,6 +951,10 @@
 		E6EE83AF11E87E9700B01518 /* Proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Proxy.h; sourceTree = "<group>"; };
 		E6EE83B011E87E9700B01518 /* PWCharPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PWCharPool.cpp; sourceTree = "<group>"; };
 		E6EE83B111E87E9700B01518 /* PWCharPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PWCharPool.h; sourceTree = "<group>"; };
+		BB57D2A81D25BD57201EB84D /* Passphrase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Passphrase.cpp; sourceTree = "<group>"; };
+		3F646A2660DB9C8101741A53 /* Passphrase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Passphrase.h; sourceTree = "<group>"; };
+		EB3E58A9261C2DCC2B8F9B38 /* EffLongWordlist.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffLongWordlist.cpp; sourceTree = "<group>"; };
+		6445BCBF99D74CA4C6595779 /* EffLongWordlist.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EffLongWordlist.inc; sourceTree = "<group>"; };
 		E6EE83B211E87E9700B01518 /* PWHistory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = PWHistory.cpp; sourceTree = "<group>"; };
 		E6EE83B311E87E9700B01518 /* PWHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PWHistory.h; sourceTree = "<group>"; };
 		E6EE83B411E87E9700B01518 /* PWPolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PWPolicy.cpp; sourceTree = "<group>"; };
@@ -1108,6 +1116,7 @@
 				57E952262DE93B7A00DE9640 /* OSTest.cpp */,
 				57E952272DE93B7A00DE9640 /* SHA1Test.cpp */,
 				57E952282DE93B7A00DE9640 /* SHA256Test.cpp */,
+				233B91FEE7265C7B7B94356A /* PassphraseTest.cpp */,
 				57E952292DE93B7A00DE9640 /* StringXTest.cpp */,
 				57E9522A2DE93B7A00DE9640 /* TestCommon.h */,
 				57E9522B2DE93B7A00DE9640 /* TOTPTest.cpp */,
@@ -1858,6 +1867,10 @@
 				E6EE83AF11E87E9700B01518 /* Proxy.h */,
 				E6EE83B011E87E9700B01518 /* PWCharPool.cpp */,
 				E6EE83B111E87E9700B01518 /* PWCharPool.h */,
+				BB57D2A81D25BD57201EB84D /* Passphrase.cpp */,
+				3F646A2660DB9C8101741A53 /* Passphrase.h */,
+				EB3E58A9261C2DCC2B8F9B38 /* EffLongWordlist.cpp */,
+				6445BCBF99D74CA4C6595779 /* EffLongWordlist.inc */,
 				E6EE83B211E87E9700B01518 /* PWHistory.cpp */,
 				E6EE83B311E87E9700B01518 /* PWHistory.h */,
 				E6EE83B411E87E9700B01518 /* PWPolicy.cpp */,
@@ -2249,6 +2262,7 @@
 				57E952402DE93B7A00DE9640 /* ValidateTest.cpp in Sources */,
 				57E952412DE93B7A00DE9640 /* TOTPTest.cpp in Sources */,
 				57E952422DE93B7A00DE9640 /* SHA256Test.cpp in Sources */,
+				981EAD58A52765A1379095DC /* PassphraseTest.cpp in Sources */,
 				57E952432DE93B7A00DE9640 /* StringXTest.cpp in Sources */,
 				57E952442DE93B7A00DE9640 /* Base32Test.cpp in Sources */,
 				57E952452DE93B7A00DE9640 /* ItemAttTest.cpp in Sources */,
@@ -2289,6 +2303,8 @@
 				E6EE842211E87E9800B01518 /* ItemField.cpp in Sources */,
 				E6EE842411E87E9800B01518 /* Match.cpp in Sources */,
 				E6EE842511E87E9800B01518 /* PWCharPool.cpp in Sources */,
+				0731C7AABA071D8021109F1F /* Passphrase.cpp in Sources */,
+				7E6F96C679658756D0E811F3 /* EffLongWordlist.cpp in Sources */,
 				E6EE842611E87E9800B01518 /* PWHistory.cpp in Sources */,
 				E6EE842711E87E9800B01518 /* PWPolicy.cpp in Sources */,
 				E6EE842811E87E9800B01518 /* PWSAuxParse.cpp in Sources */,

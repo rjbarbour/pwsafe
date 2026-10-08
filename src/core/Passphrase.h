@@ -34,7 +34,7 @@ double PassphraseEntropyBits(size_t wordCount, size_t nWords);
 // This line does not say whether the result is strong.
 StringX PassphraseEntropyLine(size_t wordCount, size_t nWords);
 
-// Bundled EFF long list: 7776 lowercase words. See EFF-LONG-WORDLIST-NOTICE.txt.
+// Bundled EFF long list: 7776 lowercase words. See docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt.
 const char * const *EffLongWords();
 size_t EffLongWordCount();
 const char *EffLongWordlistNotice();
