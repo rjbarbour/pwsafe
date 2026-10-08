@@ -7,7 +7,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 16:58'
-updated_date: '2026-10-08 17:13'
+updated_date: '2026-10-08 17:14'
 labels:
   - quality
 dependencies:
@@ -94,4 +94,6 @@ Non-blocking:
 (3) Pin the coverage.py version in the fork-*.yml job, as for gcovr under R-07.
 Ready: once AC 9 is fixed, this can go to Ready after PWS-07 has merged and Robert Barbour has approved PWS-22, provided Ready has room. The dependencies field also lists PWS-18, which is still To Do, and this task extends coverage.sh 'from PWS-18 once merged'. So either PWS-18 lands first, or Fred Brooks agrees to drop that dependency and take coverage.sh as it stands.
 No vulnerability or CodeQL specifics appear.
+
+DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 8bd0c5383: pass. RD-01 to RD-07 are met, and gaps 1, 2 and A are closed. AC 9 now covers measured .c, .cpp and .h files that are in the report. AC 7 calls new logic in a listed header 'a review failure that blocks the merge'. AC 3 has the exemption entries applied by the AC 11 gate after gcovr runs. AC 8 and AC 12 pin coverage.py, as gcovr is pinned under R-07. Status stays To Do until PWS-07 and PWS-18 have merged and Robert Barbour has approved PWS-22. After that, it can go to Ready if the WIP limit allows.
 <!-- SECTION:NOTES:END -->
