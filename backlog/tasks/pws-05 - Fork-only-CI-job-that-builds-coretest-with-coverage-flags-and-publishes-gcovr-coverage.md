@@ -7,7 +7,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:48'
+updated_date: '2026-10-08 15:50'
 labels:
   - quality
 dependencies: []
@@ -42,6 +42,17 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 2026-10-08 14:35 BST: Grace started. Moved to In Progress by Fred Brooks.
 
 Review 2026-10-08 (Fred Brooks): PR #6 head 83cf89f read in full. Two new files only (.github/workflows/fork-quality.yml, tools/quality/coverage.sh); job guarded by github.repository; contents: read; persist-credentials false; gcovr pinned 8.6; vendored pugixml and crypto/external excluded; all checks green. No blockers. Nits: branch name is pws-05-coverage-job rather than codex/PWS-05-...; actions pinned by tag, not SHA. Next: QA (Edsger) on AC 1-3 and 5; AC 4 after merge.
+
+QA 2026-10-08 16:50 BST (Edsger Dijkstra):
+
+Verdicts (AC checkboxes left unticked; status unchanged):
+- AC 1 PASS. Job https://github.com/rjbarbour/pwsafe/actions/runs/37787860322/job/113347166782 (run 37787860322, head 83cf89f, event pull_request). Configure step log shows CMAKE_BUILD_TYPE:STRING=Debug, CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON, USE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF, CMAKE_C_FLAGS:STRING=--coverage -O0, CMAKE_CXX_FLAGS:STRING=--coverage -O0, CMAKE_EXE_LINKER_FLAGS:STRING=--coverage. PR #6 diff names only .github/workflows/fork-quality.yml and tools/quality/coverage.sh; CMakePresets.json and CMakeLists.txt are not in the diff (gh pr diff 6 --name-only; compare master...83cf89f).
+- AC 2 PASS. Same run: step "Run Coretests" ran `ctest --test-dir build -R Coretests --output-on-failure`; Coretests Passed 74.38s; "100% tests passed, 0 tests failed out of 1". pip installed gcovr==8.6; `gcovr --version` printed "gcovr 8.6". Artefact coverage-83cf89fb0c9d9d7c69ecca4535f4d766ed43468d (id 11555745328) downloaded with gh run download 37787860322; contains coverage.json, coverage.cobertura.xml, coverage_summary.txt.
+- AC 3 PASS. coverage_summary.txt per-directory header lists src/core, src/os/unix, src/os only. Parsed 131 file rows: all under src/core/ or src/os/; zero matches for pugixml or crypto/external in the summary text and in coverage.json file list.
+- AC 4 NOT CHECKED. Requires the first job run on master after merge; not available yet.
+- AC 5 PASS (by workflow inspection). fork-quality.yml at 83cf89f has `if: github.repository == 'rjbarbour/pwsafe'` on the coverage job; comment states other repositories skip and upload nothing. Could not trigger the workflow in another repository from this check; the skip is the job-level `if`, which GitHub evaluates before steps run.
+
+Non-blocking: CMAKE_EXPORT_COMPILE_COMMANDS appears as UNINITIALIZED=ON in CMakeCache (still ON). PR coverage figures (src/core 7656/19423 lines, 927/1493 functions; src/os/unix 431/1988, 54/196) differ slightly from the f24fd88 baseline cited in AC 4; re-check on the first master run. Fred's nits (branch name; actions pinned by tag not SHA) stand.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
