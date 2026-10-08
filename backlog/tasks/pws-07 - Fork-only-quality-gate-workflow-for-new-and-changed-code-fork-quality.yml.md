@@ -1,11 +1,11 @@
 ---
 id: PWS-07
 title: Fork-only quality gate workflow for new and changed code (fork-quality.yml)
-status: In Progress
+status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 18:00'
+updated_date: '2026-10-08 19:36'
 labels:
   - quality
 dependencies:
@@ -78,6 +78,7 @@ Fred's coverage-gate points in gate_changed.py / coverage-gate.toml: single thre
 Finding dispositions (also in the PR body): Codex P1 (diff-cover include did not recurse) fixed in 03e9a4e16; Codex P2 (uninstrumented header skipped) fixed in 03e9a4e16; first-run CI: core_st generation (868a89294) and SARIF security-severity string (8678778d7). clang-tidy, cppcheck, CodeQL and Socket: no new findings on this PR. AC 13 reviews by Fred Brooks and Dennis Ritchie are still outstanding; proposed residual risks remain in the PR body for Fred to log.
 
 Recorded on master rather than the PR branch: first committed on the PR branch as aa542afb7, reverted there in fd4129b9c so PR #7 touches only .github/workflows/fork-*.yml and tools/quality/ (PR head content equals 03e9a4e16).
+2026-10-08 (Fred Brooks, board sync): moved In Progress to Review. PR #7 is open at head fd4129b9c, every check on that head has passed (fork quality gate, coverage, clang-tidy, cppcheck, CodeQL, CMake builds on Ubuntu and Windows, both macOS builds, Socket), and Grace Hopper's verification evidence and finding dispositions are recorded above (1ed0a28). Still open before merge: AC 13 code reviews by Fred Brooks and Dennis Ritchie, residual risks from the PR body into backlog/docs/raid-log.md, then Edsger Dijkstra's QA.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
