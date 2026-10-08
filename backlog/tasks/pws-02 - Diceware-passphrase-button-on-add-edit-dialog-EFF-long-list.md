@@ -7,7 +7,7 @@ status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 16:37'
+updated_date: '2026-10-08 16:38'
 labels: []
 dependencies: []
 references:
@@ -82,7 +82,7 @@ Exclusions: no `PWPolicy`, `PWCharPool` or `CPasswordCharPool` change; no databa
 - [ ] #15 Given the add/edit dialog is open for an entry, when QA looks at the Policy tab and edits the entry's own and named policy there, then its controls and behaviour are the same as on upstream master (3996b15)
 - [ ] #16 Given the pull request head, when coretest runs on Linux CMake and in the macOS workflow, then it passes with no test skipped or removed, and the existing Passphrase tests are unchanged
 - [ ] #17 Given the pull request, when its coverage report is read, then new code it adds under `src/core` has 100% line coverage, 100% branch coverage and 100% condition coverage, as Robert Barbour set on 2026-10-08, whether or not `backlog/docs/test-strategy.md` (PWS-22) has been approved by then (once approved, it defines how these are measured); and new code under `src/ui` is listed as not measured (GUI wiring, reviewed by hand) rather than left out
-- [ ] #18 Given the pull request diff, when it is inspected, then the passphrase bits figure and its one-decimal formatting, and the generate decision (a function taking plain values for whether "Use this computer's policy" is selected and whether the entry is on the safe's default policy, and returning whether to generate a passphrase), are functions in `src/core/Passphrase.h` and `src/core/Passphrase.cpp` with no wx types, each with its cases in `src/test/PassphraseTest.cpp`; and the dialog code calls these functions and contains no branching of its own beyond wiring
+- [ ] #18 Given the pull request diff, when it is inspected, then the passphrase bits figure and its one-decimal formatting, and the generate decision (a function taking plain values for whether "Use this computer's policy" is selected and whether the entry is on the safe's default policy, and returning whether to generate a passphrase), are functions in `src/core/Passphrase.h` and `src/core/Passphrase.cpp` with no wx types, each with its cases in `src/test/PassphraseTest.cpp`; and the dialog code calls these functions and contains no branching of its own beyond wiring and the existing Default Policy comparison, whose result it passes to the generate decision
 - [ ] #19 Given the GUI checks for this task, when each run starts, then it uses a scratch home directory, so `pwsafe.cfg` starts in its first-run state and the tester's own configuration is not read or changed; and the task notes record, for each run, the scratch path used and that `pwsafe.cfg` did not exist at its start
 - [ ] #20 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
