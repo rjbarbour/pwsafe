@@ -1,0 +1,29 @@
+# PWS-07: clang-tidy clean-code rules for C++ files a pull request ADDS (fork-only; never upstream).
+# Run by tools/quality/clang_tidy_gate.py on the whole of each file `git diff --diff-filter=A` lists
+# against the pull request's base (PWS-07 AC 11). Files the pull request modifies never get these
+# checks; they follow the surrounding file's style. Any finding here fails the job.
+# A rule is never suppressed with an inline comment in the source; a noisy or false-positive rule
+# is disabled below, each with its reason.
+#
+# Disabled checks and why:
+#   modernize-use-trailing-return-type      Password Safe never uses trailing return types; the rule
+#                                           would flag every function in a new file
+#   readability-identifier-length           flags conventional short names (i, n, os, it); 50 hits in
+#                                           one existing test file alone (src/test/StringXTest.cpp)
+#   readability-convert-member-functions-to-static
+#                                           false positives on wxWidgets event handlers, which must be
+#                                           non-static members to be bound by event tables or Bind()
+#                                           (seen on src/ui/wxWidgets/AboutDlg.cpp)
+Checks: >
+  -*,
+  readability-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length,
+  -readability-convert-member-functions-to-static
+WarningsAsErrors: '*'
+# Only the added files themselves are reported; clang_tidy_gate.py widens this to the added headers.
+HeaderFilterRegex: ''
+CheckOptions:
+  # Same limit as the lizard cognitive-complexity gate.
+  readability-function-cognitive-complexity.Threshold: 15

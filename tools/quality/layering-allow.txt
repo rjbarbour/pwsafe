@@ -1,0 +1,7 @@
+# PWS-07: layering allow list (fork-only). Includes listed here are never counted as edges.
+# One "<including file> -> <header as written>" per line; every entry needs a reason.
+#
+# version.h is generated from the src/ui/*/version.in templates: into the build directory by CMake
+# and Xcode, but into src/ui/wxWidgets by Makefile.macos. It is not a src/core to src/ui
+# dependency (PWS-07 AC 10, RAID R-02; Barbara Liskov's decision).
+src/core/PWSversion.cpp -> version.h
