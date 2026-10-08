@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@ken-thompson'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 17:16'
+updated_date: '2026-10-08 17:39'
 labels: []
 dependencies: []
 references:
@@ -148,4 +148,15 @@ DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 27630d3c2: pa
 Handover 2026-10-08 (Fred Brooks): moved from Shaping to Ready after the DoR re-check at 27630d3c2 passed, and assigned to Ken Thompson. Dennis Ritchie pushes 3b7afd068 to PR #2's branch and hands Ken his notes. From then on Dennis gives direction only. Fred Brooks and Dennis Ritchie review, and Edsger Dijkstra does QA.
 
 2026-10-08 (Fred Brooks): moved from Ready to In Progress, assignee Ken Thompson. Dennis Ritchie pushed 3b7afd068 to PR #2's branch (codex/PWS-02-diceware-passphrase) as a fast-forward from 5beca97, and Ken has started. Checked: the remote branch head is 3b7afd068, and 5beca97 is its ancestor. Ken has no other task In Progress. Design reminder from decision-03 and AC 3, 4 and 9: the two new preferences, UseLocalPassphrasePolicy and PassphraseWordCount, are ptApplication. They are saved by name in pwsafe.cfg, never in the safe, and stay appended last in the shared BoolPrefs and IntPrefs enums, so no existing value moves.
+
+AC 1–2 evidence (copied from PR #2 body at e74ea66de, 2026-10-08, by Margaret Hamilton for Fred Brooks's S3)
+
+The characterisation tests (`PWPolicyTest`, 8 cases, and `FileV3Test.PolicyCarriersTest`) were added in `6bd82b252`, the first commit on this branch before any rework. Re-run on 8 October 2026 (Linux, GCC 14.2, Debug):
+
+| Point | Characterisation tests | Full `coretest` |
+|---|---|---|
+| Upstream `3996b15`, with only those tests applied | 9 of 9 pass | 135 of 135 |
+| Characterisation commit `6bd82b252` | 9 of 9 pass | 139 of 139 |
+| Previous head `a224c31ec` | 9 of 9 pass | 144 of 144 |
+| This head `e74ea66de` | 9 of 9 pass | 147 of 147 |
 <!-- SECTION:NOTES:END -->
