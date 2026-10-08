@@ -1,11 +1,11 @@
 ---
 id: PWS-15
 title: Check the Ubuntu workflows on the Ubuntu 26.04 runner image before 19 October
-status: Review
+status: Done
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 15:50'
+updated_date: '2026-10-08 15:51'
 labels: []
 dependencies: []
 type: chore
@@ -24,9 +24,9 @@ Exclusions: no workflow change lands on `master` under this task; the test runs 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a throwaway branch in rjbarbour/pwsafe that sets only the `ubuntu-latest` jobs to the image label `ubuntu-26.04` (the `ubuntu-latest` cell of the `cmake-build.yml` matrix and the `runs-on` of `codeql-analysis.yml`, leaving `ubuntu-22.04` and `windows-latest` unchanged), when both workflows run on it before 19 October 2026, then the task notes record each run's URL and result
-- [ ] #2 Given either run fails, when QA reads the task notes, then they name the failing step and its first error, and record that the task went back to Fred Brooks for a decision
-- [ ] #3 Given the check is finished, when QA lists the branches of rjbarbour/pwsafe, then the throwaway branch is gone, and no workflow file on `master` has changed for this task
+- [x] #1 Given a throwaway branch in rjbarbour/pwsafe that sets only the `ubuntu-latest` jobs to the image label `ubuntu-26.04` (the `ubuntu-latest` cell of the `cmake-build.yml` matrix and the `runs-on` of `codeql-analysis.yml`, leaving `ubuntu-22.04` and `windows-latest` unchanged), when both workflows run on it before 19 October 2026, then the task notes record each run's URL and result
+- [x] #2 Given either run fails, when QA reads the task notes, then they name the failing step and its first error, and record that the task went back to Fred Brooks for a decision
+- [x] #3 Given the check is finished, when QA lists the branches of rjbarbour/pwsafe, then the throwaway branch is gone, and no workflow file on `master` has changed for this task
 <!-- AC:END -->
 
 ## Implementation Notes
@@ -60,6 +60,8 @@ Verdicts (AC checkboxes left unticked; status unchanged):
 - AC 3 PASS. Branch API for pws-15-ubuntu-2604-check returns 404; branches list has no pws-15/ubuntu-2604 name. Master cmake-build.yml and codeql-analysis.yml blob SHAs match parent ceaa038 (df9765c… / 9bc1ae0…); neither file on master contains ubuntu-26. No workflow change from this task on master.
 
 Non-blocking (already in Grace's notes, confirmed in logs): apt "E: Unable to locate package dpkg-sig" on 26.04; cpack "Couldn't find dpkg-sig or debsigs"; .deb built unsigned; step still succeeded.
+
+DoD v1.1 check 2026-10-08 (Fred Brooks), overlay DO-02 spike: DD-01 pass (Edsger QA e739758, run links recorded); DD-02 n/a for a spike, master workflows unchanged and throwaway branch deleted; DD-03 pass (Fred review + Edsger independent QA); DD-04 pass (results in task notes, no docs or ADR changed); DD-05 residual: dpkg-sig is absent on 26.04 so the .deb is unsigned (already optional in the setup script); next gate is GitHub moving ubuntu-latest to 26.04 from 19 Oct 2026, which the evidence shows is safe. Done.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
