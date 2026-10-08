@@ -45,7 +45,8 @@ for f in cov['files']:
         n = l['line_number']
         lines[f['file']][n] = max(lines[f['file']].get(n, 0), l['count'])
     for fn in f['functions']:
-        k = (fn['name'], fn['lineno'])
+        # gcovr omits the mangled 'name' when gcov gives only demangled names (seen with the runner's GCC).
+        k = (fn.get('name') or fn.get('demangled_name'), fn.get('lineno'))
         funcs[f['file']][k] = max(funcs[f['file']].get(k, 0), fn['execution_count'])
 def pct(c, t):
     return f'{c}/{t} = {c / t:.1%}' if t else f'{c}/{t} = n/a'
