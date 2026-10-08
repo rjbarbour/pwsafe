@@ -7,7 +7,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:50'
+updated_date: '2026-10-08 15:51'
 labels:
   - quality
 dependencies: []
@@ -53,6 +53,8 @@ Verdicts (AC checkboxes left unticked; status unchanged):
 - AC 5 PASS (by workflow inspection). fork-quality.yml at 83cf89f has `if: github.repository == 'rjbarbour/pwsafe'` on the coverage job; comment states other repositories skip and upload nothing. Could not trigger the workflow in another repository from this check; the skip is the job-level `if`, which GitHub evaluates before steps run.
 
 Non-blocking: CMAKE_EXPORT_COMPILE_COMMANDS appears as UNINITIALIZED=ON in CMakeCache (still ON). PR coverage figures (src/core 7656/19423 lines, 927/1493 functions; src/os/unix 431/1988, 54/196) differ slightly from the f24fd88 baseline cited in AC 4; re-check on the first master run. Fred's nits (branch name; actions pinned by tag not SHA) stand.
+
+PR #6 squash-merged 2026-10-08 as 35c62e7 by Fred Brooks under Robert's standing rule for fork-only platform PRs (CI green, Fred review, Edsger QA 6ce79a0 AC 1-3 and 5). Stays in Review until Grace records AC 4 from the first master run.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
