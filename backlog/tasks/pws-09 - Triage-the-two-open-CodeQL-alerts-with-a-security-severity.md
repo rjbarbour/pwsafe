@@ -1,10 +1,10 @@
 ---
 id: PWS-09
 title: Triage the two open CodeQL alerts with a security severity
-status: To Do
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 12:52'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies: []
@@ -30,3 +30,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #4 Given a true-positive verdict, when QA opens that alert on the repository's code-scanning page, then it is still open, and the task, its commits and any pull request contain no file path, line number, rule name or other detail of it
 - [ ] #5 Given the task's commits, when QA lists the files they change, then no file under `src/` is changed
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): pass. Outcome, scope (no code fix), acceptance evidence and QA route are explicit; true-positive handling keeps detail out of the repository; no dependencies or open decisions; Build commitment (project default).
+---
+<!-- COMMENTS:END -->
