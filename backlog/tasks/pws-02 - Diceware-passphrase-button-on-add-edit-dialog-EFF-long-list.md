@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 12:00'
+updated_date: '2026-10-08 12:30'
 labels: []
 dependencies: []
 references:
@@ -15,11 +15,24 @@ modified_files:
   - src/core/Passphrase.cpp
   - src/core/EffLongWordlist.cpp
   - src/core/EffLongWordlist.inc
-  - src/core/eff-long-wordlist.txt
-  - src/core/EFF-LONG-WORDLIST-NOTICE.txt
+  - docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt
+  - install/macosx/Makefile
+  - install/deb/copyright.debian
   - src/core/CMakeLists.txt
+  - src/core/Makefile
+  - src/core/core-15.vcxproj
+  - src/core/core-15.vcxproj.filters
+  - src/core/core-16.vcxproj
+  - src/core/core_wx-15.vcxproj
+  - src/core/core_wx-15.vcxproj.filters
+  - Xcode/pwsafe-xcode6.xcodeproj/project.pbxproj
+  - CodeBlocks/core/core.cbp
+  - CodeLite/core.project
   - src/test/CMakeLists.txt
   - src/test/PassphraseTest.cpp
+  - src/test/coretest-15.vcxproj
+  - src/test/coretest-15.vcxproj.filters
+  - src/test/coretest-16.vcxproj
   - src/ui/wxWidgets/AddEditPropSheetDlg.cpp
   - src/ui/wxWidgets/AddEditPropSheetDlg.h
 type: feature
@@ -35,7 +48,7 @@ Outcome: in the add/edit entry dialog, a Passphrase button beside Generate fills
 
 Agreed design:
 - `MakePassphrase(list, count, draw)` returns StringX and draws with replacement; it does not call RangeRand itself.
-- The button on AddEditPropSheetDlg uses DrawWithRangeRand on the EFF long list (7776 words, CC BY notice in src/core) and writes the password and confirmation fields, never the clipboard.
+- The button on AddEditPropSheetDlg uses DrawWithRangeRand on the EFF long list (7776 words) and writes the password and confirmation fields, never the clipboard. `src/core/EffLongWordlist.inc` is the only copy of the list; its header gives EFF's source URL and the SHA-256 of EFF's file. The list is CC BY 4.0 International (EFF copyright policy, https://www.eff.org/copyright): the notice is `docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt`, shipped in the Mac dmg via `install/macosx/Makefile`, and listed in `install/deb/copyright.debian`. The About box is unchanged (Barbara Liskov, 2026-10-08).
 - The word-count spin and the entropy line sit on their own row in the existing add/edit dialog, aligned like the other fields, not on the password row (Robert Barbour, 2026-10-04). Spin default 6, range 1 to 99.
 - An entropy line shows count x log2(7776) (6 words = 77.5 bits).
 
@@ -61,7 +74,7 @@ Evidence so far: three PassphraseTest cases reported passing in the Linux corete
 Open points:
 - Spin cap: code creates range 1 to 99; the Linux dialog run reported 1 to 100. Confirm before PR.
 - Three tracked files under Misc/wxWidgets_VS_Updates/build/msw/ show deleted in the working tree, unexplained; not part of this task and must not be committed.
-- Word list is committed twice (eff-long-wordlist.txt and EffLongWordlist.inc); for review.
+- Word list: one copy since db9dab1, `EffLongWordlist.inc`; `eff-long-wordlist.txt` removed (Barbara Liskov ruling, 2026-10-08).
 - Pronounceable and Easy Vision scenarios (AC 4 and 5) not yet checked.
 - Dialog run on Robert's Mac pending.
 - Push, pull request on the fork and CI (build, CodeQL) pending; GitHub command line on the box is not signed in.
