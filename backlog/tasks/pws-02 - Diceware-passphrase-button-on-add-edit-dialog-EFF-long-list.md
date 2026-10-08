@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 12:30'
+updated_date: '2026-10-08 12:44'
 labels: []
 dependencies: []
 references:
@@ -82,4 +82,19 @@ Open points:
 Next action: Dennis confirms the spin cap and resolves the deleted Misc files, then pushes once GitHub sign-in works.
 
 Branch base (per PWS-01 decision, Robert Barbour, 2026-10-08): this branch is upstream-bound and is based on upstream master (3996b15), not on fork `master`. It skips the Tracked Work SOP GT-03A rebase onto fork `master`; synchronise it against upstream master before review or pull request. Its diff must contain no backlog/, backlog.config.yml or AGENTS.md.
+
+Design review of PR #2 at db9dab1 (Barbara Liskov, architect, 2026-10-08). Covers the design only, not Fred's code review or Edsger's QA. Read from the PR diff; nothing built or run.
+Conforms to the rulings:
+- The draw is the seam. `Passphrase.h` declares `PassphraseDraw` and does not include `PWSrand`. Only the dialog adapts `PWSrand::RangeRand`, which has the same signature. `MakePassphrase` checks `nWords == 0` before it draws, so "n is never zero" holds. It fails closed: an out-of-range draw or a null or empty word returns empty and keeps nothing partial.
+- No `CPasswordCharPool` inheritance. `PWPolicy`, `PWCharPool`, `PWSrand` and the file format are untouched, and no preference is added.
+- The handler is thin. It uses Generate's guard (Validate, TransferDataFromWindow, not an alias), writes `m_Password` (a StringX) and the confirmation when hidden, then updates the meter. It doesn't touch the clipboard, logging or the policy. OnUpdateUI disables the spin and the button exactly as it disables Generate.
+- No class was extracted. The dialog diff is the new controls, two handlers and rows moved down two (growable row 18 to 20).
+- `EffLongWordlist.inc` is the only copy, with EFF's URL and SHA-256 in its header. `static_assert`s pin the count at 7776. All five build systems list the new files, and Xcode lists the .inc as text that isn't compiled.
+- The EFF credit follows the Yubico pattern: `docs/EFF` is on the dmg DOCS line, the Debian file has a `Files:` stanza for CC-BY-4.0, and the About box is unchanged.
+Findings (none block the design):
+1. The notice is stale. Its last line, `docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt`, still describes the deleted .txt ("One lowercase word per line"). Suggested wording: "Dice prefixes are not included; the list is compiled into Password Safe from src/core/EffLongWordlist.inc." This is a one-line doc fix, but it changes what the dmg ships, so Fred decides whether it goes in with any fix from the evidence or as the only post-evidence commit.
+2. The PR text should name two deliberate differences from Generate so the maintainer doesn't read them as oversights. Passphrase doesn't copy to the clipboard, and it shows no error box because an empty result is only possible for impossible input.
+3. Mac check for Robert's run: type a number into the spin, without the arrows, then click Passphrase. The word count and the entropy line should agree. Only EVT_SPINCTRL updates the entropy line, and when a native spin control sends that event while someone is typing varies between platforms.
+4. For the maintainer's judgement, not a change now: `PassphraseEntropyLine` builds UI text, including "bits", in core, so it can't be translated through _(). It's acceptable for milestone 1. If upstream asks, the formatting moves to the dialog and core keeps `PassphraseEntropyBits`.
+Verdict: db9dab1 implements the agreed design. No ADR is needed and nothing here changes a contract.
 <!-- SECTION:NOTES:END -->
