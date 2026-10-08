@@ -4,7 +4,7 @@ title: 'Record the WIP limits, board flow and RAID-log edit exception in AGENTS.
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:13'
-updated_date: '2026-10-08 16:17'
+updated_date: '2026-10-08 16:18'
 labels:
   - tracker
 dependencies: []
@@ -37,4 +37,6 @@ Exclusions: the only file the pull request changes is the root `AGENTS.md`; fork
 
 <!-- SECTION:NOTES:BEGIN -->
 DoR check 2026-10-08 (Fred Brooks, Definition of Ready v1.3): pass, with one proposed wording change before Ready; stays in To Do while Ready holds 3. RD-01: the outcome is explicit (the board rules agents work to are written down), for every agent and Robert. RD-02: scope and exclusions are explicit (root AGENTS.md only; no config or RAID log change). RD-03: AC 1-5 are concrete and checkable by reading AGENTS.md; AC 1's reason holds, because Backlog.md 1.50.1 has no WIP-limit setting. RD-04: sources are Dennis Ritchie's review (68d429b93) and Fred Brooks's (ef7ed8628). Rebase dependency: PWS-11 also edits the root AGENTS.md, so whichever merges second rebases on the other and keeps both changes. RD-05: low risk, reversible, Build commitment (project default). RD-06: one file; QA by Edsger Dijkstra; two code reviews (AC 5). RD-07: project defaults. Proposed for Margaret: AC 2's 'Fred Brooks owns every status after To Do' would contradict Definition of Ready v1.3, under which SDLC may return a task to Shaping. Reword it to: 'Fred Brooks moves tasks between statuses after To Do; Margaret Hamilton shapes tasks in Shaping; an SDLC role may ask Fred Brooks to return a task to Shaping under DoR v1.3 triggers RT-01 to RT-04.'
+
+DoR re-check 2026-10-08 (Fred Brooks) after the AC 2 edit (70f5aee14): pass holds, and the proposed wording condition is now met. AC 2 now says who moves, shapes and can return tasks, consistent with Definition of Ready v1.3 RT-01 to RT-04. Stays in To Do while Ready holds 3.
 <!-- SECTION:NOTES:END -->
