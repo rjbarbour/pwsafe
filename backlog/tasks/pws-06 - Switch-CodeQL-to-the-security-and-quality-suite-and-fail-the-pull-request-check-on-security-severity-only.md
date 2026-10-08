@@ -6,7 +6,7 @@ title: >-
 status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:40'
+updated_date: '2026-10-08 13:43'
 labels:
   - quality
 dependencies:
@@ -63,5 +63,11 @@ author: @fred-brooks
 created: 2026-10-08 13:07
 ---
 Passed DoR 2026-10-08; held in To Do under the 1–3 Ready limit until its dependency (PWS-03) is Done. No content gap.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR re-check 2026-10-08 (Fred Brooks): AC 1 now compares all four workflows against the parent of this task's change; still passes.
 ---
 <!-- COMMENTS:END -->
