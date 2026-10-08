@@ -3,11 +3,11 @@ id: PWS-05
 title: >-
   Fork-only CI job that builds coretest with coverage flags and publishes gcovr
   coverage
-status: In Progress
+status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:34'
+updated_date: '2026-10-08 15:48'
 labels:
   - quality
 dependencies: []
@@ -40,6 +40,8 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 
 <!-- SECTION:NOTES:BEGIN -->
 2026-10-08 14:35 BST: Grace started. Moved to In Progress by Fred Brooks.
+
+Review 2026-10-08 (Fred Brooks): PR #6 head 83cf89f read in full. Two new files only (.github/workflows/fork-quality.yml, tools/quality/coverage.sh); job guarded by github.repository; contents: read; persist-credentials false; gcovr pinned 8.6; vendored pugixml and crypto/external excluded; all checks green. No blockers. Nits: branch name is pws-05-coverage-job rather than codex/PWS-05-...; actions pinned by tag, not SHA. Next: QA (Edsger) on AC 1-3 and 5; AC 4 after merge.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
