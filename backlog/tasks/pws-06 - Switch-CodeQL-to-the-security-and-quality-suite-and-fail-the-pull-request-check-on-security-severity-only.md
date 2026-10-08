@@ -3,10 +3,10 @@ id: PWS-06
 title: >-
   Switch CodeQL to the security-and-quality suite and fail the pull request
   check on security severity only
-status: Shaping
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 12:58'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies:
@@ -43,5 +43,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): fail. Decision to add: the pull request check fails on security severity high and above; quality-only alerts are reported but do not block. AC #5 should name that level rather than a level recorded in the task notes. Also name who changes the repository's code-scanning check-failure setting, which needs admin rights on rjbarbour/pwsafe.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. Prior gaps closed: PR check fails on security severity high and above; Robert Barbour changes the admin check-failure setting; AC #5 and #7 name that. Depends on PWS-03 (Ready). Build commitment (project default).
 ---
 <!-- COMMENTS:END -->
