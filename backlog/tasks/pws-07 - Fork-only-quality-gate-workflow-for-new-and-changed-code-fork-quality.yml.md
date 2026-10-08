@@ -1,10 +1,10 @@
 ---
 id: PWS-07
 title: Fork-only quality gate workflow for new and changed code (fork-quality.yml)
-status: Shaping
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 12:58'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies:
@@ -54,5 +54,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): fail. Awaiting content update for owner's tooling ruling (PMD dropped); re-check after.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. Owner tooling ruling applied: PMD/CPD dropped; lizard duplication report-only; cppcheck error/warning fails on changed lines; clang-tidy bugprone/cert/clang-analyzer; drafts located. Depends on PWS-04 and PWS-05 (now Ready). Build commitment (project default).
 ---
 <!-- COMMENTS:END -->
