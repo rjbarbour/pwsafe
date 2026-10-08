@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:59'
-updated_date: '2026-10-08 16:15'
+updated_date: '2026-10-08 16:16'
 labels:
   - quality
 dependencies: []
@@ -41,7 +41,7 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 - [ ] #1 Given the change is on fork `master`, when QA reads the root `AGENTS.md`, then it has one `## Code Review Rules` section with the rules drafted by Barbara Liskov, each stating what to flag, why it matters, and the safe path or exception
 - [ ] #2 Given that section, when QA reads it, then it contains exactly two rules: that `src/core` and `src/os` never include a header under `src/ui` and add no new `wx/` include, and that refactors or file changes the pull request's PWS task does not need are flagged
 - [ ] #3 Given that section, when QA reads it, then it contains no formatting, lint or other mechanical check
-- [ ] #4 Given the change, when QA runs `git ls-files '*AGENTS.md'` on fork `master`, then the root `AGENTS.md` is the only match, and the commit changes no file other than `AGENTS.md` and the PWS task file
+- [ ] #4 Given the change, when QA runs `git ls-files '*AGENTS.md'` on fork `master`, then the root `AGENTS.md` is the only match, the pull request changes no file other than the root `AGENTS.md`, and the task notes go to fork `master` as tracker-only commits
 - [ ] #5 Given Robert Barbour has agreed to an `@codex review` comment being posted under his name, and a representative pull request to fork `master` from a branch based on upstream master that breaks at least one rule, when Codex reviews it, then Grace Hopper records in the task notes the pull request URL, the review URL, and whether Codex flagged the break with reference to the rule
 - [ ] #6 Given Codex does not apply the rules on that pull request, when Grace Hopper records the result, then the task notes say so and the task goes back to Fred Brooks for a decision rather than adding a nested or branch copy of `AGENTS.md`
 - [ ] #7 Given the representative pull request, when the check is finished, then it is closed unmerged and its branch deleted
