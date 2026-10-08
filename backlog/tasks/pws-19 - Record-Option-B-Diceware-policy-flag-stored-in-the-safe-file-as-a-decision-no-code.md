@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:06'
+updated_date: '2026-10-08 16:07'
 labels:
   - decision
 dependencies:
@@ -17,14 +18,14 @@ ordinal: 19000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-Robert chose Option A for PWS-02 on 2026-10-08 (an app-scope Preferences setting, no file-format change). Option B, a Diceware policy flag stored in the safe file, is recorded as a Backlog.md decision record only: no code, no branch other than fork master, no pull request. It becomes a pwsafe/pwsafe issue only with Robert's approval, if Option A gets traction. Barbara Liskov writes it once assigned.
+Robert chose Option A for PWS-02 on 2026-10-08 (an app-scope Preferences setting, no file-format change), recorded in decision-03 "Passphrase policy is an app-scope preference (Option A)". Option B, a Diceware policy flag stored in the safe file, is deferred until upstream pwsafe/pwsafe agrees a flag bit; it is not rejected. Its record is a new Backlog.md decision record that references decision-03 and neither restates nor supersedes it. No code, no branch other than fork master, no pull request. It becomes a pwsafe/pwsafe issue only with Robert's approval, if Option A gets traction. Barbara Liskov writes it once assigned.
 
-Exclusions: no change under `src/`, no workflow or build file change, nothing raised on pwsafe/pwsafe without Robert's approval; no secrets.
+Exclusions: no change under `src/`, no workflow or build file change, no edit to decision-03, nothing raised on pwsafe/pwsafe without Robert's approval; no secrets.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the decision record on fork master under `backlog/decisions/`, when it is read, then it describes the policy flag bit in the safe file, where the word count is stored, and why Option A was chosen for now
+- [ ] #1 Given the new decision record under `backlog/decisions/`, when it is read, then it references decision-03 and describes the policy flag bit in the safe file, where the word count is stored, and the condition under which Option B would replace Option A
 - [ ] #2 Given the decision record on fork master under `backlog/decisions/`, when it is read, then it describes how older Password Safe builds behave with a safe carrying the flag: release builds fail to generate a password ("Couldn't generate password - invalid policy"), and the older wxWidgets policy dialogs drop unknown bits when an entry or named policy is edited, citing `PasswordPolicyDlg.cpp` and `AddEditPropSheetDlg.cpp`
 - [ ] #3 Given the decision record on fork master under `backlog/decisions/`, when it is read, then it lists the tests Option B would need: core save-and-reload tests at entry, named-policy and default-policy level, an older-build fallback test, and a dropped-bit test
 - [ ] #4 Given the decision record on fork master under `backlog/decisions/`, when it is read, then it states that Option B is raised on pwsafe/pwsafe only with Robert's approval
