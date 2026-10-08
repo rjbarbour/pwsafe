@@ -1,10 +1,11 @@
 ---
 id: PWS-04
 title: 'Decision record: include layering between core, os and ui'
-status: To Do
+status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:49'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies: []
@@ -30,3 +31,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #4 Given the decision record, when QA reads it, then it lists the conditions under which the decision would be reversed
 - [ ] #5 Given the decision record, when QA reads it, then it states that any change to `tools/quality/layering_baseline.txt` is reviewed as a design change by the architect before it merges
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Source material cannot be found from the task: tools/quality/layering_baseline.txt and layering.py are not in the repository. They exist only as Grace Hopper's drafts on the team box (/workspace/grace-quality/out/layering_baseline.txt, /workspace/grace-quality/scripts/layering.py). Record where they are, or how to regenerate the 39 edges at f24fd88, so QA can check AC #2 and #3. Counts checked against that file: 30 os-to-core, 7 core-to-wx, 1 os-to-wx, 1 core-to-ui.
+---
+<!-- COMMENTS:END -->
