@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@fred-brooks'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 13:35'
+updated_date: '2026-10-08 15:55'
 labels: []
 dependencies: []
 references:
@@ -58,6 +58,9 @@ QA evidence 2026-10-08 (Edsger Dijkstra), checked against fork `master` f24fd88:
 - AC5 caveat: PR #1 has no GitHub approving review. Review consisted of the owner's merge by rjbarbour at 12:54 BST (merge f24fd88) plus the Codex bot's automated review of 48fbf4f, which had no findings.
 
 Status 2026-10-08 (Fred Brooks): QA and CI are now recorded in this task. With acceptance by Fred Brooks and PR #1 merged, PWS-01 meets the board rule for Done.
+
+DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass for AC 1-4 (Edsger Dijkstra's QA of f24fd88); AC 5 is ticked, but its 'reviewed pull request' rests on the owner's merge and the Codex bot's automated review, so it stands only with the DD-03 waiver below; DD-02 pass: PR #1 merged as f24fd88 on fork master, and macOS runs 37773748187 and 37773751736 succeeded on f24fd88; DD-03 gap: independent QA by Edsger Dijkstra, but no human technical review of PR #1 and no explicit waiver (RAID I-02); DD-04 gaps: (a) the owner decision on the integration branch (option A, with options B and C rejected and fork master permanently differing from upstream) is recorded only in these notes, not as a Backlog.md decision record; (b) the 'Capability gap' line saying Shaping, Ready and Review are not configured is stale, because 8f7c8c4 added them to backlog.config.yml; DD-05 partial: the operational constraint (upstream changes arrive by merge, not fast-forward) is recorded, but no residual risk or next gate is stated; overlay DO-05 (documentation and configuration only, so no application build is needed; authority is Robert Barbour's 2026-10-08 decision, and QA checked the rendered board). Result: gaps: DD-03 waiver or retrospective review (I-02); DD-04 decision record and stale status line; DD-05 next gate.
+Proposed wording, not yet agreed: DD-03 'Waiver (Robert Barbour, <date>): PR #1 is tracker-only (AGENTS.md, backlog.config.yml, backlog/); the owner's merge, the Codex automated review with no findings and Edsger Dijkstra's QA of f24fd88 stand in place of a technical review.' Otherwise Fred Brooks and Dennis Ritchie review f24fd88 retrospectively. DD-04 (a): Barbara Liskov records decision-02 'Fork master is the integration branch and holds the fork-only tracker' from the 12:42 BST owner decision, or Robert rules that these notes are the record. DD-04 (b): 'Superseded 2026-10-08: Shaping, Ready and Review were added to backlog.config.yml in 8f7c8c4.' DD-05: 'Next gate: none for adoption. Fork-only files are kept out of upstream pull requests by checking each pull request's file list, as on PR #2. Fork risks are logged in backlog/docs/raid-log.md.'
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
