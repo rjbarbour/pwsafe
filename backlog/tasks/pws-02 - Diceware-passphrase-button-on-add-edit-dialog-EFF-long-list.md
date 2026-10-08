@@ -7,7 +7,7 @@ status: Review
 assignee:
   - '@ken-thompson'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 18:28'
+updated_date: '2026-10-08 18:29'
 labels: []
 dependencies: []
 references:
@@ -173,4 +173,12 @@ AC 1–2 evidence update (copied from PR #2 body at dd8f899b0, 2026-10-08, by Ma
 Dennis Ritchie's independent re-run on dd8f899b0 (room, 2026-10-08, about 19:20 BST): 9 of 9 characterisation tests pass on the head (coretest 147/147) and 9 of 9 on upstream 3996b15 with only the 6bd82b252 test files applied (coretest 135/135).
 
 2026-10-08 19:33 BST, Fred Brooks: code re-review of PR #2 at 19a7302f4 (diff from a224c31ec, where I last reviewed) - PASS, no blockers. B1 stale GetValue() save: the save now uses the one clamped member. B2 clamp in the dialog: ClampPassphraseWords and PassphraseWordCountFromText live in core Passphrase.cpp, the PWSprefs table uses kMin/kMaxPassphraseWords. B3 coverage gaps: the AppendUnsigned loop guard is gone (buffer sized from numeric_limits), 100% line/branch/condition confirmed by Dennis, with the explicit 999x/-999x cases in 19a7302f4. B4 label: Passphrase words: label added and enabled with the spin control. S1: one core parse for typed text; the spin handler keeps GetPosition(), correct on wx 3.2 generic and GTK per Barbara's and Dennis's source reading. S2: PWSprefsTest no longer depends on the tester's cfg, and FileV3Test uses Store() and restores the app prefs. S3: AC 1-2 evidence in notes (d78ea8532). Nits closed: DialogBlocks block placement, <cstddef>. One nit, no change required: m_PasswordGeneration_WordCount is first set in PrefsToPropSheet rather than in the constructor, matching how the file's other members work. Still ahead of merge: CI on 19a7302f4, Dennis's test-only verdict, Edsger's Linux QA, Robert's Mac run, Robert's merge decision.
+
+AC 1–2 evidence update (copied from PR #2 body at 19a7302f4, 2026-10-08, by Margaret Hamilton)
+
+| Point | Characterisation tests | Full `coretest` |
+|---|---|---|
+| Test-only `19a7302f4` | 9 of 9 pass | 147 of 147 |
+
+Dennis Ritchie's delta check on 19a7302f4 (room, 2026-10-08, about 19:28 BST): test-only, a single file src/test/PassphraseTest.cpp with 3 lines added; coretest 147/147.
 <!-- SECTION:NOTES:END -->
