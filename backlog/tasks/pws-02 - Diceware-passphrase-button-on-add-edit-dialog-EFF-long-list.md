@@ -57,8 +57,8 @@ Exclusions: Generate, the password field, CPasswordCharPool and PWPolicy unchang
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the add/edit dialog is open with an empty password and the word-count spin at 6, when the user clicks Passphrase, then the password field holds six lowercase words joined by single hyphens
-- [ ] #2 Given the word-count spin is set to 4, when the user clicks Passphrase, then the password field holds four lowercase words joined by single hyphens
+- [ ] #1 Given the add/edit dialog is open with an empty password and the word-count spin at 6, when the user clicks Passphrase, then the password field holds six lowercase words from the EFF long list joined by single hyphens (counted as entries of the EFF long list, not by splitting on hyphens, since four list words, `drop-down`, `felt-tip`, `t-shirt` and `yo-yo`, contain a hyphen themselves)
+- [ ] #2 Given the word-count spin is set to 4, when the user clicks Passphrase, then the password field holds four lowercase words from the EFF long list joined by single hyphens (counted as entries of the EFF long list, not by splitting on hyphens, since four list words, `drop-down`, `felt-tip`, `t-shirt` and `yo-yo`, contain a hyphen themselves)
 - [ ] #3 Given the spin is at 6, then the entropy line shows 6 x log2(7776), not a larger figure that assumes the word list is secret
 - [ ] #4 Given Pronounceable is selected, when the user clicks Generate Password, then the existing pronounceable generator runs, unaffected by this change
 - [ ] #5 Given Easy Vision is selected, when the user clicks Generate Password, then the existing easy-vision generator runs, unaffected by this change
