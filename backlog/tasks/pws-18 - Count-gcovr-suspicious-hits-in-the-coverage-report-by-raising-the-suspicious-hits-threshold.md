@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 15:57'
-updated_date: '2026-10-08 16:10'
+updated_date: '2026-10-08 16:33'
 labels:
   - quality
 dependencies:
@@ -42,4 +42,24 @@ Exclusions: fork-only, never part of an upstream pull request; no change to the 
 DoR check 2026-10-08 (Fred Brooks, Definition of Ready v1.3): pass, with one recommended tightening. RD-01: the outcome is explicit (the lines gcovr now treats as suspicious are counted), and the benefit is accurate coverage figures (RAID R-10). RD-02: scope and exclusions are explicit (coverage.sh only; no gate, flags, filters or src/ change). RD-03: AC 1-5 are concrete and deterministic. Recommended for AC 3: the before and after runs use the same runner image and compiler, as the job log shows. Otherwise the ubuntu-latest move to 26.04 on 19 October 2026 (RAID R-09) could change other lines and fail AC 3 for a reason unrelated to this task. RD-04: depends on PWS-05 (Done); no decision outstanding. RD-05: low risk, reversible, report-only job, Build commitment (project default). RD-06: one file changes; QA by Edsger Dijkstra; two code reviews (AC 5); the gate after is Done and closing RAID R-10. RD-07: project defaults; if the observed hit counts are close enough to a real counter overflow that no threshold separates them, stop and return to Fred Brooks. Stays in To Do while Ready holds 3 (PWS-06, PWS-07, PWS-13).
 
 DoR re-check 2026-10-08 (Fred Brooks) after Margaret's AC 3 change (3cd6f0095): pass. AC 3 now requires the same src/ commit, runner image and compiler version for both runs, with all three recorded from the job logs, which closes my earlier recommendation (RAID R-09). Stays in To Do while Ready holds 3.
+
+Coverage-gate options for new code (Grace Hopper, 2026-10-08), pending PWS-22 approval:
+
+**Condition coverage needs GCC 14 or later** (`-fcondition-coverage`, `gcov --conditions`). The current coverage job runs on ubuntu-24.04 with GCC 13.2. The PWS-15 check confirmed that ubuntu-26.04 runners ship GCC 15.2.
+
+**Options:**
+1. **Move the coverage job to ubuntu-26.04 (recommended).** Change the runner, add `-fcondition-coverage` to `coverage.sh`, and use a gcovr release that reports conditions. Barbara agrees. Re-baseline once against f24fd88, because the compiler change shifts the figures slightly.
+2. **Install gcc-14 on ubuntu-24.04.** This adds an apt step and a toolchain that differs from the rest of CI.
+3. **Clang source-based coverage with MC/DC (Clang 18+).** This is the strictest, but it means a second compiler and `llvm-cov` reports.
+
+**Gate design:**
+- **What counts as new code:** whole new files, plus changed lines in existing files.
+- **Line gate:** diff-cover enforces 100% of changed lines, but it only reads line hits.
+- **Branch and condition gate:** extend `gate_changed.py` to read gcovr JSON and fail on any uncovered branch or condition on changed lines. Use gcovr `--exclude-throw-branches` and `--exclude-unreachable-branches` so compiler-generated and exception branches don't create noise. PWS-22 should say this explicitly.
+- **Exemptions:** keep a reviewed exemption file under `tools/quality/`, with a reason for each entry. It is only for judgement calls in modified `src/core` or `src/os/unix` files, never a standing list of UI files.
+- **Unmeasured areas:** the gate reports changes in `src/ui` and `src/os/mac` as "not measured: reviewed by hand" rather than skipping them silently. Linux coretest doesn't instrument `src/ui`, and doesn't compile `src/os/mac` at all.
+- **Missing files fail:** any changed file under `src/core` or `src/os/unix` that is missing from the coverage report fails the gate. This catches a new file that coretest never links.
+- **macOS:** a fork-only Mac coverage job, triggered only when a PR touches `src/os/mac`, is an alternative to the "not measured" label. PWS-22 decides between them.
+
+**Sequencing:** PWS-07 (in progress) and PWS-18 both edit `coverage.sh` and `fork-quality.yml`, so whichever lands second rebases.
 <!-- SECTION:NOTES:END -->
