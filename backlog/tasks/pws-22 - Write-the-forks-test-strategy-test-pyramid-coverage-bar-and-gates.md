@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:55'
+updated_date: '2026-10-08 16:57'
 labels:
   - docs
   - test
@@ -69,4 +69,21 @@ DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 4841b96c2, th
 2026-10-08 (Edsger Dijkstra): draft of backlog/docs/test-strategy.md committed in 1a318010b; maps to ACs 1-13 (brief per-AC pointer to section): AC 1 §1 pyramid and levels table; AC 2 §2 bar and measurement table; AC 3 §2 runner/compiler open point (Grace); AC 4 §3 boundary policy with PassphraseWordCount example; AC 5 §6 layering with GenerateMakesPassphrase allowed/disallowed; AC 6 §5 not-measured labelling; AC 7 §5 missing measured file fails; AC 8 §4 gcovr throw/unreachable exclusions; AC 9 §9 Mac options, recommend (b), open point (Robert); AC 10 §8 automated UAT and Mac run; AC 11 §7 light integration interfaces; AC 12 §10 existing code; AC 13 §11 gate map. Open points: Grace (AC 3 runner/compiler), Robert (AC 9 Mac choice); awaiting Robert's approval (AC 14).
 
 2026-10-08 (Fred Brooks): moved from Ready through In Progress to Review in one step. Edsger Dijkstra's draft of backlog/docs/test-strategy.md is at 1a318010b, and his AC mapping note is at f6a68d485. Fred Brooks's review is in progress. The task waits on Robert Barbour's approval (AC 14), Grace Hopper's answer on the coverage runner and compiler (AC 3), and Robert's macOS coverage choice (AC 9). Edsger remains the assignee.
+
+Review 2026-10-08 (Fred Brooks) of backlog/docs/test-strategy.md at 1a318010b, against AC 1-15, Robert Barbour's test policy and the decisions already made. Met: AC 1-7, 9-12 and 15. Not met: AC 8 (B2), AC 13 (B1), and AC 14, which is expected because Robert's approval is pending. Robert's policy is fully covered: the pyramid, the 100% bar, boundary and parameter tests, unit tests and automated UAT, light integration tests, no obligation on existing code, and judgement in modified files. Every 1a318010b and f6a68d485 PWS-22 commit touches only test-strategy.md or this task file. No vulnerability or CodeQL specifics appear.
+B1, blocking (AC 13): §11 rows 2, 4, 5 and 6 named 'PWS-18 or a new task' or 'PWS-07 or a new task', so those gates had no committed owner. PWS-18 cannot take rows 2 and 4 as written: its AC 1 sets only the suspicious-hits threshold, and its AC 4 allows changes to coverage.sh only. Fred Brooks's decision: one new platform task for Grace Hopper, 'Coverage gate: condition coverage, branch exclusions, not-measured labelling and missing-file failure', owns §11 rows 2, 4, 5 and 6. PWS-07's scope is unchanged, and Margaret Hamilton writes the new task. Edsger Dijkstra then names that task as the single owner in those four rows.
+B2, blocking (AC 8): in gcovr 8.6, --exclude-throw-branches and --exclude-unreachable-branches remove branch records only, and gcovr prints no excluded count in its summary (it logs removals only with trace logging). §4's 'and, once available, condition' and 'The coverage summary reports the excluded count' are therefore wrong as written. Suggested §4 wording: 'The branch measure uses gcovr's --exclude-throw-branches and --exclude-unreachable-branches ... Condition coverage is not affected by these options. gcovr does not report how many branches it excluded, so the coverage job computes and prints that count (§11 row 4) so every report means the same thing.'
+Agreed src/os scope change for AC 6 and AC 7 (Fred Brooks, 2026-10-08):
+- The shared src/os files (directly under src/os) are measured, together with src/core and src/os/unix.
+- src/os/windows is reported as not measured, because fork CI doesn't build it.
+- A changed measured file with no executable code, which therefore has nothing gcovr can report, is listed for review confirmation instead of failing the missing-file rule.
+§5 and §6 of the document, and the AC 6 and AC 7 wording, follow this.
+Non-blocking points:
+(1) §11 row 1 sequencing: PWS-07 can enforce line and branch at 100% first, and condition coverage only once the new task puts condition data in the report.
+(2) §6 names GenerateMakesPassphrase, which doesn't exist yet. Mark it as an example, or align it with Ken Thompson's name once PR #2 lands.
+(3) §7's 'Dialog → core decision function' bullet belongs under GUI checks, because coretest doesn't build the dialogs.
+(4) §8's fixed HOME=/tmp/qa-dialog-home should become a fresh scratch home per run with its path recorded, to match PWS-02 AC 19.
+(5) The QA harness at /workspace/qa-dialog-check isn't in version control. This is now logged as RAID R-12.
+(6) §4's 'no other coverage exclusions' should add 'beyond the vendored-directory filters in §2'. There are no GCOVR_EXCL or LCOV_EXCL markers under src/ today.
+(7) §8 should name macos-latest.yml as the source of the Mac run's dmg (PasswordSafe-macOS*.dmg), because macos-cmake-latest.yml builds passwordsafe-*.dmg.
 <!-- SECTION:NOTES:END -->
