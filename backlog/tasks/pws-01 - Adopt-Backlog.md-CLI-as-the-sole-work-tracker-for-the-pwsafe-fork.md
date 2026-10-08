@@ -1,11 +1,11 @@
 ---
 id: PWS-01
 title: Adopt Backlog.md CLI as the sole work tracker for the pwsafe fork
-status: In Progress
+status: Done
 assignee:
   - '@fred-brooks'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 11:42'
+updated_date: '2026-10-08 12:06'
 labels: []
 dependencies: []
 references:
@@ -27,11 +27,11 @@ Exclusions: no legacy PROJECT.md, PLAN.md, ROADMAP.md or handwritten backlog; no
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Fork `master` is declared the integration branch holding the tracker (owner decision: Robert Barbour, 2026-10-08), and no upstream-bound feature branch diff contains backlog/, backlog.config.yml or AGENTS.md
-- [ ] #2 `backlog/` and `backlog.config.yml` are version-controlled on fork `master` in their own commit
-- [ ] #3 AGENTS.md on fork `master` names Backlog.md as the sole work tracker, the PWS-NN identifier format, the installed `backlog instructions` guides, the one-task-ID-per-branch/commit/PR rule and the fork-only file rule
-- [ ] #4 `backlog task list --json` lists the adoption task and the Diceware Milestone 1 task with the intended IDs and statuses
-- [ ] #5 The adoption commit is integrated on the fork through one reviewed pull request, with GitHub authentication done without exposing a secret
+- [x] #1 Fork `master` is declared the integration branch holding the tracker (owner decision: Robert Barbour, 2026-10-08), and no upstream-bound feature branch diff contains backlog/, backlog.config.yml or AGENTS.md
+- [x] #2 `backlog/` and `backlog.config.yml` are version-controlled on fork `master` in their own commit
+- [x] #3 AGENTS.md on fork `master` names Backlog.md as the sole work tracker, the PWS-NN identifier format, the installed `backlog instructions` guides, the one-task-ID-per-branch/commit/PR rule and the fork-only file rule
+- [x] #4 `backlog task list --json` lists the adoption task and the Diceware Milestone 1 task with the intended IDs and statuses
+- [x] #5 The adoption commit is integrated on the fork through one reviewed pull request, with GitHub authentication done without exposing a secret
 <!-- AC:END -->
 
 ## Implementation Notes
@@ -44,4 +44,12 @@ Capability gap: `backlog config set` cannot set statuses, so Shaping, Ready and 
 State: one local commit on fork `master`; local-only, not pushed.
 Blocker for push and pull request: GitHub command line on the box is not signed in.
 Remaining: GitHub sign-in under GH-01; push an adoption branch and open one reviewed pull request into fork `master`; after merge, synchronise local `master` and record evidence.
+
+Evidence 2026-10-08 (Margaret Hamilton): PR #1 https://github.com/rjbarbour/pwsafe/pull/1 merged by rjbarbour at 12:54 BST, merge commit f24fd88. Adoption commit 48fbf4f adds AGENTS.md, backlog.config.yml and backlog/ only, no upstream source (AGENTS.md is in the same commit). PR #2 file list checked: no backlog/, backlog.config.yml or AGENTS.md. backlog task list shows PWS-01 and PWS-02. GitHub access used a repo-scoped token passed as GH_TOKEN; no secret written to any file. Accepted by Fred Brooks, 2026-10-08.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Adopted Backlog.md CLI 1.50.1 as the fork's sole work tracker on fork master (fork-only AGENTS.md, backlog/, backlog.config.yml). Integrated through PR #1, reviewed and merged by Robert Barbour on 2026-10-08. Verified from the merged PR, the adoption commit's file list, PR #2's file list and backlog task list.
+<!-- SECTION:FINAL_SUMMARY:END -->
