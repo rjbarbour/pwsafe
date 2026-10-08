@@ -47,7 +47,7 @@ Most new behaviour is proved at the bottom. GUI checks confirm the dialogs wire 
 | Branch | same gcovr run, with `--exclude-throw-branches` and `--exclude-unreachable-branches` (see §4) | gcovr JSON per-line `branches` |
 | Condition | same gcovr run after a GCC 14+ build with `-fcondition-coverage` | gcovr JSON per-line `conditions` (`conditionno`, `count`, `covered`, `not_covered_false`, `not_covered_true`); gcovr passes `gcov --conditions` when the gcov tool supports it ([gcovr 8.6 JSON output](https://gcovr.com/en/8.6/output/json.html); [gcovr FAQ — gcov options](https://gcovr.com/en/stable/faq.html)) |
 
-diff-cover can enforce changed-line **line** coverage only. Branch and condition coverage on changed lines is enforced by the gate script reading gcovr JSON (extend `gate_changed.py` from PWS-07; condition data and exclusions land in PWS-23).
+diff-cover can enforce changed-line **line** coverage only. **PWS-07** owns the line-coverage gate on changed lines (`gate_changed.py`, and may use diff-cover). **PWS-23** owns branch coverage on changed lines, condition coverage once the PWS-23 runner puts condition data in the report, and the reviewed exemption file under `tools/quality/` (it extends `gate_changed.py` from PWS-07 for those checks).
 
 ### Runner and compiler (open point — Grace Hopper)
 
@@ -74,7 +74,7 @@ The branch measure uses gcovr's:
 
 Condition coverage is not affected by these options. gcovr does not report how many branches it excluded, so the coverage job computes and prints that count (§11 row 4) so every report means the same thing.
 
-Beyond the vendored-directory filters in §2, no other coverage exclusions are used. Any exemption is a reasoned entry in a reviewed file under `tools/quality/`, only for judgement calls in modified measured files (`src/core`, `src/os/unix`, or shared files directly under `src/os`) — never a standing list of UI files.
+Beyond the vendored-directory filters in §2, no other coverage exclusions are used. Any exemption is a reasoned entry in a reviewed file under `tools/quality/` (**PWS-23**), only for judgement calls in modified measured files (`src/core`, `src/os/unix`, or shared files directly under `src/os`) — never a standing list of UI files.
 
 ## 5. What the coverage bar does and does not measure
 
@@ -89,17 +89,13 @@ The 100% bar applies only to the measured tree in §2.
 
 The strategy must not be read as if GUI or platform code meets the 100% bar.
 
-**Missing-file rule.** A changed file under `src/core`, `src/os/unix`, or directly under `src/os`, that is missing from the coverage report and has executable lines, **fails the coverage gate**. That catches a new file coretest never builds or links.
-
-**Exception — no executable lines.** The gate cannot prove a file has no executable code by itself. Such a file is listed as:
-
-> not in coverage report: no executable code, confirm in review
-
-Both code reviewers (Fred Brooks and Dennis Ritchie) check that it really has none. It is never a silent pass.
+**Missing-file rule.** A changed measured `.c` or `.cpp` file (under `src/core`, `src/os/unix` or directly under `src/os`) that is missing from the coverage report fails the gate. A changed measured `.h` that is missing is listed as "not in coverage report: no executable code, confirm in review", and both code reviewers (Fred Brooks and Dennis Ritchie) confirm it holds only declarations, constants and trivial accessors; a header found holding a real branch or condition (inline function, template, class body) is a gate failure and goes back to move the logic into a measured `.cpp`.
 
 ## 6. Layering policy (testability)
 
 New decision logic lives in `src/core`, or in `src/os` code that the Linux coretest build compiles (`src/os/unix` and the shared files directly under `src/os`). `src/ui` and `src/os/mac` hold thin wiring only. That is what makes the 100% bar reachable without driving the GUI.
+
+New decision logic is defined in a measured `.c` or `.cpp` file; new headers carry only declarations, constants (`constexpr` is fine) and trivial accessors. Example: `Passphrase.h` declares `GenerateMakesPassphrase` and `ClampPassphraseWords`, with bodies in `Passphrase.cpp`, and `kMinPassphraseWords`/`kMaxPassphraseWords` as `constexpr int`.
 
 **Allowed:**
 
@@ -160,13 +156,14 @@ Policy → check → blocks or advises → workflow → implementing task.
 
 | Policy | Check | Blocks / advises | Workflow | Implementing task |
 |---|---|---|---|---|
-| 100% coverage on new code (changed lines) | `gate_changed.py` reads gcovr JSON (and may use diff-cover for line). Enforce **line and branch at 100% first**; condition once condition data is in the report (row 2). Raising PWS-07 AC 2 from 80% changed lines is a separate tracker change by Margaret Hamilton after Robert approves this document | Blocks | `.github/workflows/fork-quality.yml` | **PWS-07** (extend `gate_changed.py`; AC 2 raise is Margaret's follow-up) |
+| 100% line coverage on changed lines | `gate_changed.py` (and may use diff-cover) fails when any changed measured line is uncovered. Raising PWS-07 AC 2 from 80% of changed lines to 100% is a separate tracker change by Margaret Hamilton after Robert approves this document | Blocks | `.github/workflows/fork-quality.yml` | **PWS-07** |
+| 100% branch coverage on changed lines; condition once condition data is in the report | `gate_changed.py` reads gcovr JSON for uncovered branches (and conditions once row 2 puts them in the report) on changed measured lines | Blocks | `fork-quality.yml` | **PWS-23** |
 | Condition coverage enabled in the report | Build with `-fcondition-coverage`; gcovr JSON `conditions` populated; runner/compiler move once Grace confirms | Blocks once the bar is live (report must carry the data the gate reads) | `fork-quality.yml` + `tools/quality/coverage.sh` | **PWS-23** |
 | Coverage accuracy (suspicious hits counted) | `--gcov-suspicious-hits-threshold` in `coverage.sh` | Advises accuracy of the report the gate reads | `fork-quality.yml` + `coverage.sh` | **PWS-18** |
 | Throw / unreachable branch exclusions | `--exclude-throw-branches`, `--exclude-unreachable-branches`; job computes and prints the excluded-branch count | Blocks (defines what 100% branch means) | `coverage.sh` | **PWS-23** |
 | Not-measured labelling | Report lists changed `src/ui` / `src/os/mac` / `src/os/windows` files as not measured with the reason in §5 | Blocks if omitted silently | `fork-quality.yml` / gate script | **PWS-23** |
-| Missing measured file fails | Changed file under `src/core`, `src/os/unix` or directly under `src/os` absent from the report → fail if it has executable lines; otherwise list for review confirmation (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
-| Judgement exemptions | Reasoned entry in a reviewed file under `tools/quality/`, modified measured files only | Blocks misuse (no standing UI exclude list) | `tools/quality/` | **PWS-07** (exemption file owned with the gate) |
+| Missing measured file fails | Missing changed measured `.c`/`.cpp` → fail; missing changed measured `.h` → list for review confirmation, or fail if it holds a real branch or condition (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
+| Judgement exemptions | Reasoned entry in a reviewed file under `tools/quality/`, modified measured files only | Blocks misuse (no standing UI exclude list) | `tools/quality/` | **PWS-23** |
 | Mac coverage if Robert picks (a) | Fork-only macOS coverage job on `src/os/mac` changes | Blocks when that job is required | new `fork-*.yml` | **New task** |
 | Mac coverage if Robert picks (b) | Hand review + Mac run; not-measured label | Advises (review and Mac run recorded in notes) | none (process) | No gate task; recorded under AC 9 / task notes |
 | Automated UAT (GUI checks) | QA harness run traced to ACs | Advises (evidence in task notes); does not replace coretest | off-repo harness | Per feature task (no separate gate workflow) |
