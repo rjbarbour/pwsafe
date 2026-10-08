@@ -1,10 +1,10 @@
 ---
 id: PWS-03
 title: Confirm the CodeQL alert baseline on fork master under the default query suite
-status: To Do
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 12:49'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies: []
@@ -29,3 +29,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #3 Given the recorded total is zero, when QA opens the code-scanning analyses for `refs/heads/master`, then an analysis of the recorded commit by the CodeQL tool is listed, so zero means analysed with no alerts and not never analysed
 - [ ] #4 Given the recorded figures, when QA lists the open alerts for `refs/heads/master` at the recorded commit, then the numbers match the task notes
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): pass. Outcome, scope, acceptance evidence and QA route are explicit; no dependencies or open decisions; task notes only, no file changes; Build commitment (project default).
+---
+<!-- COMMENTS:END -->
