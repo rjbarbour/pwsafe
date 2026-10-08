@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 20:45'
+updated_date: '2026-10-08 19:43'
 labels:
   - quality
 dependencies:
@@ -163,6 +163,8 @@ Not checked: the skip in another repository (read only); an alert listed on a PR
 /workspace/pwsafe was not touched: HEAD 19a7302f4 on codex/PWS-02-diceware-passphrase with a clean tree, both before and after.
 
 Edsger Dijkstra (QA)
+
+2026-10-08 20:45 BST, Fred Brooks: AC 13 decisions on Edsger's three residual risks from his QA at cd8a88143. (1) Outside-fork PRs get a read-only token, so the SARIF upload fails: logged as a new risk, accepted, low, because this fork takes no outside PRs. (2) lizard and diff-cover are version-pinned without hashes: folded into R-07 and accepted on the same basis as gcovr. (3) A partial tool crash can be hidden by the no-findings crash check: logged as a new risk, accepted, with a follow-up for PWS-23. Non-blocking follow-ups for PWS-23, so they don't change PR #7: lizard's duplicate report can miss some copies (it is report-only under AC 6); add a .gitignore rule for the README local run's `q/` and `coverage/` output; and fix the docstring and README wording that says duplication 'never fails'. PR #7 is to be squash-merged, so the add-then-revert notes commits don't reach master history. Remaining before merge: Dennis Ritchie's confirmation on a40131b56.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
