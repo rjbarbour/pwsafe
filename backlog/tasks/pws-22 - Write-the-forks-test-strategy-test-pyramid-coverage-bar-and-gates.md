@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 17:10'
+updated_date: '2026-10-08 17:12'
 labels:
   - docs
   - test
@@ -102,4 +102,16 @@ Non-blocking, for Robert's read and the follow-ups:
 (c) Non-blocking point 2 is still open. §3 and §6 name GenerateMakesPassphrase, ClampPassphraseWords and kMinPassphraseWords/kMaxPassphraseWords, and say the PWSprefs table uses those constants, but PWS-02's ACs name none of these. Mark them as illustrative, or have PWS-02 adopt them.
 2026-10-08 (Edsger Dijkstra): revised backlog/docs/test-strategy.md in 93ad1e3cd after Fred's re-read (b3fcb335e) and Margaret's AC 7/13 update (1ffc7e5d6). (1) §11 row 1 split: PWS-07 owns the line-coverage gate on changed lines (Margaret raises AC 2 to 100% after Robert approves); PWS-23 owns branch coverage on changed lines, condition once the PWS-23 runner gives condition data, and the exemption file under tools/quality/; PWS-23 kept on rows 2, 4, 5 and 6; PWS-18 remains suspicious-hits only; §2 and §4 made consistent. (2) §5 missing-file rule: missing measured .c/.cpp fails; missing measured .h listed for review confirmation of declarations/constants/trivial accessors only, else gate failure and move logic to a measured .cpp; dropped the old no-executable-lines test. (3) §6: new decision logic defined in a measured .c/.cpp; headers only declarations, constexpr constants and trivial accessors (Passphrase.h/Passphrase.cpp example). Status, ACs and assignee unchanged; AC 14 still awaiting Robert.
 
+Joint re-check 2026-10-08 (Fred Brooks) of backlog/docs/test-strategy.md at c74bce23e, with Edsger's note at 4ab1c4d96, against the ACs at 4581d8cea: it passes. Only AC 14 is open, so the document goes to Robert Barbour for approval via Edsger Dijkstra. Status stays Review.
+AC results: AC 1-13 and AC 15 are met; AC 14 is pending.
+Checks against the agreed changes:
+- §11 ownership matches. PWS-07 owns only "100% line coverage on changed lines". PWS-23 owns "100% branch coverage on changed lines" (and condition), "Condition coverage enabled in the report", "Throw / unreachable branch exclusions", "Not-measured labelling", "Missing measured file fails" and "Judgement exemptions". PWS-18 owns "Coverage accuracy (suspicious hits counted)".
+- §5 has the file-type rule. A missing measured .c/.cpp fails. A missing .h is listed for Fred Brooks and Dennis Ritchie to confirm, and fails only if its new or changed lines add a real branch or condition. Upstream logic counts as existing code under §10.
+- §6 has the header rule: new decision logic goes in measured .c/.cpp files, and new headers hold only declarations, constants and trivial accessors.
+- No §11 row numbers remain in the document, or in the PWS-22 or PWS-23 descriptions and ACs. The gate names in §11, PWS-22 AC 13 and the PWS-23 description and ACs match.
+- Everything since 73423355e touches only test-strategy.md and the PWS-22 and PWS-23 task files.
+- No security specifics appear.
+Non-blocking:
+(a) §5 and the §11 row call a header with new logic a 'gate failure', but PWS-23 AC 7 says the gate does not fail on a listed header and leaves the call to the reviewers. Suggest 'a review failure that blocks the merge until the logic moves into a measured .cpp'.
+(b) §3 and §6 still name GenerateMakesPassphrase, ClampPassphraseWords and kMinPassphraseWords/kMaxPassphraseWords, which PWS-02's ACs don't name. PWS-02 should adopt the names, or the document should mark them as illustrative.
 <!-- SECTION:NOTES:END -->
