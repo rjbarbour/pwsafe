@@ -1,10 +1,10 @@
 ---
 id: PWS-20
-title: 'Record the WIP limits, board flow and RAID-log edit exception in AGENTS.md'
+title: 'Record the WIP limits, board flow and hand-edited docs exception in AGENTS.md'
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:13'
-updated_date: '2026-10-08 16:36'
+updated_date: '2026-10-08 16:38'
 labels:
   - tracker
 dependencies: []
