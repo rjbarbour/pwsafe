@@ -4,7 +4,7 @@ title: 'Fail a pull request that adds a *.psafe3 file, with a fork-only check'
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:13'
-updated_date: '2026-10-08 16:18'
+updated_date: '2026-10-08 16:19'
 labels:
   - quality
 dependencies: []
@@ -34,7 +34,7 @@ Exclusions: upstream `.gitignore` and upstream workflows are not edited; `fork-q
 - [ ] #3 Given a pull request to fork `master`, or a push to fork `master`, that adds or renames no such file, when the fork-only check runs, then it passes
 - [ ] #4 Given the evidence for AC 1 to AC 3, when QA reads the task notes, then they link one failing and one passing pull-request run and one passing push run on fork `master`; the failing push case is shown by running `tools/quality/check-no-psafe3.sh` on the box against the failing test branch's commit range, with its output in the notes, so that no `*.psafe3` file ever reaches fork `master`; the failing cases use an empty placeholder file with no safe data; and the test pull request is closed unmerged and its branch deleted
 - [ ] #5 Given the check is working, when Grace Hopper puts it to Robert Barbour, then Robert decides whether it becomes a required status check on fork `master`; Grace gives him the exact branch-protection or ruleset setting, including how tracker-only direct pushes to `master` stay possible (the owner's admin bypass with "include administrators" off, or a ruleset bypass), and states that blocking direct pushes would reverse decision-02 and need a superseding decision record; and the task notes record his answer
-- [ ] #6 Given the pull request diff, when it is inspected, then it adds only `.github/workflows/fork-hygiene.yml` and `tools/quality/check-no-psafe3.sh`, the workflow has the repository guard `github.repository == 'rjbarbour/pwsafe'`, and `fork-quality.yml`, `tools/quality/coverage.sh`, `.gitignore`, the upstream workflows and `src/` are unchanged
+- [ ] #6 Given the pull request diff, when it is inspected, then it adds only `.github/workflows/fork-hygiene.yml` and `tools/quality/check-no-psafe3.sh`, the workflow has the repository guard `github.repository == 'rjbarbour/pwsafe'`, and `fork-quality.yml`, `tools/quality/coverage.sh`, `.gitignore`, the upstream workflows and `src/` are unchanged, and neither its push nor its pull_request trigger has a path filter, and the passing push run's log shows the commit range it checked
 - [ ] #7 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
