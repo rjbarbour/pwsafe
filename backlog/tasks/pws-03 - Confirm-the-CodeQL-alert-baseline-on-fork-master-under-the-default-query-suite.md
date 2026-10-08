@@ -1,11 +1,11 @@
 ---
 id: PWS-03
 title: Confirm the CodeQL alert baseline on fork master under the default query suite
-status: In Progress
+status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:27'
+updated_date: '2026-10-08 13:28'
 labels:
   - quality
 dependencies: []
@@ -43,6 +43,8 @@ Workflow: `.github/workflows/codeql-analysis.yml` unchanged from upstream 3996b1
 Run: https://github.com/rjbarbour/pwsafe/actions/runs/37781946022 (push to master, Analyze-Linux success). Analysed commit: 293d1bf0a61912cb3922e3616236e969d4423f39. CodeQL CLI 2.27.1 (job log). Analysis id 1915953522, uploaded 14:18 BST; category `.github/workflows/codeql-analysis.yml:analyzeL`; tool CodeQL 2.27.1; rules_count 58; results_count 2; error empty.
 
 Open alerts on refs/heads/master: total 2. Without a security severity: 0. With a security severity: critical 2. Sum 2. Both are pre-existing upstream code: the source tree at 293d1bf is identical to upstream 3996b15 (only AGENTS.md, backlog.config.yml and backlog/ differ), and neither alert is in a file PR #2 (PWS-02) changes. Triage is PWS-09, with alert detail kept out of the repository; dismissal awaits Robert Barbour.
+
+2026-10-08 14:30 BST: Moved to Review by Fred Brooks. QA (Edsger Dijkstra) checks AC 4 against analysis 1915953522 on 293d1bf; AC 3 does not apply (total is 2, not 0).
 <!-- SECTION:NOTES:END -->
 
 ## Comments
