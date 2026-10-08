@@ -1,11 +1,11 @@
 ---
 id: PWS-04
 title: 'Decision record: include layering between core, os and ui'
-status: Review
+status: Done
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:28'
+updated_date: '2026-10-08 13:31'
 labels:
   - quality
 dependencies: []
@@ -27,18 +27,20 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the decision record created with `backlog decision create`, when QA reads it, then it states that no file under `src/core` or `src/os` includes a header under `src/ui`
-- [ ] #2 Given the decision record, when QA reads it, then it lists inline all 39 include edges found at fork master `f24fd88`, each as source file, included header and classification, with counts of 30 `src/os` to `src/core`, 7 `src/core` to `wx/`, 1 `src/os` to `wx/` and 1 `src/core` to `src/ui`; and given any listed edge, when QA runs `git grep -n '#include' f24fd88 -- <source file>`, then the include is present
-- [ ] #3 Given the decision record, when QA reads it, then it states that the existing include cycle between `src/core` and `src/os` is accepted, names the 30 `src/os`-to-`src/core` edges in its list as the accepted set, and states whether a new `src/os`-to-`src/core` edge fails the layering check
-- [ ] #4 Given the decision record, when QA reads it, then it names the Windows-only include of `../ui/Windows/stdafx.h` from `src/core/PwsPlatform.h` as the only exception to the no-`src/ui` rule, and it classifies each of the 8 listed edges from `src/core` (7) and `src/os` (1) to `wx/` headers as allowed or forbidden, leaving no listed edge unclassified
-- [ ] #5 Given the decision record, when QA reads it, then it lists the conditions under which the decision would be reversed
-- [ ] #6 Given the decision record, when QA reads it, then it states that the edge-list file used by the PWS-07 layering check must list exactly the edges in the record, and that any change to either list is reviewed as a design change by the architect or Fred Brooks before it merges
+- [x] #1 Given the decision record created with `backlog decision create`, when QA reads it, then it states that no file under `src/core` or `src/os` includes a header under `src/ui`
+- [x] #2 Given the decision record, when QA reads it, then it lists inline all 39 include edges found at fork master `f24fd88`, each as source file, included header and classification, with counts of 30 `src/os` to `src/core`, 7 `src/core` to `wx/`, 1 `src/os` to `wx/` and 1 `src/core` to `src/ui`; and given any listed edge, when QA runs `git grep -n '#include' f24fd88 -- <source file>`, then the include is present
+- [x] #3 Given the decision record, when QA reads it, then it states that the existing include cycle between `src/core` and `src/os` is accepted, names the 30 `src/os`-to-`src/core` edges in its list as the accepted set, and states whether a new `src/os`-to-`src/core` edge fails the layering check
+- [x] #4 Given the decision record, when QA reads it, then it names the Windows-only include of `../ui/Windows/stdafx.h` from `src/core/PwsPlatform.h` as the only exception to the no-`src/ui` rule, and it classifies each of the 8 listed edges from `src/core` (7) and `src/os` (1) to `wx/` headers as allowed or forbidden, leaving no listed edge unclassified
+- [x] #5 Given the decision record, when QA reads it, then it lists the conditions under which the decision would be reversed
+- [x] #6 Given the decision record, when QA reads it, then it states that the edge-list file used by the PWS-07 layering check must list exactly the edges in the record, and that any change to either list is reviewed as a design change by the architect or Fred Brooks before it merges
 <!-- AC:END -->
 
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 2026-10-08 14:30 BST: Decision record decision-01 landed in 1f90a0b. Moved to Review by Fred Brooks; QA (Edsger Dijkstra) checks AC 1-6 against the record and fork master f24fd88.
+
+2026-10-08 14:32 BST: QA (Edsger Dijkstra) passed AC 1-6 against decision-01 (1f90a0b) and f24fd88: all 39 edges checked and regenerated with an exact match, counts 30/7/1/1. Non-blocking for PWS-07: src/core/PWSversion.cpp includes generated "version.h" (from src/ui/*/version.in, resolved in the build directory); the layering check's path resolution must handle it. Accepted and moved to Done by Fred Brooks (tracker-only task, no PR).
 <!-- SECTION:NOTES:END -->
 
 ## Comments
