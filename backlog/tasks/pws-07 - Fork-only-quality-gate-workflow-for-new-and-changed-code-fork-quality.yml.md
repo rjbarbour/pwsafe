@@ -1,11 +1,11 @@
 ---
 id: PWS-07
 title: Fork-only quality gate workflow for new and changed code (fork-quality.yml)
-status: Ready
+status: In Progress
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:58'
+updated_date: '2026-10-08 16:47'
 labels:
   - quality
 dependencies:
@@ -62,6 +62,8 @@ DoR re-check 2026-10-08 (Fred Brooks): pass. 65fd69c (readability/modernize on a
 2026-10-08 (Fred Brooks): moved to Ready and assigned to Grace Hopper. The DoR re-check passed in 43e1401, and its dependencies PWS-04 and PWS-05 are Done. Ready now holds PWS-06, PWS-13 and PWS-07 (limit 3).
 
 Robert's 2026-10-08 rule applies: two code reviews (Fred Brooks, Dennis Ritchie); every automated-check finding addressed before merge or logged in backlog/docs/raid-log.md.
+
+2026-10-08 (Fred Brooks, board sync): moved Ready to In Progress. Grace Hopper opened PR #7 (branch pws-07-quality-gate, head 89f1783) at 17:46 BST; CI still queued and the PR body says evidence follows, so not yet Review. In Progress now holds PWS-02, PWS-09 and PWS-07, above the one-task limit proposed in PWS-20; flagged to Robert.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
