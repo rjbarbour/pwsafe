@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:59'
-updated_date: '2026-10-08 16:16'
+updated_date: '2026-10-08 16:18'
 labels:
   - quality
 dependencies: []
@@ -53,6 +53,8 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 
 <!-- SECTION:NOTES:BEGIN -->
 DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) after AC 8 (56493b180): pass; stays in Shaping (no status change while Ready holds 3). The earlier fail (13:06) is closed: the rules are now limited to layering and scope. RD-01: the outcome is explicit (Codex flags layering and scope breaks; the fork-only list is complete), for reviewers and Robert. RD-02: scope and exclusions are explicit, and AC 6 sends a failed Codex trial back to Fred Brooks. RD-03: AC 1-9 are concrete. AC 8 matches decision-02, which already names .github/workflows/fork-*.yml and tools/quality/. RD-04: the known risk is RAID R-08, and decision-02 is the source. Rebase dependency: PWS-20 also edits the root AGENTS.md, so whichever merges second rebases on the other and keeps both changes. RD-05: low risk, reversible, Build commitment (project default). RD-06: AGENTS.md only; Barbara Liskov drafts, Grace Hopper runs the Codex trial, QA by Edsger Dijkstra, two code reviews (AC 9). RD-07: Robert's agreement to an @codex review comment posted under his name is reserved to him and must be recorded before AC 5 starts. Proposed tidy for Margaret, non-blocking: AC 4 'the commit changes no file other than AGENTS.md and the PWS task file' becomes 'the pull request changes only the root AGENTS.md; task notes go to fork master as tracker-only commits (decision-02, point 5)', to match PWS-20 AC 4.
+
+DoR re-check 2026-10-08 (Fred Brooks) after the AC 4 edit (080dd39e8): pass holds. AC 4 now limits the pull request to the root AGENTS.md and sends task notes to fork master as tracker-only commits, as proposed, which matches PWS-20 AC 4. No other change; stays in Shaping.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
