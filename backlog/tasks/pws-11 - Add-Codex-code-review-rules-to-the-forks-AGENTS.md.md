@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:59'
-updated_date: '2026-10-08 15:58'
+updated_date: '2026-10-08 16:13'
 labels:
   - quality
 dependencies: []
@@ -31,6 +31,8 @@ Known risk: pull request branches are based on upstream master, so they do not c
 
 Requested by Robert Barbour in the pwsafe platform room (can the Codex reviewer be tuned for architecture checks?), relayed by Fred Brooks, 2026-10-08. Reference: Codex GitHub integration, "Customize what Codex reviews".
 
+The same change also completes the fork-only file list in `AGENTS.md`, from Dennis Ritchie's retrospective review of PR #1 (finding 3, recorded on PWS-01 in 68d429b93): alongside `backlog/`, `backlog.config.yml` and `AGENTS.md`, it names `.github/workflows/fork-*.yml` and `tools/quality/`, as decision-02 does, so upstream-bound pull requests must not touch those paths either. This sits outside the `## Code Review Rules` section. The WIP limits and board flow from the same review are a separate task, so that this task stays limited to code-review scope.
+
 Exclusions: fork `master` only, never part of an upstream pull request; root `AGENTS.md` only, with no nested `AGENTS.md` under `src/`; no `@codex security review`; no mechanical lint, formatting or include-count rules, which stay in CI (PWS-07); no secrets.
 <!-- SECTION:DESCRIPTION:END -->
 
@@ -43,7 +45,8 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 - [ ] #5 Given Robert Barbour has agreed to an `@codex review` comment being posted under his name, and a representative pull request to fork `master` from a branch based on upstream master that breaks at least one rule, when Codex reviews it, then Grace Hopper records in the task notes the pull request URL, the review URL, and whether Codex flagged the break with reference to the rule
 - [ ] #6 Given Codex does not apply the rules on that pull request, when Grace Hopper records the result, then the task notes say so and the task goes back to Fred Brooks for a decision rather than adding a nested or branch copy of `AGENTS.md`
 - [ ] #7 Given the representative pull request, when the check is finished, then it is closed unmerged and its branch deleted
-- [ ] #8 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
+- [ ] #8 Given the pull request head, when QA reads the fork-only file list in the root `AGENTS.md`, then, outside the `## Code Review Rules` section, it names `backlog/`, `backlog.config.yml`, `AGENTS.md`, `.github/workflows/fork-*.yml` and `tools/quality/`, matching decision-02, and says that no upstream-bound pull request may touch any of them
+- [ ] #9 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
