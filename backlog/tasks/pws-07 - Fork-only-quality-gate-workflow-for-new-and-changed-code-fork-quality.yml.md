@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 19:45'
+updated_date: '2026-10-08 19:59'
 labels:
   - quality
 dependencies:
@@ -167,6 +167,8 @@ Edsger Dijkstra (QA)
 2026-10-08 20:45 BST, Fred Brooks: AC 13 decisions on Edsger's three residual risks from his QA at cd8a88143. (1) Outside-fork PRs get a read-only token, so the SARIF upload fails: logged as a new risk, accepted, low, because this fork takes no outside PRs. (2) lizard and diff-cover are version-pinned without hashes: folded into R-07 and accepted on the same basis as gcovr. (3) A partial tool crash can be hidden by the no-findings crash check: logged as a new risk, accepted, with a follow-up for PWS-23. Non-blocking follow-ups for PWS-23, so they don't change PR #7: lizard's duplicate report can miss some copies (it is report-only under AC 6); add a .gitignore rule for the README local run's `q/` and `coverage/` output; and fix the docstring and README wording that says duplication 'never fails'. PR #7 is to be squash-merged, so the add-then-revert notes commits don't reach master history. Remaining before merge: Dennis Ritchie's confirmation on a40131b56.
 
 2026-10-08 20:44 BST, Fred Brooks (board sync on pr-merged): PR #7 squash-merged by rjbarbour at 20:44 BST as 9117f91 ("PWS-07: fork quality gate (#7)"). Head merged was a40131b56. Scope stayed fork-only (`.github/workflows/fork-quality.yml` and `tools/quality/` only). CI on a40131b56: all 18 checks green (fork quality run 37826866671 among them). Edsger Dijkstra's QA at cd8a88143 passed AC 1–12; AC 13 is met by Fred's and Dennis's reviews, the residual-risk dispositions in R-07/R-16/R-17 (3aa303e), and this merge. Accepted by Fred Brooks. Moved Review → Done.
+
+2026-10-08 20:59 BST, Fred Brooks: Definition of Done check. DD-01: ACs 1-12 evidenced by Edsger's QA (cd8a88143) and CI on a40131b56. DD-02: squash-merged as 9117f91d7. On the merge commit itself, Coverage (coretest, gcovr) success, Socket Security: Project Report success, Build pwsafe for macOS success, build (CMake on macOS) success, Quality gate (new and changed code) skipped; Analyze-Linux and build (ubuntu-22.04, ubuntu-latest, windows-latest) were cancelled by concurrency when the Done tracker push 589590f landed about one minute later. Post-merge CI on master tip 589590f (contains 9117f91d7) then passed in full: Analyze-Linux success, Coverage (coretest, gcovr) success, build (ubuntu-22.04) success, build (ubuntu-latest) success, build (windows-latest) success, Build pwsafe for macOS success, build (CMake on macOS) success, Socket Security: Project Report success, Fork quality workflow success (Quality gate skipped on push, Coverage success), CodeQL success, CMake Build success, mac-pwsafe success. Open code-scanning alerts on refs/heads/master: 2, both pre-existing (created before this merge); 0 new from 9117f91d7. DD-03: code reviews by Fred Brooks and Dennis Ritchie with no blockers; independent QA by Edsger Dijkstra passed. DD-04: tools/quality/README.md documents the gate; decision-01 holds the layering table. DD-05: residual risks logged as R-07, R-09, R-13 to R-17; next gate is PWS-23 (branch and condition gates plus the follow-ups). Accepted as Done.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
