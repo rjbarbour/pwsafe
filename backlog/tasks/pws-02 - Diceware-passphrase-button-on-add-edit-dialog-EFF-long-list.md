@@ -7,7 +7,7 @@ status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 16:27'
+updated_date: '2026-10-08 16:29'
 labels: []
 dependencies: []
 references:
@@ -117,4 +117,6 @@ Findings (none block the design):
 Verdict: db9dab1 implements the agreed design. No ADR is needed and nothing here changes a contract.
 
 2026-10-08 14:27 BST: Robert tested the 5beca97 dmg on his Mac; the feature works, but he wants the passphrase controls off the Basic tab and set once as a policy-level setting. PR #2 stays open and unmerged for rework on the same branch; the core (MakePassphrase, word list, notice, tests) carries over. Criteria to be rewritten once Robert picks where the setting is saved. Moved back to Shaping by Fred Brooks.
+
+2026-10-08 (Fred Brooks): The State, evidence, pending and open-point notes above, about db9dab1 and 5beca97, the Basic-tab Passphrase design and Barbara Liskov's design review of PR #2, are superseded by the Option A rewrite in e21da4bd1, and so are their references to old AC 4 and AC 5 (Pronounceable and Easy Vision, now covered by AC 12). They stay as history. Precedence (decision-03 point 5: an entry's own or named policy wins, and this computer's policy replaces only the safe's default) was confirmed by Robert Barbour on 2026-10-08; it is AC 13, and the confirmation is recorded on decision-03 in ad3d2c165. Still current: the branch-base rule (upstream master 3996b15, no fork-only files in the diff); the three deleted Misc/wxWidgets_VS_Updates files must not be committed; and V3test.psafe3 stays untracked (now locally ignored, RAID R-11).
 <!-- SECTION:NOTES:END -->
