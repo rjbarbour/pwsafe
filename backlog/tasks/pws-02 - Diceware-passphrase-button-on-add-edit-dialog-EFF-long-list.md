@@ -3,11 +3,11 @@ id: PWS-02
 title: >-
   Diceware passphrase generation as an app-scope Preferences setting (EFF long
   list)
-status: In Progress
+status: Review
 assignee:
   - '@ken-thompson'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 17:39'
+updated_date: '2026-10-08 18:23'
 labels: []
 dependencies: []
 references:
@@ -159,4 +159,6 @@ The characterisation tests (`PWPolicyTest`, 8 cases, and `FileV3Test.PolicyCarri
 | Characterisation commit `6bd82b252` | 9 of 9 pass | 139 of 139 |
 | Previous head `a224c31ec` | 9 of 9 pass | 144 of 144 |
 | This head `e74ea66de` | 9 of 9 pass | 147 of 147 |
+
+2026-10-08 19:24 BST, Fred Brooks: moved to Review. PR #2 head dd8f899b0: every fork CI check passed on this head, macOS builds included (read via the Actions API). Dennis's delta and minimal-diff verdict passes, AC 1-2 characterisation 9/9 on head and on 3996b15, Passphrase.cpp 100% line/branch/condition (confirmed by Dennis). Barbara has no open design points. Still ahead of merge: Fred's re-review, Edsger's Linux dialog QA under the reworded AC 8, Robert's Mac run (AC 8 macOS cases, AC 9, AC 10), then Robert's merge decision.
 <!-- SECTION:NOTES:END -->
