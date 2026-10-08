@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@fred-brooks'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 15:58'
+updated_date: '2026-10-08 16:08'
 labels: []
 dependencies: []
 references:
@@ -63,6 +63,22 @@ DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass for AC 1-4 (Edsger Dijkstra'
 Proposed wording, not yet agreed: DD-03 'Waiver (Robert Barbour, <date>): PR #1 is tracker-only (AGENTS.md, backlog.config.yml, backlog/); the owner's merge, the Codex automated review with no findings and Edsger Dijkstra's QA of f24fd88 stand in place of a technical review.' Otherwise Fred Brooks and Dennis Ritchie review f24fd88 retrospectively. DD-04 (a): Barbara Liskov records decision-02 'Fork master is the integration branch and holds the fork-only tracker' from the 12:42 BST owner decision, or Robert rules that these notes are the record. DD-04 (b): 'Superseded 2026-10-08: Shaping, Ready and Review were added to backlog.config.yml in 8f7c8c4.' DD-05: 'Next gate: none for adoption. Fork-only files are kept out of upstream pull requests by checking each pull request's file list, as on PR #2. Fork risks are logged in backlog/docs/raid-log.md.'
 
 DoD remediation 2026-10-08 (Fred Brooks): PWS-01 stays in Done while it is under DoD remediation. DD-03: no waiver is sought; under Robert's two-reviewer rule, a retrospective technical review of f24fd88 by Fred Brooks and Dennis Ritchie is pending (RAID I-02). DD-04 (a): Barbara Liskov is asked to write decision-02, 'Fork master is the integration branch and holds the fork-only tracker'. DD-04 (b), agreed by Fred Brooks: Superseded 2026-10-08: Shaping, Ready and Review were added to backlog.config.yml in 8f7c8c4. DD-05, agreed by Fred Brooks: Next gate: none for adoption. Fork-only files are kept out of upstream pull requests by checking each pull request's file list, as on PR #2. Fork risks are logged in backlog/docs/raid-log.md.
+
+Retrospective code review 2026-10-08 17:08 BST (Dennis Ritchie): one of the two technical reviews of PR #1 under Robert's two-reviewer rule (RAID I-02). Fred Brooks's review is recorded separately.
+
+Verdict: pass with findings. No blockers.
+
+Scope: PR #1 was one commit, 48fbf4f (parent 3996b15), integrated by the merge commit f24fd88. Against its first parent, f24fd88 adds exactly four files and changes nothing else: `AGENTS.md`, `backlog.config.yml`, `backlog/tasks/pws-01 - Adopt-Backlog.md-CLI-as-the-sole-work-tracker-for-the-pwsafe-fork.md` and `backlog/tasks/pws-02 - Diceware-passphrase-button-on-add-edit-dialog-EFF-long-list.md`. No change under `src/`, to the build files or to any workflow.
+
+What was checked: all four files read in full as merged, and today's `AGENTS.md` and `backlog.config.yml` compared with f24fd88. Secret-pattern search of the added lines: the only matches are `AGENTS.md`'s policy text and design wording in PWS-02; no token, credential, local path or password database. `backlog.config.yml` has prefix PWS, `auto_commit: false` (so one ID per commit stays a person's choice) and `bypass_git_hooks: false`. `AGENTS.md` matches the 12:42 BST owner decision (decision-02) and AC 3.
+
+Findings (all non-blocking):
+1. As merged, `backlog.config.yml` had only To Do, In Progress and Done. The PWS-01 notes recorded this as a capability gap, and 8f7c8c4 later added Shaping, Ready and Review. No further action.
+2. Backlog.md has no WIP-limit setting, and `AGENTS.md` does not state the SOP limits (one task In Progress, at most three Ready) or the Shaping, Ready and Review flow. Fred enforces them by hand; the board is within limits today (1 In Progress, 3 Ready). Proposed: follow-up task (with 3) to add the status flow and limits to `AGENTS.md`.
+3. `AGENTS.md`'s fork-only file list names only `AGENTS.md`, `backlog/` and `backlog.config.yml`. Since PWS-05 it should also name `.github/workflows/fork-*.yml` and `tools/quality/`, as decision-02 already does. Proposed: same follow-up task. It may sit with PWS-11, which also edits `AGENTS.md`.
+4. `AGENTS.md` forbids committing `*.psafe3` files, but nothing in the repository stops it: `.gitignore` has no such pattern, and a local test database sits untracked in a team checkout. Editing `.gitignore` would change an upstream file. Proposed: RAID risk, mitigated by a `.git/info/exclude` entry in each team checkout (not a repository change), and later a fork-only check in `tools/quality/`.
+5. AC 5's "reviewed pull request" rested on the owner's merge, the Codex bot's automated review and Edsger's QA. This note supplies one of the two technical reviews for I-02. I-02 can close once Fred's review is recorded.
+6. Observation, no action: `zero_padded_ids: 2` gives PWS-100 and later uneven padding. It is cosmetic.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
