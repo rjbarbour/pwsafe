@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:43'
+updated_date: '2026-10-08 15:58'
 labels: []
 dependencies:
   - PWS-03
@@ -37,6 +37,7 @@ Exclusions: fork-only, never part of an upstream pull request; no file under `sr
 - [ ] #3 Given `install/macosx/Makefile` on fork `master`, when `make` runs in `install/macosx` without `DMG_APP` set, then the staged app and the dmg's app icon are named `pwsafe.app`
 - [ ] #4 Given the change, when QA reads its diff, then it touches only `install/macosx/Makefile` and the fork's dmg workflow; `RESOURCES` and the `.xcent` path still name `pwsafe.app`; and `PRODUCT_NAME`, the executable name and the bundle ID are unchanged
 - [ ] #5 Given the same fork CI run, when QA reads its log, then the coretest step passes
+- [ ] #6 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
