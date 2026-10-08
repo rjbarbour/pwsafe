@@ -18,15 +18,15 @@ TEST(PWSprefsTest, passphrase_prefs_defaults_and_limits)
 {
   const PWSprefs *prefs = PWSprefs::GetInstance();
 
+  // Defaults come from the table, not from the tester's pwsafe.cfg
   EXPECT_FALSE(prefs->GetPrefDefVal(PWSprefs::UseLocalPassphrasePolicy));
-  EXPECT_FALSE(prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy));
 
   EXPECT_EQ(static_cast<unsigned int>(kDefaultPassphraseWords),
             prefs->GetPrefDefVal(PWSprefs::PassphraseWordCount));
-  EXPECT_EQ(static_cast<unsigned int>(kDefaultPassphraseWords),
-            prefs->GetPref(PWSprefs::PassphraseWordCount));
   EXPECT_EQ(1, prefs->GetPrefMinVal(PWSprefs::PassphraseWordCount));
   EXPECT_EQ(99, prefs->GetPrefMaxVal(PWSprefs::PassphraseWordCount));
+  EXPECT_EQ(kMinPassphraseWords, prefs->GetPrefMinVal(PWSprefs::PassphraseWordCount));
+  EXPECT_EQ(kMaxPassphraseWords, prefs->GetPrefMaxVal(PWSprefs::PassphraseWordCount));
 }
 
 TEST(PWSprefsTest, passphrase_prefs_are_not_stored_in_the_safe)
@@ -34,7 +34,11 @@ TEST(PWSprefsTest, passphrase_prefs_are_not_stored_in_the_safe)
   // Only database-scoped prefs go into the string saved in a safe's header,
   // so changing an application-scoped pref must leave that string unchanged.
   PWSprefs *prefs = PWSprefs::GetInstance();
+  const bool appUseLocal = prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy);
   prefs->SetupCopyPrefs();
+  prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, false, true);
+  prefs->SetPref(PWSprefs::PassphraseWordCount,
+                 static_cast<unsigned int>(kDefaultPassphraseWords), true);
   const StringX before = prefs->Store(true);
 
   prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, true, true);
@@ -43,8 +47,10 @@ TEST(PWSprefsTest, passphrase_prefs_are_not_stored_in_the_safe)
   EXPECT_EQ(9u, prefs->GetPref(PWSprefs::PassphraseWordCount, true));
   EXPECT_EQ(before, prefs->Store(true));
 
+  // Changing the copy leaves the application value alone
   prefs->SetupCopyPrefs();
-  EXPECT_FALSE(prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy, true));
+  EXPECT_EQ(appUseLocal, prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy));
+  EXPECT_EQ(appUseLocal, prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy, true));
 }
 
 TEST(PWSprefsTest, existing_enum_positions_unchanged)

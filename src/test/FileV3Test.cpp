@@ -416,15 +416,17 @@ TEST_F(FileV3Test, PassphraseSwitchLeavesSafeUnchangedTest)
   PSWDPolicyMap policies;
   policies[polname] = namedPol;
 
+  const bool appUseLocal = prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy);
+  const unsigned int appWordCount = prefs->GetPref(PWSprefs::PassphraseWordCount);
   StringX readPrefs[2];
   PSWDPolicyMap readPolicies[2];
   PWPolicy readDefault[2];
   for (int on = 0; on < 2; on++) {
-    prefs->SetupCopyPrefs();
-    prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, on != 0, true);
-    prefs->SetPref(PWSprefs::PassphraseWordCount, on ? 9u : 6u, true);
+    // Switch the application prefs, then save the header as PWScore does
+    prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, on != 0);
+    prefs->SetPref(PWSprefs::PassphraseWordCount, on ? 9u : 6u);
     PWSfileHeader hdr;
-    hdr.m_prefString = prefs->Store(true);
+    hdr.m_prefString = prefs->Store();
 
     PWSfileV3 fw(fname.c_str(), PWSfile::Write, PWSfile::V30);
     fw.SetHeader(hdr);
@@ -444,6 +446,8 @@ TEST_F(FileV3Test, PassphraseSwitchLeavesSafeUnchangedTest)
     prefs->Load(readPrefs[on], true);
     readDefault[on] = prefs->GetDefaultPolicy(true);
   }
+  prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, appUseLocal);
+  prefs->SetPref(PWSprefs::PassphraseWordCount, appWordCount);
   EXPECT_EQ(readPrefs[0], readPrefs[1]);
   EXPECT_EQ(readPolicies[0], readPolicies[1]);
   ExpectSamePolicy(readDefault[0], readDefault[1]);
