@@ -3,9 +3,10 @@ id: PWS-10
 title: >-
   Seed pwsafe's random generator from the operating system's random source on
   every platform
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
+updated_date: '2026-10-08 12:55'
 labels: []
 dependencies: []
 type: enhancement
@@ -29,3 +30,13 @@ Exclusions: no new cryptographic algorithm; no file-format change; existing call
 - [ ] #5 Given coretest, when it runs, then it includes a case that injects an operating-system source and shows the seed is taken from it, and a case where the injected source fails and the generator fails closed
 - [ ] #6 Given the pull request, when QA inspects it, then it is based on upstream master and its diff contains none of the fork-only files (`AGENTS.md`, `backlog/`, `backlog.config.yml`)
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Blocked on owner decision; not Ready.
+---
+<!-- COMMENTS:END -->
