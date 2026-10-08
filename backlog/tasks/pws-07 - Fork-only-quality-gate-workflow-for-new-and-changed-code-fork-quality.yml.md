@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 19:36'
+updated_date: '2026-10-08 18:43'
 labels:
   - quality
 dependencies:
@@ -79,6 +79,8 @@ Finding dispositions (also in the PR body): Codex P1 (diff-cover include did not
 
 Recorded on master rather than the PR branch: first committed on the PR branch as aa542afb7, reverted there in fd4129b9c so PR #7 touches only .github/workflows/fork-*.yml and tools/quality/ (PR head content equals 03e9a4e16).
 2026-10-08 (Fred Brooks, board sync): moved In Progress to Review. PR #7 is open at head fd4129b9c, every check on that head has passed (fork quality gate, coverage, clang-tidy, cppcheck, CodeQL, CMake builds on Ubuntu and Windows, both macOS builds, Socket), and Grace Hopper's verification evidence and finding dispositions are recorded above (1ed0a28). Still open before merge: AC 13 code reviews by Fred Brooks and Dennis Ritchie, residual risks from the PR body into backlog/docs/raid-log.md, then Edsger Dijkstra's QA.
+
+2026-10-08 19:42 BST, Fred Brooks: code review of PR #7 at fd4129b9c - pass, with no blocking findings. The PR's net change against master (three-dot diff from merge base 07ee21502) is `.github/workflows/fork-quality.yml` plus 12 new files under `tools/quality/`. No `src/`, upstream workflow, `coverage.sh` or `backlog/` file changes; no inline suppression comment is added; nothing installs PMD, CPD, include-what-you-use, CodeChecker or SonarQube; and GitHub reports the PR merges cleanly. All 18 checks on fd4129b9c passed, and the merge ref has no open code-scanning alerts. Both Codex findings and the two first-run CI failures are fixed. The edge list matches decision-01's 39 edges, and `layering.py` passes with the single `PWSversion.cpp` allow entry. I checked the gate locally. Only line coverage is enforced, at 80%; branch and condition stay with PWS-23. `src/ui`, `src/os/mac` and `src/os/windows` are listed as not measured. A neutral edit to an existing function over the limit passes, and an edit that raises its complexity fails as a ratchet failure. Required before merge (sent to Grace): (1) pin the quality job's actions to commit SHAs, because it now holds `security-events: write` and that meets R-07's revisit condition; (2) make the gate scripts fail when clang-tidy, clang-tidy-diff or lizard exits non-zero and no findings were parsed; (3) drop the leading `./` from the duplication scan's vendored-code exclusions; (4) use the recursive `src/core/**` and `src/os/**` patterns in the README's local diff-cover command. Follow-up, not blocking: split the larger gate-script functions before PWS-23 extends `gate_changed.py`. RAID: R-07 and R-09 updated, and three new risks logged (macOS/Windows-only code unchecked on Linux; non-self-contained headers; platform-#ifdef code in measured core files). Still needed before merge: Dennis Ritchie's code review, Grace's four fixes with my re-check, and Edsger Dijkstra's QA.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
