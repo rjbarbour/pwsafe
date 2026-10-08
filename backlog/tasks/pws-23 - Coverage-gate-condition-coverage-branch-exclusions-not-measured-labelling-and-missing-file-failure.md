@@ -7,12 +7,13 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 16:58'
-updated_date: '2026-10-08 17:04'
+updated_date: '2026-10-08 17:07'
 labels:
   - quality
 dependencies:
   - PWS-07
   - PWS-18
+  - PWS-22
 type: chore
 ordinal: 23000
 ---
@@ -23,20 +24,26 @@ ordinal: 23000
 Fred Brooks decided on 2026-10-08 that this one platform task owns gates 2, 4, 5 and 6 in §11 of `backlog/docs/test-strategy.md` (PWS-22). PWS-07's scope is unchanged. PWS-18 only sets the suspicious-hits threshold and may only touch `coverage.sh`, so it cannot take these gates. This task extends `tools/quality/gate_changed.py` (from PWS-07) and `tools/quality/coverage.sh` (from PWS-18) once those have merged.
 
 It is a fork-only change limited to `.github/workflows/fork-*.yml` and `tools/quality/`, with no upstream workflow or `src/` change. It does not set the coverage percentage limit: raising PWS-07 AC 2's limit is a separate tracker change after Robert Barbour approves PWS-22. Once PWS-22 is approved, `backlog/docs/test-strategy.md` defines how these measures work.
+
+QA owner: Edsger Dijkstra.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given Grace Hopper's confirmation of the runner (recommended `ubuntu-26.04` with GCC 15.2), when the coverage job runs on a pull request, then it uses a compiler that supports condition coverage (GCC 14 or later), and the task notes record the runner, the compiler version and the one coverage re-baseline
+- [ ] #1 Given Grace Hopper's confirmation of the runner (recommended `ubuntu-26.04` with GCC 15.2), when the coverage job runs on a pull request, then it uses a compiler that supports condition coverage (GCC 14 or later), and the task notes record the runner, the compiler version and the one coverage re-baseline; RAID R-05 and R-09 in `backlog/docs/raid-log.md` bear on the runner and the re-baseline
 - [ ] #2 Given a pull request that changes a measured file, when the coverage job runs, then the coverage report includes condition coverage for that file alongside line and branch coverage
-- [ ] #3 Given the coverage job, when it runs gcovr, then it passes `--exclude-throw-branches` and `--exclude-unreachable-branches`, and no exclusion beyond the vendored-directory filters already in place
+- [ ] #3 Given the coverage job, when it runs gcovr, then it passes `--exclude-throw-branches` and `--exclude-unreachable-branches`, and no exclusion beyond these two flags, the vendored-directory filters already in place and the entries in the reviewed exemption file under `tools/quality/` (§4, §11 row 7)
 - [ ] #4 Given gcovr does not report how many branches it excluded, when the coverage job runs, then it computes that count and prints it in the job log and in the coverage summary
-- [ ] #5 Given a pull request that changes a file under `src/ui`, `src/os/mac` or `src/os/windows`, when the gate runs, then the report lists the file as not measured with its reason (GUI wiring reviewed by hand for `src/ui`, macOS-only for `src/os/mac`, and "not built in fork CI" for `src/os/windows`), and the gate does not fail on it
-- [ ] #6 Given a pull request that changes a file under `src/core` or `src/os/unix`, or directly under `src/os`, and the file is missing from the coverage report and has executable lines, when the gate runs, then the gate fails and names the file
-- [ ] #7 Given such a missing file that has no executable lines, when the gate runs, then the report lists it as "not in coverage report: no executable code, confirm in review" and the gate does not fail on it
-- [ ] #8 Given the new or changed gate logic in `tools/quality/`, when its tests run, then each case in AC 4 to AC 7 has a unit test with a fixture coverage report, and every branch of the new code is covered
-- [ ] #9 Given the pull request diff, when it is read, then it touches only `.github/workflows/fork-*.yml` and `tools/quality/`, with no upstream workflow and no `src/` file
-- [ ] #10 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
+- [ ] #5 Given a pull request that changes a file under `src/ui`, `src/os/mac` or `src/os/windows`, when the gate runs, then the report lists the file as not measured with its §5 label, "not measured (GUI or platform wiring, reviewed by hand)" for `src/ui` and `src/os/mac` and "not measured (not built in fork CI)" for `src/os/windows`, and the gate does not fail on it
+- [ ] #6 Given a pull request that changes a `.c` or `.cpp` file under `src/core` or `src/os/unix`, or directly under `src/os`, and the file is missing from the coverage report, when the gate runs, then the gate fails and names the file
+- [ ] #7 Given a pull request that changes a `.h` file under `src/core` or `src/os/unix`, or directly under `src/os`, and the file is missing from the coverage report, when the gate runs, then the report and the job log list it as "not in coverage report: no executable code, confirm in review" for Fred Brooks and Dennis Ritchie to confirm against the §6 header rule (new decision logic is defined in a measured `.c` or `.cpp` file, and new headers carry only declarations, constants and trivial accessors), and the gate does not fail on it, so it never fails silently or passes silently; the listed header passes review only if it holds just declarations, constants and trivial accessors, and a real branch or condition a reviewer finds in it (an inline function, template or class body) counts as a gate failure, with the logic moved into a measured `.cpp` file
+- [ ] #8 Given the new or changed gate logic in `tools/quality/`, when its unit tests run under coverage.py with branch measurement in a `.github/workflows/fork-*.yml` job, then each case in AC 4 to AC 7 has a unit test with a fixture coverage report, and the new gate code has 100% line and branch coverage
+- [ ] #9 Given a pull request that changes lines in a `.c` or `.cpp` file under `src/core` or `src/os/unix`, or directly under `src/os`, when the gate runs, then branch coverage of those changed lines is 100%, or the gate fails and names the file, the line and the branch
+- [ ] #10 Given a pull request that changes lines in a file under `src/core` or `src/os/unix`, or directly under `src/os`, and the coverage job runs on the AC 1 runner and compiler, when the gate runs, then condition coverage of those changed lines is 100%, or the gate fails
+- [ ] #11 Given the reviewed exemption file under `tools/quality/` (§4, §11 row 7), when the gate runs, then each entry names a changed file under `src/core` or `src/os/unix`, or directly under `src/os` and its lines, a reason and the approving reviewer; exempted lines are excluded from the line, branch and condition checks; the gate prints each exemption it applied; and an entry that is malformed, names a line the pull request does not change, or names a file outside those measured areas fails the gate
+- [ ] #12 Given the gate logic for AC 9 to AC 11, when its unit tests run under coverage.py with branch measurement, then each case in AC 9 to AC 11 has a unit test with a fixture coverage report (and a fixture exemption file for AC 11), and the new gate code has 100% line and branch coverage
+- [ ] #13 Given the pull request diff, when it is read, then it touches only `.github/workflows/fork-*.yml` and `tools/quality/`, with no upstream workflow and no `src/` file
+- [ ] #14 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Implementation Notes
