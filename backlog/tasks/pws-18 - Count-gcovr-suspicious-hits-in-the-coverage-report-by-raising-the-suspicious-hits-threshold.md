@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 15:57'
-updated_date: '2026-10-08 16:06'
+updated_date: '2026-10-08 16:10'
 labels:
   - quality
 dependencies:
@@ -40,4 +40,6 @@ Exclusions: fork-only, never part of an upstream pull request; no change to the 
 
 <!-- SECTION:NOTES:BEGIN -->
 DoR check 2026-10-08 (Fred Brooks, Definition of Ready v1.3): pass, with one recommended tightening. RD-01: the outcome is explicit (the lines gcovr now treats as suspicious are counted), and the benefit is accurate coverage figures (RAID R-10). RD-02: scope and exclusions are explicit (coverage.sh only; no gate, flags, filters or src/ change). RD-03: AC 1-5 are concrete and deterministic. Recommended for AC 3: the before and after runs use the same runner image and compiler, as the job log shows. Otherwise the ubuntu-latest move to 26.04 on 19 October 2026 (RAID R-09) could change other lines and fail AC 3 for a reason unrelated to this task. RD-04: depends on PWS-05 (Done); no decision outstanding. RD-05: low risk, reversible, report-only job, Build commitment (project default). RD-06: one file changes; QA by Edsger Dijkstra; two code reviews (AC 5); the gate after is Done and closing RAID R-10. RD-07: project defaults; if the observed hit counts are close enough to a real counter overflow that no threshold separates them, stop and return to Fred Brooks. Stays in To Do while Ready holds 3 (PWS-06, PWS-07, PWS-13).
+
+DoR re-check 2026-10-08 (Fred Brooks) after Margaret's AC 3 change (3cd6f0095): pass. AC 3 now requires the same src/ commit, runner image and compiler version for both runs, with all three recorded from the job logs, which closes my earlier recommendation (RAID R-09). Stays in To Do while Ready holds 3.
 <!-- SECTION:NOTES:END -->
