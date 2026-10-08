@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 12:44'
+updated_date: '2026-10-08 12:52'
 labels: []
 dependencies: []
 references:
@@ -68,18 +68,17 @@ Exclusions: Generate, the password field, CPasswordCharPool and PWPolicy unchang
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
-State 2026-10-08: implementation commit 4cbd3bb "[wx] Add an EFF long-list passphrase beside Generate" on local branch `passphrase`, based on master 3996b15. Local-only: not pushed, no pull request.
-Intended branch per Tracked Work SOP GT-03: codex/PWS-02-diceware-passphrase (existing branch `passphrase` not yet renamed).
-Evidence so far: three PassphraseTest cases reported passing in the Linux coretest on 2026-10-04 (not rerun on 4cbd3bb). Linux add/edit dialog check on 2026-10-04: six lowercase hyphenated words in password and confirmation, new phrase per click, 77.5 bits at 6 and 51.7 at 4, clipboard empty. Not accepted.
+State 2026-10-08: pull request #2 on branch codex/PWS-02-diceware-passphrase. The evidence below was taken on db9dab1. The head has since moved to 5beca97: ea519ea (lint fixes) and 5beca97 (one-line fix to the EFF notice text). No evidence is claimed for ea519ea or 5beca97 yet.
+Evidence on db9dab1:
+- Linux CMake coretest 129/129 (Dennis Ritchie and Edsger Dijkstra).
+- Linux/GTK dialog check 27/27 in Add Entry and Edit Entry (Edsger Dijkstra).
+- AC 4 and 5 (Pronounceable and Easy Vision) from Edsger Dijkstra's 3902dfe run, carried forward by Fred Brooks because nothing under src/ui changed after 3902dfe apart from the spin size.
+- Barbara Liskov's design review of db9dab1 found nothing blocking (below).
+Pending on 5beca97: macOS workflow runs and CodeQL (Grace Hopper), and the Linux/GTK dialog check. Then Robert's run on his Mac.
 Open points:
-- Spin cap: code creates range 1 to 99; the Linux dialog run reported 1 to 100. Confirm before PR.
 - Three tracked files under Misc/wxWidgets_VS_Updates/build/msw/ show deleted in the working tree, unexplained; not part of this task and must not be committed.
 - Word list: one copy since db9dab1, `EffLongWordlist.inc`; `eff-long-wordlist.txt` removed (Barbara Liskov ruling, 2026-10-08).
-- Pronounceable and Easy Vision scenarios (AC 4 and 5) not yet checked.
-- Dialog run on Robert's Mac pending.
-- Push, pull request on the fork and CI (build, CodeQL) pending; GitHub command line on the box is not signed in.
 - V3test.psafe3 in the repo root stays untracked.
-Next action: Dennis confirms the spin cap and resolves the deleted Misc files, then pushes once GitHub sign-in works.
 
 Branch base (per PWS-01 decision, Robert Barbour, 2026-10-08): this branch is upstream-bound and is based on upstream master (3996b15), not on fork `master`. It skips the Tracked Work SOP GT-03A rebase onto fork `master`; synchronise it against upstream master before review or pull request. Its diff must contain no backlog/, backlog.config.yml or AGENTS.md.
 
