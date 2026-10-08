@@ -7,7 +7,7 @@ status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 16:38'
+updated_date: '2026-10-08 16:40'
 labels: []
 dependencies: []
 references:
@@ -41,6 +41,9 @@ modified_files:
   - src/core/PWSprefs.cpp
   - src/ui/wxWidgets/OptionsPropertySheetDlg.h
   - src/ui/wxWidgets/OptionsPropertySheetDlg.cpp
+  - src/test/FileV3Test.cpp
+  - src/test/PWPolicyTest.cpp
+  - src/test/PWSprefsTest.cpp
 type: feature
 ordinal: 2000
 ---
@@ -57,10 +60,12 @@ Design: recorded in decision-03 "Passphrase policy is an app-scope preference (O
 - Preferences (`OptionsPropertySheetDlg`) gets a new "Password Generation" page, built by a new `OptionsPropertySheetDlg::CreatePasswordGenerationPanel`, placed straight after Password History and reusing Password History's icon (image index 3); no new artwork. It offers "Use the safe's password policy" or "Use this computer's policy". This computer's policy means Diceware, with the word count and a bits line showing count x log2(7776) (6 words = 77.5 bits).
 - `AddEditPropSheetDlg::OnGenerateButtonClick` calls `MakePassphrase` with the `PWSrand` draw (DrawWithRangeRand) when `UseLocalPassphrasePolicy` is on, and otherwise keeps the existing `PWPolicy::MakeRandomPassword` path, subject to the precedence rule (AC 13). The passphrase goes through the existing Generate tail: clipboard copy with the existing clear-on-minimise and timeout handling, password and confirmation fields, strength meter. No new clipboard code. An empty result shows the existing "Couldn't generate password - invalid policy" message, with no new strings and nothing copied. The word list is compiled in, so an empty result needs impossible input (empty list, zero word count or failed draw).
 - PR #2's Passphrase button, word-count spin and bits line come off the Basic tab.
-- Carried over unchanged from PR #2: `MakePassphrase(list, count, draw)` (returns StringX, draws with replacement, does not call RangeRand itself, fails closed with an empty result), `Passphrase.*`, `EffLongWordlist.*` (`src/core/EffLongWordlist.inc` is the only copy of the list; its header gives EFF's source URL and the SHA-256 of EFF's file), the EFF notice `docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt` (CC BY 4.0 International, shipped in the Mac dmg via `install/macosx/Makefile`, listed in `install/deb/copyright.debian`), the existing tests, and the unchanged About box.
+- Carried over unchanged from PR #2: `MakePassphrase(list, count, draw)` (returns StringX, draws with replacement, does not call RangeRand itself, fails closed with an empty result), `Passphrase.*` (plus the AC 18 generate decision), `EffLongWordlist.*` (`src/core/EffLongWordlist.inc` is the only copy of the list; its header gives EFF's source URL and the SHA-256 of EFF's file), the EFF notice `docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt` (CC BY 4.0 International, shipped in the Mac dmg via `install/macosx/Makefile`, listed in `install/deb/copyright.debian`), the existing tests, and the unchanged About box.
 - Rework on the same branch and PR #2 (Robert's ruling); Ken Thompson implements, Fred Brooks and Dennis Ritchie review.
 
-Exclusions: no `PWPolicy`, `PWCharPool` or `CPasswordCharPool` change; no database-scope preference; no file-format change (no policy flag, no field type, no change to `HDR_PSWDPOLICIES` or the preferences header); no existing preference enum value moves; entry Policy tab and Manage Password Policies unchanged; no new clipboard code, no new user-visible error string, no new artwork; other Preferences pages and their order unchanged apart from the new page; no new dialog or toolkit; no new crypto or RNG; no change to `Passphrase.*` or `EffLongWordlist.*`. Option B is out of scope (PWS-19).
+Test files: `src/test/FileV3Test.cpp` (existing) for AC 1(b) and AC 5; `src/test/PWPolicyTest.cpp` (new) for AC 1(a) and AC 2; `src/test/PWSprefsTest.cpp` (new) for AC 3 and AC 4. Register new test files in the coretest build: `src/test/CMakeLists.txt`, `src/test/coretest-15.vcxproj`, `src/test/coretest-15.vcxproj.filters`, `src/test/coretest-16.vcxproj` and `Xcode/pwsafe-xcode6.xcodeproj/project.pbxproj`; `src/test/Makefile` and `src/test/Makefile.macos` pick up `*Test.cpp` by wildcard.
+
+Exclusions: no `PWPolicy`, `PWCharPool` or `CPasswordCharPool` change; no database-scope preference; no file-format change (no policy flag, no field type, no change to `HDR_PSWDPOLICIES` or the preferences header); no existing preference enum value moves; entry Policy tab and Manage Password Policies unchanged; no new clipboard code, no new user-visible error string, no new artwork; other Preferences pages and their order unchanged apart from the new page; no new dialog or toolkit; no new crypto or RNG; no change to `EffLongWordlist.*` or to the existing functions in `Passphrase.*` (`MakePassphrase`, `PassphraseEntropyBits`, `PassphraseEntropyLine`); AC 18 adds the generate decision to `Passphrase.*`. Option B is out of scope (PWS-19).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
