@@ -1,11 +1,11 @@
 ---
 id: PWS-04
 title: 'Decision record: include layering between core, os and ui'
-status: Ready
+status: Review
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:06'
+updated_date: '2026-10-08 13:28'
 labels:
   - quality
 dependencies: []
@@ -34,6 +34,12 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #5 Given the decision record, when QA reads it, then it lists the conditions under which the decision would be reversed
 - [ ] #6 Given the decision record, when QA reads it, then it states that the edge-list file used by the PWS-07 layering check must list exactly the edges in the record, and that any change to either list is reviewed as a design change by the architect or Fred Brooks before it merges
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+2026-10-08 14:30 BST: Decision record decision-01 landed in 1f90a0b. Moved to Review by Fred Brooks; QA (Edsger Dijkstra) checks AC 1-6 against the record and fork master f24fd88.
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
