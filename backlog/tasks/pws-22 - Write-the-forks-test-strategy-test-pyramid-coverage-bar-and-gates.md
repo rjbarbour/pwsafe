@@ -1,11 +1,11 @@
 ---
 id: PWS-22
 title: 'Write the fork''s test strategy (test pyramid, coverage bar and gates)'
-status: Ready
+status: Review
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:41'
+updated_date: '2026-10-08 16:55'
 labels:
   - docs
   - test
@@ -68,4 +68,5 @@ DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 4841b96c2, th
 2026-10-08 (Fred Brooks): the AC 9 addition at fc669db28 (the Mac coverage job runs only when a pull request changes src/os/mac, and the not-measured route includes review by hand) is a wording change that closes my earlier non-blocking point, so the DoR pass at 4841b96c2 stands.
 2026-10-08 (Edsger Dijkstra): draft of backlog/docs/test-strategy.md committed in 1a318010b; maps to ACs 1-13 (brief per-AC pointer to section): AC 1 §1 pyramid and levels table; AC 2 §2 bar and measurement table; AC 3 §2 runner/compiler open point (Grace); AC 4 §3 boundary policy with PassphraseWordCount example; AC 5 §6 layering with GenerateMakesPassphrase allowed/disallowed; AC 6 §5 not-measured labelling; AC 7 §5 missing measured file fails; AC 8 §4 gcovr throw/unreachable exclusions; AC 9 §9 Mac options, recommend (b), open point (Robert); AC 10 §8 automated UAT and Mac run; AC 11 §7 light integration interfaces; AC 12 §10 existing code; AC 13 §11 gate map. Open points: Grace (AC 3 runner/compiler), Robert (AC 9 Mac choice); awaiting Robert's approval (AC 14).
 
+2026-10-08 (Fred Brooks): moved from Ready through In Progress to Review in one step. Edsger Dijkstra's draft of backlog/docs/test-strategy.md is at 1a318010b, and his AC mapping note is at f6a68d485. Fred Brooks's review is in progress. The task waits on Robert Barbour's approval (AC 14), Grace Hopper's answer on the coverage runner and compiler (AC 3), and Robert's macOS coverage choice (AC 9). Edsger remains the assignee.
 <!-- SECTION:NOTES:END -->
