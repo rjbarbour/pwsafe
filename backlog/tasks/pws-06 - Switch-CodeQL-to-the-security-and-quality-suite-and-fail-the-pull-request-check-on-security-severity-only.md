@@ -6,7 +6,7 @@ title: >-
 status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:33'
+updated_date: '2026-10-08 13:40'
 labels:
   - quality
 dependencies:
@@ -27,7 +27,7 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the change is on fork `master`, when QA diffs `.github/workflows/codeql-analysis.yml` against the commit immediately before this task's change, then the only difference is the added `queries: security-and-quality` line under the `github/codeql-action/init@v4.38.2` step; and when QA diffs `.github/workflows/cmake-build.yml`, `.github/workflows/macos-latest.yml` and `.github/workflows/macos-cmake-latest.yml` against `3996b15`, then those three files are unchanged
+- [ ] #1 Given the change is on fork `master`, when QA diffs `.github/workflows/cmake-build.yml`, `.github/workflows/codeql-analysis.yml`, `.github/workflows/macos-latest.yml` and `.github/workflows/macos-cmake-latest.yml` against the commit immediately before this task's change, then the only difference is the added `queries: security-and-quality` line under the `github/codeql-action/init@v4.38.2` step of `codeql-analysis.yml`
 - [ ] #2 Given the first CodeQL run on `master` after the change, when QA reads the Initialize CodeQL step of its log and the uploaded analysis, then it shows the `security-and-quality` suite, the analysis lists a non-zero rule count (an analysis with 0 rules and 0 results is not a real scan), and the number of queries run is greater than in the PWS-03 baseline run
 - [ ] #3 Given that run, when QA reads the task notes, then they record the open alert total for `refs/heads/master` and its breakdown in the same form as PWS-03, next to the PWS-03 figures, and those figures come from an analysis with a non-zero rule count
 - [ ] #4 Given a test pull request to `master` that introduces only an alert with no security severity, when CodeQL runs, then the CodeQL check passes and the alert is listed on the pull request
