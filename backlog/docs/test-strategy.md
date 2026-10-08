@@ -72,7 +72,7 @@ The branch measure uses gcovr's:
 
 **Why:** those are compiler-generated exception and unreachable branches that cannot be exercised meaningfully from tests. Without them the 100% branch figure is noise.
 
-Condition coverage is not affected by these options. gcovr does not report how many branches it excluded, so the coverage job computes and prints that count (§11 row 4) so every report means the same thing.
+Condition coverage is not affected by these options. gcovr does not report how many branches it excluded, so the coverage job computes and prints that count (§11, "Throw / unreachable branch exclusions") so every report means the same thing.
 
 Beyond the vendored-directory filters in §2, no other coverage exclusions are used. Any exemption is a reasoned entry in a reviewed file under `tools/quality/` (**PWS-23**), only for judgement calls in modified measured files (`src/core`, `src/os/unix`, or shared files directly under `src/os`) — never a standing list of UI files.
 
@@ -157,12 +157,12 @@ Policy → check → blocks or advises → workflow → implementing task.
 | Policy | Check | Blocks / advises | Workflow | Implementing task |
 |---|---|---|---|---|
 | 100% line coverage on changed lines | `gate_changed.py` (and may use diff-cover) fails when any changed measured line is uncovered. Raising PWS-07 AC 2 from 80% of changed lines to 100% is a separate tracker change by Margaret Hamilton after Robert approves this document | Blocks | `.github/workflows/fork-quality.yml` | **PWS-07** |
-| 100% branch coverage on changed lines; condition once condition data is in the report | `gate_changed.py` reads gcovr JSON for uncovered branches (and conditions once row 2 puts them in the report) on changed measured lines | Blocks | `fork-quality.yml` | **PWS-23** |
+| 100% branch coverage on changed lines; condition once condition data is in the report | `gate_changed.py` reads gcovr JSON for uncovered branches (and conditions once the "Condition coverage enabled in the report" gate puts them in the report) on changed measured lines | Blocks | `fork-quality.yml` | **PWS-23** |
 | Condition coverage enabled in the report | Build with `-fcondition-coverage`; gcovr JSON `conditions` populated; runner/compiler move once Grace confirms | Blocks once the bar is live (report must carry the data the gate reads) | `fork-quality.yml` + `tools/quality/coverage.sh` | **PWS-23** |
 | Coverage accuracy (suspicious hits counted) | `--gcov-suspicious-hits-threshold` in `coverage.sh` | Advises accuracy of the report the gate reads | `fork-quality.yml` + `coverage.sh` | **PWS-18** |
 | Throw / unreachable branch exclusions | `--exclude-throw-branches`, `--exclude-unreachable-branches`; job computes and prints the excluded-branch count | Blocks (defines what 100% branch means) | `coverage.sh` | **PWS-23** |
 | Not-measured labelling | Report lists changed `src/ui` / `src/os/mac` / `src/os/windows` files as not measured with the reason in §5 | Blocks if omitted silently | `fork-quality.yml` / gate script | **PWS-23** |
-| Missing measured file fails | Missing changed measured `.c`/`.cpp` → fail; missing changed measured `.h` → list for review confirmation, or fail if it holds a real branch or condition (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
+| Missing measured file fails | Missing changed measured `.c`/`.cpp` → fail; missing changed measured `.h` → list for review confirmation, or fail if its new or changed lines add a real branch or condition (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
 | Judgement exemptions | Reasoned entry in a reviewed file under `tools/quality/`, modified measured files only | Blocks misuse (no standing UI exclude list) | `tools/quality/` | **PWS-23** |
 | Mac coverage if Robert picks (a) | Fork-only macOS coverage job on `src/os/mac` changes | Blocks when that job is required | new `fork-*.yml` | **New task** |
 | Mac coverage if Robert picks (b) | Hand review + Mac run; not-measured label | Advises (review and Mac run recorded in notes) | none (process) | No gate task; recorded under AC 9 / task notes |
