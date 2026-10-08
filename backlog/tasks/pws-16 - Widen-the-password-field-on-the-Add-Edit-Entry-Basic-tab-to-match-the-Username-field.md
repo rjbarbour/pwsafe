@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 13:19'
-updated_date: '2026-10-08 13:40'
+updated_date: '2026-10-08 13:43'
 labels: []
 dependencies:
   - PWS-02
@@ -35,3 +35,19 @@ Exclusions: layout only, with no change to what any control does; no change to `
 - [ ] #3 Given the controls that sat beside the Password field before the change, when QA uses each one after the change, then every control is still present, visible and does what it did before
 - [ ] #4 Given the change, when QA compares the Basic tab with the build before it, then no field other than Password, and no control other than those rearranged beside it, has moved or changed size, and `coretest` passes
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Add PWS-02 as a dependency; it edits the same Basic tab and is back in Shaping pending Robert's storage choice. Re-check after that dependency is recorded.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR re-check 2026-10-08 (Fred Brooks): dependency on PWS-02 recorded. Held in To Do until PWS-02 is Done.
+---
+<!-- COMMENTS:END -->
