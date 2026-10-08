@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:43'
+updated_date: '2026-10-08 15:58'
 labels: []
 dependencies: []
 modified_files:
@@ -29,6 +29,7 @@ Exclusions: fork-only, never part of an upstream pull request; no other step or 
 - [ ] #1 Given the change, when QA reads the "Create DMG" step of `.github/workflows/macos-cmake-latest.yml`, then it retries `cpack -G DragNDrop` up to 3 times, only when the output contains `hdiutil: Resource busy`, and no other step changes
 - [ ] #2 Given a run where the first attempt fails with `hdiutil: Resource busy` and a later attempt succeeds, when the job finishes, then it passes and the log shows the retry; the task notes give that run's URL, or say a simulated failure on a throwaway branch was used instead
 - [ ] #3 Given a run where the step fails with any other error, when the job finishes, then it fails without retrying
+- [ ] #4 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
