@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:40'
+updated_date: '2026-10-08 13:43'
 labels: []
 dependencies:
   - PWS-03
@@ -38,3 +38,19 @@ Exclusions: fork-only, never part of an upstream pull request; no file under `sr
 - [ ] #4 Given the change, when QA reads its diff, then it touches only `install/macosx/Makefile` and the fork's dmg workflow; `RESOURCES` and the `.xcent` path still name `pwsafe.app`; and `PRODUCT_NAME`, the executable name and the bundle ID are unchanged
 - [ ] #5 Given the same fork CI run, when QA reads its log, then the coretest step passes
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR check 2026-10-08 (Fred Brooks): fail. AC #1 requires the EFF word-list notice in the dmg "as before", but master does not ship it (the install/macosx/Makefile DOCS list has only the Yubico notice; the EFF notice is on PR #2 / PWS-02). Drop the EFF notice from AC #1, or depend on PWS-02 and say the notice is present only after that merge.
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR re-check 2026-10-08 (Fred Brooks): pass. EFF notice removed from AC 1. Held in To Do while Ready is at its limit of 3.
+---
+<!-- COMMENTS:END -->
