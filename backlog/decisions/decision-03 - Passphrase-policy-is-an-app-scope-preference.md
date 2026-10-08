@@ -43,3 +43,7 @@ Owner decision: Robert Barbour, 2026-10-08 17:04 BST, Option A now; B designed b
 - Upstream pwsafe/pwsafe agreeing a passphrase policy type and flag bit, at which point B supersedes this record.
 - Robert Barbour needing the passphrase choice to travel with the safe or to differ per entry or per safe.
 - Robert Barbour choosing a different precedence rule (supersedes point 5 only).
+
+## Confirmation
+
+- 2026-10-08: Robert Barbour confirmed point 5 as proposed, recorded as PWS-02 AC 13 (`e21da4bd1`). Point 5 is now decided. The text above is unchanged, and nothing is superseded.
