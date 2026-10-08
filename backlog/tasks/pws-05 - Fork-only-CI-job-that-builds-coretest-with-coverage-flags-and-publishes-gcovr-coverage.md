@@ -7,7 +7,7 @@ status: Done
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:58'
+updated_date: '2026-10-08 16:08'
 labels:
   - quality
 dependencies: []
@@ -81,6 +81,19 @@ Findings (all non-blocking):
 6. Observation, no action: the "UNEXPECTED files" check prints but does not fail. That is consistent with report-only and with AC 3.
 
 DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass: AC 1, 2, 3 and 5 are ticked on Edsger Dijkstra's QA verdicts (6ce79a0: run 37787860322 and its coverage artefact; 131 files, all under src/core and src/os; the job-level github.repository guard). AC 5 was checked by reading the workflow, not by running it in another repository (RAID A-01). AC 4 is ticked on Grace Hopper's record (11a338604): master run 37804161642 on 35c62e7, with all four figures within 0.12 points of the f24fd88 baseline. Fred Brooks checked those figures against that run's coverage_summary.txt artefact (src/core 7656/19423 lines, 927/1493 functions; src/os/unix 431/1988 lines, 54/196 functions); Edsger has not separately QA'd AC 4. DD-02 pass: PR #6 was squash-merged as 35c62e7 on fork master, and the first master run 37804161642 (Fork quality, push) succeeded, with Coretests passing and the coverage artefact uploaded. DD-03 pass: two code reviews, Fred Brooks (848e07d) and Dennis Ritchie's retrospective review (2449a58, pass with findings, no blockers), plus Edsger Dijkstra's independent QA (6ce79a0). DD-04 pass: .github/workflows/fork-quality.yml and tools/quality/coverage.sh are the documentation, no upstream file changed, and residual risks are in backlog/docs/raid-log.md. DD-05 pass: residual risk and follow-up are logged as RAID R-05 (baseline difference, accepted), R-07 (pinned by tag and version, accepted), R-09 (Ubuntu 26 move), R-10 (gcovr suspicious hits; I-03 moved there) and I-04 (concurrency and coverage runs on tracker-only pushes); the next gate is Margaret Hamilton's follow-up platform tasks, PWS-18 for R-10 and PWS-17 for I-04. Overlay DO-04 (CI operations): the deployment evidence is the merge plus the first master run; the job reports coverage on every run as an artefact and a job summary; rollback is reverting the two fork-only files, with no upstream file involved. Result: meets DoD. Moved to Done by Fred Brooks.
+
+QA 2026-10-08 (Edsger Dijkstra): AC 4
+
+PASS. Independently checked against the first Fork quality push on master after the merge, not against Grace's or Fred's notes alone.
+
+- Run https://github.com/rjbarbour/pwsafe/actions/runs/37804161642 (job 113403925079), event push, head 35c62e7 (PR #6 squash merge), conclusion success. Among fork-quality.yml runs with id ≤ 37804161642, this is the only successful push to master; earlier runs are pull_request only on pws-05-coverage-job. So it is the first master coverage job.
+- Job log: Coretests Passed 66.29s (100%); gcovr 8.6; Image ubuntu-24.04; CXX GNU 13.3.0. Upload step produced artefact coverage-35c62e7bad1502db631b3c86effdd1da0066de3d (id 11561609532).
+- Downloaded artefact with `gh run download 37804161642` into /workspace/qa-pws05/master-run/. coverage_summary.txt per-directory table: src/core lines 7656/19423 = 39.4%, functions 927/1493 = 62.1%; src/os/unix lines 431/1988 = 21.7%, functions 54/196 = 27.6%. Same four figures appear in the job log summary.
+- Task notes (Grace, 11a338604) already record those figures next to the f24fd88 baseline stated in AC 4 (core 7659/19424 = 39.4%, 930/1495 = 62.2%; os/unix 430/1988 = 21.6%, 54/196 = 27.6%). That is what AC 4 requires.
+- Versus the PR run 37787860322 artefact I read earlier: identical per-directory header (core 7656/19423, 927/1493; os/unix 431/1988, 54/196). CI is stable PR-to-master.
+- Versus f24fd88 baseline: core lines −3 covered / −1 total (−0.01 pp), core functions −3 / −2 (−0.12 pp), os/unix lines +1 covered / 0 total (+0.05 pp), os/unix functions unchanged. `git diff --stat f24fd88 35c62e7 -- src` is empty, so the shift is not a source change under src/. Consistent with toolchain difference (CI ubuntu-24.04 / GCC 13.3 vs the local baseline environment). Accepted residual risk already in RAID R-05.
+
+Status and AC checkboxes left unchanged.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
