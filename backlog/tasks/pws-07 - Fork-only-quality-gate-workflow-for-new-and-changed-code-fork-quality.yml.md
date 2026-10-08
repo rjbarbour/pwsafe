@@ -4,7 +4,7 @@ title: Fork-only quality gate workflow for new and changed code (fork-quality.ym
 status: To Do
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:51'
+updated_date: '2026-10-08 15:57'
 labels:
   - quality
 dependencies:
@@ -50,6 +50,7 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #10 Given `src/core/PWSversion.cpp` includes the generated `"version.h"`, which is built from the `src/ui/*/version.in` templates into the build directory by CMake and Xcode but into `src/ui/wxWidgets` by `Makefile.macos`, when the layering check runs, then it resolves includes against `git ls-files` rather than the filesystem, so that include is never counted as a `src/core` to `src/ui` edge on any build; the check's allow list has exactly one entry for it, naming `src/core/PWSversion.cpp`; it is not reported as a NEW edge; and the edge-list file still lists exactly the 39 edges of the PWS-04 decision record
 - [ ] #11 Given `tools/quality/clang-tidy-new-files.yaml` enables the `readability-` and `modernize-` groups, with each rule it disables carrying a comment that gives the reason, when a pull request adds a C++ source or header file, then clang-tidy runs that configuration on the whole of each file `git diff --diff-filter=A` lists against the pull request's base, any finding fails the job, and the job summary names the file, line and rule
 - [ ] #12 Given a pull request that adds a new file with a `readability-` finding, when the gate runs, then the job fails; and given a pull request whose only `readability-` finding is the same finding on a changed line of an existing file, when the gate runs, then that finding does not fail the job
+- [ ] #13 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Implementation Notes
