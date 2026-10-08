@@ -84,3 +84,46 @@ TEST(PassphraseTest, generate_decision)
   EXPECT_FALSE(GenerateMakesPassphrase(false, true));  // switch off: existing generator
   EXPECT_FALSE(GenerateMakesPassphrase(false, false));
 }
+
+TEST(PassphraseTest, clamp_word_count)
+{
+  EXPECT_EQ(kMinPassphraseWords, ClampPassphraseWords(kMinPassphraseWords - 1));
+  EXPECT_EQ(kMinPassphraseWords, ClampPassphraseWords(kMinPassphraseWords));
+  EXPECT_EQ(kMaxPassphraseWords, ClampPassphraseWords(kMaxPassphraseWords));
+  EXPECT_EQ(kMaxPassphraseWords, ClampPassphraseWords(kMaxPassphraseWords + 1));
+  EXPECT_EQ(6, ClampPassphraseWords(6));
+}
+
+TEST(PassphraseTest, word_count_from_text)
+{
+  const int current = 7;
+  // The clamp's boundaries, typed
+  EXPECT_EQ(kMinPassphraseWords, PassphraseWordCountFromText(std::to_wstring(kMinPassphraseWords - 1), current));
+  EXPECT_EQ(kMinPassphraseWords, PassphraseWordCountFromText(std::to_wstring(kMinPassphraseWords), current));
+  EXPECT_EQ(kMaxPassphraseWords, PassphraseWordCountFromText(std::to_wstring(kMaxPassphraseWords), current));
+  EXPECT_EQ(kMaxPassphraseWords, PassphraseWordCountFromText(std::to_wstring(kMaxPassphraseWords + 1), current));
+  // Well-formed numbers
+  EXPECT_EQ(12, PassphraseWordCountFromText(L"12", current));
+  EXPECT_EQ(5, PassphraseWordCountFromText(L"+5", current));
+  EXPECT_EQ(4, PassphraseWordCountFromText(L" \t4 ", current));
+  EXPECT_EQ(kMinPassphraseWords, PassphraseWordCountFromText(L"-5", current));
+  // Too large for an int: clamped by sign, not wrapped
+  EXPECT_EQ(kMaxPassphraseWords, PassphraseWordCountFromText(L"99999999999", current));
+  EXPECT_EQ(kMinPassphraseWords, PassphraseWordCountFromText(L"-99999999999", current));
+  // Not a whole number: the current count is kept
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"   ", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"abc", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"12abc", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"1 2", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"+", current));
+  EXPECT_EQ(current, PassphraseWordCountFromText(L"\uFF15", current)); // full-width 5
+}
+
+TEST(PassphraseTest, word_below_A_and_no_words)
+{
+  const char *words[] = {"t-shirt"};
+  g_seq[0] = 0; g_n = 1; g_i = 0;
+  EXPECT_EQ(std::wstring(L"t-shirt"), std::wstring(MakePassphrase(words, 1, 1, FixedDraw).c_str()));
+  EXPECT_DOUBLE_EQ(PassphraseEntropyBits(4, 0), 0.0);
+}

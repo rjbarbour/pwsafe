@@ -196,7 +196,7 @@ const PWSprefs::intPref PWSprefs::m_int_prefs[NumIntPrefs] = {
   {_T("DisplayMode"), DisplayModeSystem, ptApplication,
                            minDisplayMode, maxDisplayMode},         // application
   {_T("PassphraseWordCount"), static_cast<unsigned int>(kDefaultPassphraseWords),
-                           ptApplication, 1, 99},                   // application
+                           ptApplication, kMinPassphraseWords, kMaxPassphraseWords}, // application
 };
 
 const PWSprefs::stringPref PWSprefs::m_string_prefs[NumStringPrefs] = {

@@ -12,6 +12,8 @@
 #ifndef __PASSPHRASE_H
 #define __PASSPHRASE_H
 
+#include <cstddef>
+
 #include "StringX.h"
 
 // draw(n) returns a uniform value in [0, n). n is never zero.
@@ -20,6 +22,19 @@ typedef unsigned int (*PassphraseDraw)(size_t n);
 // Default word count for the bundled EFF long list, and the default of the
 // PassphraseWordCount preference.
 const size_t kDefaultPassphraseWords = 6;
+
+// Limits of the PassphraseWordCount preference.
+constexpr int kMinPassphraseWords = 1;
+constexpr int kMaxPassphraseWords = 99;
+
+// count limited to [kMinPassphraseWords, kMaxPassphraseWords].
+int ClampPassphraseWords(int count);
+
+// A typed word count: a base-10 whole number with an optional sign and
+// surrounding whitespace, clamped by ClampPassphraseWords. A number too large
+// for an int clamps by its sign. Returns current when text is empty or is not
+// a whole number.
+int PassphraseWordCountFromText(const stringT &text, int current);
 
 // Lowercase words, joined by a single hyphen, drawn with replacement.
 // Returns empty, and does not call draw, when the list is empty, words is

@@ -5,19 +5,23 @@
 * distributed with this code, or available from
 * http://www.opensource.org/licenses/artistic-license-2.0.php
 */
+#include <charconv>
 #include <cmath>
+#include <limits>
+#include <string>
+#include <system_error>
 
 #include "Passphrase.h"
 
 static void AppendUnsigned(StringX &out, size_t n)
 {
-  wchar_t tmp[32];
+  wchar_t tmp[std::numeric_limits<size_t>::digits10 + 1];
   int i = 0;
   if (n == 0) {
     out.push_back(L'0');
     return;
   }
-  while (n > 0 && i < 32) {
+  while (n > 0) {
     tmp[i++] = static_cast<wchar_t>(L'0' + (n % 10));
     n /= 10;
   }
@@ -82,6 +86,45 @@ StringX PassphraseEntropyLine(size_t wordCount, size_t nWords)
   AppendUnsigned(line, tenths % 10);
   line += L" bits";
   return line;
+}
+
+int ClampPassphraseWords(int count)
+{
+  if (count < kMinPassphraseWords)
+    return kMinPassphraseWords;
+  if (count > kMaxPassphraseWords)
+    return kMaxPassphraseWords;
+  return count;
+}
+
+int PassphraseWordCountFromText(const stringT &text, int current)
+{
+  const wchar_t *space = L" \t\r\n\v\f";
+  const stringT::size_type first = text.find_first_not_of(space);
+  if (first == stringT::npos)
+    return current;
+  const stringT::size_type last = text.find_last_not_of(space);
+
+  stringT::size_type i = first;
+  const bool negative = text[i] == L'-';
+  if (negative || text[i] == L'+')
+    ++i;
+  if (i > last)
+    return current;
+
+  std::string number(negative ? "-" : "");
+  for (; i <= last; ++i) {
+    if (text[i] < L'0' || text[i] > L'9')
+      return current;
+    number.push_back(static_cast<char>(text[i]));
+  }
+
+  int count = 0;
+  const std::from_chars_result r =
+    std::from_chars(number.data(), number.data() + number.size(), count);
+  if (r.ec == std::errc::result_out_of_range)
+    return negative ? kMinPassphraseWords : kMaxPassphraseWords;
+  return ClampPassphraseWords(count);
 }
 
 bool GenerateMakesPassphrase(bool useLocalPolicy, bool entryOnSafeDefault)
