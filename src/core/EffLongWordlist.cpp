@@ -25,13 +25,3 @@ size_t EffLongWordCount()
 {
   return kEffLongWordCount;
 }
-
-const char *EffLongWordlistNotice()
-{
-  return
-    "EFF long wordlist (7776 words). "
-    "Copyright Electronic Frontier Foundation. "
-    "Licensed under Creative Commons Attribution 3.0 (CC BY 3.0): "
-    "https://creativecommons.org/licenses/by/3.0/ "
-    "Source: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt";
-}

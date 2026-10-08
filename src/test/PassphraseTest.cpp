@@ -38,8 +38,6 @@ TEST(PassphraseTest, entropy_line)
   EXPECT_EQ(EffLongWordCount(), 7776u);
   EXPECT_STREQ(EffLongWords()[0], "abacus");
   EXPECT_STREQ(EffLongWords()[7775], "zoom");
-  EXPECT_NE(EffLongWordlistNotice(), nullptr);
-  EXPECT_NE(std::string(EffLongWordlistNotice()).find("CC BY 3.0"), std::string::npos);
 }
 
 TEST(PassphraseTest, fail_closed)
