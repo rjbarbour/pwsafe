@@ -89,7 +89,7 @@ The 100% bar applies only to the measured tree in §2.
 
 The strategy must not be read as if GUI or platform code meets the 100% bar.
 
-**Missing-file rule.** A changed measured `.c` or `.cpp` file (under `src/core`, `src/os/unix` or directly under `src/os`) that is missing from the coverage report fails the gate. A changed measured `.h` that is missing is listed as "not in coverage report: no executable code, confirm in review", and both code reviewers (Fred Brooks and Dennis Ritchie) confirm that its new or changed lines add only declarations, constants and trivial accessors. A header whose **new or changed lines** add a real branch or condition (inline function, template, class body) is a gate failure and goes back to move that logic into a measured `.cpp`. Logic already in an upstream header is existing code and carries no obligation (§10).
+**Missing-file rule.** A changed measured `.c` or `.cpp` file (under `src/core`, `src/os/unix` or directly under `src/os`) that is missing from the coverage report fails the gate. A changed measured `.h` that is missing is listed as "not in coverage report: no executable code, confirm in review", and both code reviewers (Fred Brooks and Dennis Ritchie) confirm that its new or changed lines add only declarations, constants and trivial accessors. A header whose **new or changed lines** add a real branch or condition (inline function, template, class body) is a review failure that blocks the merge, and goes back to move that logic into a measured `.cpp`. Logic already in an upstream header is existing code and carries no obligation (§10).
 
 ## 6. Layering policy (testability)
 
@@ -162,7 +162,7 @@ Policy → check → blocks or advises → workflow → implementing task.
 | Coverage accuracy (suspicious hits counted) | `--gcov-suspicious-hits-threshold` in `coverage.sh` | Advises accuracy of the report the gate reads | `fork-quality.yml` + `coverage.sh` | **PWS-18** |
 | Throw / unreachable branch exclusions | `--exclude-throw-branches`, `--exclude-unreachable-branches`; job computes and prints the excluded-branch count | Blocks (defines what 100% branch means) | `coverage.sh` | **PWS-23** |
 | Not-measured labelling | Report lists changed `src/ui` / `src/os/mac` / `src/os/windows` files as not measured with the reason in §5 | Blocks if omitted silently | `fork-quality.yml` / gate script | **PWS-23** |
-| Missing measured file fails | Missing changed measured `.c`/`.cpp` → fail; missing changed measured `.h` → list for review confirmation, or fail if its new or changed lines add a real branch or condition (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
+| Missing measured file fails | Missing changed measured `.c`/`.cpp` → fail; missing changed measured `.h` → list for review confirmation, or a review failure that blocks the merge if its new or changed lines add a real branch or condition (§5) | Blocks | `fork-quality.yml` / gate script | **PWS-23** |
 | Judgement exemptions | Reasoned entry in a reviewed file under `tools/quality/`, modified measured files only | Blocks misuse (no standing UI exclude list) | `tools/quality/` | **PWS-23** |
 | Mac coverage if Robert picks (a) | Fork-only macOS coverage job on `src/os/mac` changes | Blocks when that job is required | new `fork-*.yml` | **New task** |
 | Mac coverage if Robert picks (b) | Hand review + Mac run; not-measured label | Advises (review and Mac run recorded in notes) | none (process) | No gate task; recorded under AC 9 / task notes |
