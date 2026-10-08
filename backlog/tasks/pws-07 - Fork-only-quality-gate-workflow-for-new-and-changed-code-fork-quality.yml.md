@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 20:04'
+updated_date: '2026-10-08 20:45'
 labels:
   - quality
 dependencies:
@@ -123,6 +123,46 @@ Result: item-1 blocker cleared; no blockers from me on a40131b56. (Supersedes th
 - Residual for RAID (not blockers): the fail-closed check only fires when nothing was parsed, so a partial tool crash is still masked; and CI on this head did not exercise the new checks (no C/C++ changed), so fail-closed is evidenced by reading, not a run.
 
 Remaining gate: Edsger's QA.
+
+2026-10-08 20:45 BST, Edsger Dijkstra (QA): QA verdict on PR #7 at a40131b56 - the gate passes AC 1 to AC 12 (some with notes); AC 13 is still open, so not yet mergeable.
+
+Result: every check I could run failed on an injected violation, named the function, file, line or rule and the limit, and passed again once the violation was removed. Legacy findings on unchanged lines did not fail it. I found no defect in the gate. AC 13 remains open on records only: three residual risks from Dennis's reviews have no disposition in the RAID log or these notes (see Blocker).
+
+How I tested: PR head a40131b56 (matches GitHub), merge base with master 07ee21502. Work was done in my own worktree /workspace/edsger-pwsafe-qa7 and a scratch clone /workspace/edsger-pws07-neg with no remote, on local-only branches. Nothing was pushed and nothing was posted on GitHub. Tools: lizard 1.24.1, diff-cover 10.6.0 and gcovr 8.6 (the workflow's pins), cppcheck 2.17.1, and clang-tidy 19.1.7 (CI uses 18.1.3, which is not on the box). Each local run follows the workflow's steps with base a40131b56: a coverage build of coretest, Coretests, coverage.sh, then layering.py, gate_changed.py, diff-cover, clang_tidy_gate.py and cppcheck_gate.py. States: P2, a passing change (a neutral legacy edit, a readability pattern and a cppcheck style finding on changed lines, and a duplicated test); N, which is P2 plus the violations below; P3, P2 re-run after N. For CI, I read fork quality run 37826866671 (pull_request on a40131b56, 19:46 to 19:56 BST): both job logs, both artefacts, and the code-scanning analyses for refs/pull/7/merge.
+
+| AC | Verdict | What I exercised |
+|---|---|---|
+| 1 | Pass with note | Run 37826866671 is a pull_request run on a40131b56, and its quality job ran. The configure log shows `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` and `CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON`. Both jobs carry `github.repository == 'rjbarbour/pwsafe'`. The skip in another repository was checked by reading only, as RAID A-01 already records. |
+| 2 | Pass with note | A new function in src/core/Util.cpp FAILED with "CCN 12 > 10; cognitive complexity 21 > 15; CRAP 156.0 > 30". A separate uncovered function with CCN 6 and cognitive complexity 5 FAILED on "CRAP 42.0 > 30" alone. Changed-line coverage of 3/23 = 13.0% FAILED "below 80%", and 1/1 = 100% passed. Note: src/os/mac and src/os/windows are listed as "not measured: reviewed by hand" rather than measured (RAID R-13). |
+| 3 | Pass | A neutral edit to legacy PWSprefs::SetMRUList (CCN 16, cognitive 12) was listed as changed, result "ok". A nested if FAILED it with "ratchet failure: modified CCN 16 -> 18" and "ratchet failure: cognitive complexity 12 -> 17". Untouched legacy functions over the limits in the same file were not listed. |
+| 4 | Pass | `--list-checks` on the gate config gives 79 bugprone-, 35 cert- and 125 clang-analyzer- checks, and nothing else. rand() on a changed line FAILED via clang-tidy-diff (cert-msc30-c). An out-of-bounds write on a changed line FAILED via diff-quality (cppcheck error, "Quality is below 100"). Style and performance findings on changed lines were listed with "Fails: no", and P2, which contains one, passed. These did not fail: a pre-existing cppcheck error on an unchanged line of the modified Util.cpp, and 14 pre-existing gate-config clang-tidy findings on unchanged lines of the modified Util.cpp and PWSprefs.cpp. No readability- or modernize- check ran on modified files. A changed line in PWSprefs.cpp has a readability-implicit-bool-conversion finding (confirmed by running the new-files config on it directly), and the gate passed. |
+| 5 | Pass with note | refs/pull/7/merge (d69310abb) has clang-tidy (312 rules) and cppcheck (58 rules) analyses from this run, uploaded by upload-sarif pinned to v4.38.2's commit. There are 0 results and 0 open alerts on the PR. Locally, state N's SARIF held its 5 clang-tidy and 4 cppcheck results with repository-relative paths and string security-severity. Not seen: an alert actually listed on a PR, because no PR has had a finding yet. |
+| 6 | Pass with note | A duplicated test in src/test/UtilTest.cpp gave "changed src/test/UtilTest.cpp:37-47 duplicates src/test/UtilTest.cpp:24-34", and the run passed. Note: a second verbatim 18-line copy, in MRUListTest.cpp, was not reported. lizard's heuristic skips a block whose original already has repeated snippets. Duplication is report-only, so this can only under-report. The vendored exclusions now work: with the old `./` prefix lizard still scanned pugixml, and without it no vendored file appears. |
+| 7 | Pass with note | A new `#include "../../core/UTF8Conv.h"` in src/os/unix/dir.cpp FAILED: "NEW edge (os to core) ... not in the edge list, so a design change for the architect or Fred Brooks". The second half (an edit to the edge list gets a design-change review) is a review rule. This PR creates the file, and Fred's review records that it matches decision-01. |
+| 8 | Pass | I parsed decision-01's table and layering-edges.txt: 39 edges each, the same E-numbers, and the same pair for each number. layering.py at head finds 39 edges against 39 listed and passes. |
+| 9 | Pass | See the scope check below. No NOLINT or cppcheck-suppress comment is added. Nothing installs or runs PMD, CPD, include-what-you-use, CodeChecker or SonarQube. |
+| 10 | Pass | The allow list has exactly one entry, `src/core/PWSversion.cpp -> version.h`. An untracked, generated src/ui/wxWidgets/version.h (the Makefile.macos case) passed with 39 edges, and still passed with the allow list emptied. With version.h tracked under src/ui/wxWidgets, it is "allowed" with the entry and a NEW core-to-ui edge without it. So includes resolve against git ls-files, and the one entry is what keeps that include out. |
+| 11 | Pass | The new-files config enables 50 readability- and 40 modernize- checks, and disables three, each with a reason. An added src/core/QaNewFile.cpp and QaNewHelper.h FAILED with four findings, each naming file, line and rule. An added .cpp that is in no CMakeLists, so not in compile_commands.json, was still analysed and FAILED. |
+| 12 | Pass | An added file with readability-implicit-bool-conversion FAILED. The same rule on a changed line of the existing PWSprefs.cpp was not reported, and P2 passed. |
+| 13 | Fail (open) | Code reviews by Fred and Dennis are recorded, as are Fred's delta re-check (20:00) and Dennis's follow-up on a40131b56. I confirmed Fred's four required fixes at a40131b56: the four action SHAs match their tags, crashes fail closed (below), the `./` prefix is gone, and the README patterns are recursive. All 18 checks on a40131b56 passed, with 0 code-scanning alerts on the PR. Missing: the three dispositions under Blocker. |
+
+Scope check (Robert's merge authority for platform PRs): pass. The net diff from merge base 07ee21502 to a40131b56 has 13 files: M .github/workflows/fork-quality.yml, plus A tools/quality/.gitignore, README.md, clang-tidy-gate.yaml, clang-tidy-new-files.yaml, clang_tidy_gate.py, coverage-gate.toml, cppcheck_gate.py, gate_changed.py, gitdiff.py, layering-allow.txt, layering-edges.txt and layering.py. There is no src/ change and no upstream workflow change. Two commits outside the net diff: aa542afb7 touched this task file and fd4129b9c reverted it, so a squash merge keeps them out of master's history (Dennis's item 8).
+
+Fail-closed and exit codes: a fake clang-tidy-diff, lizard, cppcheck or diff-quality that exits non-zero with no output each makes its step exit 1. The first two give "exited 3 with no findings parsed"; cppcheck fails with an exception, and diff-quality makes the step report "cppcheck: FAIL". layering.py exits 1 when git fails. In CI, the steps run under `bash -e -o pipefail` (from the job log), so the `| tee` keeps the exit status. Tools did run and analyse files in CI: layering scanned 250 files, cppcheck reported 1006 tree findings with 0 on changed lines, and the SARIF lists 312 and 58 rules. The judged diff was empty, because the PR changes no C/C++.
+
+Blocker (AC 13; Fred to record before merge): give each of these a disposition in backlog/docs/raid-log.md or these notes:
+(1) Dennis's fd4129b9c item 4: pull requests from other forks get a read-only token, so the SARIF upload step fails and turns the job red. The README mentions it, but there is no disposition.
+(2) Dennis's item 5: R-07 covers the action pins, the clang-tidy-18 apt install and gcovr, but not lizard and diff-cover being pip-pinned without hashes.
+(3) Dennis's a40131b56 residual: fail-closed only fires when nothing was parsed, so a partial crash is still masked.
+Dennis's item 2 (CI never runs the failure paths) now has local evidence from Grace and from this QA. Fred decides whether it also needs a RAID line.
+
+Other observations, none blocking: lizard can miss a duplicate (AC 6 note). The README's local commands write q/ and coverage/ into the repository root, and neither is ignored, so `git add -A` would pick them up; it nearly did in my scratch clone.
+
+Not checked: the skip in another repository (read only); an alert listed on a PR; any macOS- or Windows-only code; clang-tidy 18 locally (I used 19); CodeQL, Socket and the build jobs beyond their check status.
+
+/workspace/pwsafe was not touched: HEAD 19a7302f4 on codex/PWS-02-diceware-passphrase with a clean tree, both before and after.
+
+Edsger Dijkstra (QA)
 <!-- SECTION:NOTES:END -->
 
 ## Comments
