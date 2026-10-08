@@ -3,10 +3,11 @@ id: PWS-05
 title: >-
   Fork-only CI job that builds coretest with coverage flags and publishes gcovr
   coverage
-status: Ready
-assignee: []
+status: In Progress
+assignee:
+  - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:06'
+updated_date: '2026-10-08 13:34'
 labels:
   - quality
 dependencies: []
@@ -34,6 +35,12 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #4 Given the first job run on `master`, when QA reads the task notes, then they record its line and function coverage for `src/core` and `src/os/unix` next to Grace Hopper's baseline at f24fd88 (`src/core` lines 7659/19424 = 39.4%, functions 930/1495 = 62.2%; `src/os/unix` lines 430/1988 = 21.6%, functions 54/196 = 27.6%)
 - [ ] #5 Given the same workflow runs in any repository other than rjbarbour/pwsafe, when it is triggered, then the coverage job is skipped and no coverage artefact is produced
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+2026-10-08 14:35 BST: Grace started. Moved to In Progress by Fred Brooks.
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
