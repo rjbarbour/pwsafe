@@ -161,8 +161,6 @@ BEGIN_EVENT_TABLE( AddEditPropSheetDlg, wxPropertySheetDialog )
   EVT_BUTTON(       ID_BUTTON_SHOWHIDE_TOTP, AddEditPropSheetDlg::OnShowHideTotpClick       )
   EVT_BUTTON(       ID_BUTTON_COPY_TOTP,     AddEditPropSheetDlg::OnCopyAuthCodeClick       )
   EVT_BUTTON(       ID_BUTTON_GENERATE,      AddEditPropSheetDlg::OnGenerateButtonClick     )
-  EVT_BUTTON(       ID_BUTTON_PASSPHRASE,    AddEditPropSheetDlg::OnPassphraseButtonClick   )
-  EVT_SPINCTRL(     ID_SPINCTRL_PASSPHRASE_WORDS, AddEditPropSheetDlg::OnPassphraseWordCountChanged )
   EVT_BUTTON(       ID_BUTTON_ALIAS,         AddEditPropSheetDlg::OnAliasButtonClick        )
   EVT_BUTTON(       ID_GO_BTN,               AddEditPropSheetDlg::OnGoButtonClick           )
   EVT_BUTTON(       ID_SEND_BTN,             AddEditPropSheetDlg::OnSendButtonClick         )
@@ -200,8 +198,6 @@ BEGIN_EVENT_TABLE( AddEditPropSheetDlg, wxPropertySheetDialog )
   EVT_UPDATE_UI(    ID_COMBOBOX_GROUP,       AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_BUTTON_SHOWHIDE,      AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_BUTTON_GENERATE,      AddEditPropSheetDlg::OnUpdateUI                )
-  EVT_UPDATE_UI(    ID_BUTTON_PASSPHRASE,    AddEditPropSheetDlg::OnUpdateUI                )
-  EVT_UPDATE_UI(    ID_SPINCTRL_PASSPHRASE_WORDS, AddEditPropSheetDlg::OnUpdateUI           )
   EVT_UPDATE_UI(    ID_BUTTON_ALIAS,         AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_TEXTCTRL_TITLE,       AddEditPropSheetDlg::OnUpdateUI                )
   EVT_UPDATE_UI(    ID_TEXTCTRL_USERNAME,    AddEditPropSheetDlg::OnUpdateUI                )
@@ -519,27 +515,11 @@ wxScrolledWindow* AddEditPropSheetDlg::CreateBasicPanel()
   auto *itemButton21 = new wxButton( panel, ID_BUTTON_GENERATE, _("&Generate"), wxDefaultPosition, wxDefaultSize, 0 );
   m_BasicSizer->Add(itemButton21, wxGBPosition(/*row:*/ 7, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
 
-  auto *passphraseButton = new wxButton(panel, ID_BUTTON_PASSPHRASE, _("&Passphrase"), wxDefaultPosition, wxDefaultSize, 0);
-  m_BasicSizer->Add(passphraseButton, wxGBPosition(/*row:*/ 7, /*column:*/ 6), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
-
   m_BasicStrengthMeter = new StrengthMeter(panel);
   m_BasicSizer->Add(m_BasicStrengthMeter, wxGBPosition(/*row:*/ 8, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
   if (m_Item.IsAlias()) {
     m_BasicStrengthMeter->Hide();
   }
-
-  auto *passphraseWordsLabel = new wxStaticText( panel, wxID_STATIC, _("Passphrase words"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(passphraseWordsLabel, wxGBPosition(/*row:*/ 9, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
-
-  m_PassphraseWordCountCtrl = new wxSpinCtrl(panel, ID_SPINCTRL_PASSPHRASE_WORDS, wxEmptyString,
-                                              wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
-                                              1, 99, static_cast<int>(kDefaultPassphraseWords));
-  const StringX entropyLine = PassphraseEntropyLine(kDefaultPassphraseWords, EffLongWordCount());
-  m_PassphraseEntropyText = new wxStaticText(panel, ID_STATICTEXT_PASSPHRASE_ENTROPY, entropyLine.c_str(), wxDefaultPosition, wxDefaultSize, 0);
-  auto *passphraseSizer = new wxBoxSizer(wxHORIZONTAL);
-  passphraseSizer->Add(m_PassphraseWordCountCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
-  passphraseSizer->Add(m_PassphraseEntropyText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 7);
-  m_BasicSizer->Add(passphraseSizer, wxGBPosition(/*row:*/ 10, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   m_BasicPasswordConfirmationTextLabel = new wxStaticText( panel, wxID_STATIC, _("Confirm"), wxDefaultPosition, wxDefaultSize, 0 );
   auto *itemStaticText13 = new wxStaticText( panel, ID_STATICTEXT_PASSWORD2, wxT("*"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -547,62 +527,62 @@ wxScrolledWindow* AddEditPropSheetDlg::CreateBasicPanel()
   auto *itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
   itemBoxSizer6->Add(m_BasicPasswordConfirmationTextLabel, 0, wxALIGN_CENTER_VERTICAL, 0);
   itemBoxSizer6->Add(itemStaticText13, 0, wxALIGN_CENTER_VERTICAL, 0);
-  m_BasicSizer->Add(itemBoxSizer6, wxGBPosition(/*row:*/ 11, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
+  m_BasicSizer->Add(itemBoxSizer6, wxGBPosition(/*row:*/ 9, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
 
   m_BasicPasswordConfirmationTextCtrl = new wxTextCtrl( panel, ID_TEXTCTRL_PASSWORD2, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD );
-  m_BasicSizer->Add(m_BasicPasswordConfirmationTextCtrl, wxGBPosition(/*row:*/ 12, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicPasswordConfirmationTextCtrl, wxGBPosition(/*row:*/ 10, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   m_BasicPasswordConfirmationBitmap = new wxStaticBitmap(panel, wxID_ANY, bitmapCheckmarkPlaceholder, wxDefaultPosition, wxDefaultSize, 0);
-  m_BasicSizer->Add(m_BasicPasswordConfirmationBitmap, wxGBPosition(/*row:*/ 12, /*column:*/ 3), wxDefaultSpan, wxALIGN_CENTER|wxALIGN_LEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicPasswordConfirmationBitmap, wxGBPosition(/*row:*/ 10, /*column:*/ 3), wxDefaultSpan, wxALIGN_CENTER|wxALIGN_LEFT|wxBOTTOM, 7);
   
   auto *itemButton22 = new wxButton( panel, ID_BUTTON_ALIAS, _("&Alias To..."), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(itemButton22, wxGBPosition(/*row:*/ 12, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(itemButton22, wxGBPosition(/*row:*/ 10, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
   if(! PWSprefs::GetInstance()->GetPref(PWSprefs::ShowAliasSelection)) {
     // Per default do not show this button
     itemButton22->Hide();
   }
 
   m_BasicTotpTextLabel = new wxStaticText( panel, wxID_STATIC, _("Authentication Code"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(m_BasicTotpTextLabel, wxGBPosition(/*row:*/ 13, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
+  m_BasicSizer->Add(m_BasicTotpTextLabel, wxGBPosition(/*row:*/ 11, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
 
   m_BasicTotpTextCtrl = new wxTextCtrl( panel, ID_TEXTCTRL_TOTP, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD|wxTE_READONLY );
-  m_BasicSizer->Add(m_BasicTotpTextCtrl, wxGBPosition(/*row:*/ 14, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicTotpTextCtrl, wxGBPosition(/*row:*/ 12, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 3), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   auto BasicPasswordBitmap = new wxStaticBitmap(panel, wxID_ANY, bitmapCheckmarkPlaceholder, wxDefaultPosition, wxDefaultSize, 0);
-  m_BasicSizer->Add(BasicPasswordBitmap, wxGBPosition(/*row:*/ 14, /*column:*/ 3), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(BasicPasswordBitmap, wxGBPosition(/*row:*/ 12, /*column:*/ 3), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 7);
 
   m_BasicShowHideTotpCtrl = new wxBitmapButton(panel, ID_BUTTON_SHOWHIDE_TOTP, wxUtilities::GetBitmapResource(wxT("graphics/eye.xpm")), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
   m_BasicShowHideTotpCtrl->SetToolTip(_("Show authentication code"));
-  m_BasicSizer->Add(m_BasicShowHideTotpCtrl, wxGBPosition(/*row:*/ 14, /*column:*/ 4), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicShowHideTotpCtrl, wxGBPosition(/*row:*/ 12, /*column:*/ 4), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   m_BasicTotpButton = new wxButton( panel, ID_BUTTON_COPY_TOTP, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
   m_BasicTotpButton->SetToolTip(_("Copy authentication code to clipboard"));
-  m_BasicSizer->Add(m_BasicTotpButton, wxGBPosition(/*row:*/ 14, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicTotpButton, wxGBPosition(/*row:*/ 12, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
 
   if (!m_ItemTotp.HasTwoFactorKey()) {
     DisableAuthenticationCodeControls();
   }
 
   auto *itemStaticText25 = new wxStaticText( panel, wxID_STATIC, _("URL"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(itemStaticText25, wxGBPosition(/*row:*/ 15, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
+  m_BasicSizer->Add(itemStaticText25, wxGBPosition(/*row:*/ 13, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
 
   m_BasicUrlTextCtrl = new wxTextCtrl( panel, ID_TEXTCTRL_URL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(m_BasicUrlTextCtrl, wxGBPosition(/*row:*/ 16, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicUrlTextCtrl, wxGBPosition(/*row:*/ 14, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   auto *itemButton29 = new wxButton( panel, ID_GO_BTN, _("Go"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(itemButton29, wxGBPosition(/*row:*/ 16, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(itemButton29, wxGBPosition(/*row:*/ 14, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
 
   auto *itemStaticText30 = new wxStaticText( panel, wxID_STATIC, _("Email"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(itemStaticText30, wxGBPosition(/*row:*/ 17, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
+  m_BasicSizer->Add(itemStaticText30, wxGBPosition(/*row:*/ 15, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_LEFT|wxALIGN_BOTTOM|wxBOTTOM, 0);
 
   m_BasicEmailTextCtrl = new wxTextCtrl( panel, ID_TEXTCTRL_EMAIL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(m_BasicEmailTextCtrl, wxGBPosition(/*row:*/ 18, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
+  m_BasicSizer->Add(m_BasicEmailTextCtrl, wxGBPosition(/*row:*/ 16, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 1, /*columnspan:*/ 5), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 7);
 
   auto *itemButton34 = new wxButton( panel, ID_SEND_BTN, _("Send"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_BasicSizer->Add(itemButton34, wxGBPosition(/*row:*/ 18, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
+  m_BasicSizer->Add(itemButton34, wxGBPosition(/*row:*/ 16, /*column:*/ 5), wxDefaultSpan, wxALIGN_CENTER_VERTICAL|wxLEFT|wxBOTTOM, 7);
 
   m_BasicDetailsNotebook = new wxNotebook(panel, wxID_ANY);
-  m_BasicSizer->Add(m_BasicDetailsNotebook, wxGBPosition(/*row:*/ 19, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 2, /*columnspan:*/ 6), wxEXPAND, 0);
+  m_BasicSizer->Add(m_BasicDetailsNotebook, wxGBPosition(/*row:*/ 17, /*column:*/ 0), wxGBSpan(/*rowspan:*/ 2, /*columnspan:*/ 6), wxEXPAND, 0);
 
   auto *notesPanel = new wxPanel(m_BasicDetailsNotebook);
   auto *notesSizer = new wxBoxSizer(wxVERTICAL);
@@ -632,7 +612,7 @@ wxScrolledWindow* AddEditPropSheetDlg::CreateBasicPanel()
   m_BasicDetailsNotebook->AddPage(customFieldsPanel, _("Custom Fields"));
 
   m_BasicSizer->AddGrowableCol(2);  // Growable text entry fields
-  m_BasicSizer->AddGrowableRow(20); // Growable notes/custom fields area
+  m_BasicSizer->AddGrowableRow(18); // Growable notes/custom fields area
 
   m_BasicTitleTextCtrl->SetValidator(wxGenericValidator(&m_Title));
   m_BasicUsernameTextCtrl->SetValidator(wxGenericValidator(&m_User));
@@ -2108,32 +2088,6 @@ void AddEditPropSheetDlg::OnGenerateButtonClick(wxCommandEvent& WXUNUSED(evt))
     }
     UpdatePasswordStrengthMeter();
   }
-}
-
-void AddEditPropSheetDlg::OnPassphraseButtonClick(wxCommandEvent& WXUNUSED(evt))
-{
-  if (!(Validate() && TransferDataFromWindow()) || m_Item.IsAlias())
-    return;
-
-  const size_t wordCount = static_cast<size_t>(m_PassphraseWordCountCtrl->GetValue());
-  const StringX phrase = MakePassphrase(EffLongWords(), EffLongWordCount(),
-                                         wordCount, DrawWithRangeRand);
-  if (phrase.empty())
-    return;
-
-  m_Password = phrase.c_str();
-  m_BasicPasswordTextCtrl->ChangeValue(m_Password.c_str());
-  if (m_IsPasswordHidden) {
-    m_BasicPasswordConfirmationTextCtrl->ChangeValue(m_Password.c_str());
-  }
-  UpdatePasswordStrengthMeter();
-}
-
-void AddEditPropSheetDlg::OnPassphraseWordCountChanged(wxSpinEvent& WXUNUSED(evt))
-{
-  const size_t wordCount = static_cast<size_t>(m_PassphraseWordCountCtrl->GetValue());
-  const StringX line = PassphraseEntropyLine(wordCount, EffLongWordCount());
-  m_PassphraseEntropyText->SetLabel(line.c_str());
 }
 
 /*!
@@ -3693,8 +3647,6 @@ void AddEditPropSheetDlg::OnUpdateUI(wxUpdateUIEvent& event)
       m_BasicShowHideCtrl->SetLabel(m_IsPasswordHidden ? _("&Show") : _("&Hide"));
       break;
     case ID_BUTTON_GENERATE:
-    case ID_BUTTON_PASSPHRASE:
-    case ID_SPINCTRL_PASSPHRASE_WORDS:
       event.Enable(!dbIsReadOnly && !m_Item.IsAlias()); // Do not generate password for alias entry
       break;
     case ID_TEXTCTRL_TITLE:
