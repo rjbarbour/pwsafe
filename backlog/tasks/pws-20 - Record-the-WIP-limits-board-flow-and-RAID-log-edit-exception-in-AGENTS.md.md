@@ -4,7 +4,7 @@ title: 'Record the WIP limits, board flow and hand-edited docs exception in AGEN
 status: To Do
 assignee: []
 created_date: '2026-10-08 16:13'
-updated_date: '2026-10-08 16:40'
+updated_date: '2026-10-08 16:50'
 labels:
   - tracker
 dependencies: []
@@ -26,7 +26,7 @@ Exclusions: the only file the pull request changes is the root `AGENTS.md`; fork
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the pull request head, when QA reads the root `AGENTS.md`, then it states the WIP limits of at most one task In Progress and at most three Ready, and that Fred Brooks enforces them by hand because Backlog.md has no WIP-limit setting
+- [ ] #1 Given the pull request head, when QA reads the root `AGENTS.md`, then it states the WIP limits of at most one task In Progress per person and at most three Ready, and that Fred Brooks enforces them by hand because Backlog.md has no WIP-limit setting
 - [ ] #2 Given the pull request head, when QA reads the root `AGENTS.md`, then it states the board flow To Do, Shaping, Ready, In Progress, Review, Done, in that order, and that Fred Brooks moves tasks between statuses after To Do, Margaret Hamilton shapes tasks in Shaping, and any SDLC role may ask Fred Brooks to return a task to Shaping under Definition of Ready triggers RT-01 to RT-04
 - [ ] #3 Given the pull request head, when QA reads the root `AGENTS.md`, then it records the hand-edited docs exception to changing docs only through the Backlog.md CLI: `backlog/docs/raid-log.md` and `backlog/docs/test-strategy.md` are edited by hand to keep their paths, because `backlog doc update` renames them (it renames the RAID log to `doc-01 - RAID-log.md`)
 - [ ] #4 Given the pull request diff, when QA inspects it, then it changes only the root `AGENTS.md`
