@@ -3,10 +3,10 @@ id: PWS-06
 title: >-
   Switch CodeQL to the security-and-quality suite and fail the pull request
   check on security severity only
-status: Ready
+status: To Do
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:06'
+updated_date: '2026-10-08 13:07'
 labels:
   - quality
 dependencies:
@@ -49,5 +49,11 @@ author: @fred-brooks
 created: 2026-10-08 13:06
 ---
 DoR re-check 2026-10-08 (Fred Brooks): pass. Prior gaps closed: PR check fails on security severity high and above; Robert Barbour changes the admin check-failure setting; AC #5 and #7 name that. Depends on PWS-03 (Ready). Build commitment (project default).
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:07
+---
+Passed DoR 2026-10-08; held in To Do under the 1–3 Ready limit until its dependency (PWS-03) is Done. No content gap.
 ---
 <!-- COMMENTS:END -->
