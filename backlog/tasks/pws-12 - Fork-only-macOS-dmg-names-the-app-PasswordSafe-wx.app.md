@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:13'
+updated_date: '2026-10-08 13:40'
 labels: []
 dependencies:
   - PWS-03
@@ -32,7 +32,7 @@ Exclusions: fork-only, never part of an upstream pull request; no file under `sr
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a fork CI run of `.github/workflows/macos-latest.yml` on rjbarbour/pwsafe, when QA mounts the dmg artefact, then it contains `PasswordSafe-wx.app` and no `pwsafe.app`, plus the EFF word-list notice and the `Yubico` folder as before
+- [ ] #1 Given a fork CI run of `.github/workflows/macos-latest.yml` on rjbarbour/pwsafe, when QA mounts the dmg artefact, then it contains `PasswordSafe-wx.app` and no `pwsafe.app`, and the `Yubico` folder is present as before
 - [ ] #2 Given that dmg, when Robert Barbour copies `PasswordSafe-wx.app` into `/Applications` beside Huvisoft's `pwsafe.app` and allows the ad hoc signed app on first open, then it opens a test safe, and Huvisoft's `pwsafe.app` is still present
 - [ ] #3 Given `install/macosx/Makefile` on fork `master`, when `make` runs in `install/macosx` without `DMG_APP` set, then the staged app and the dmg's app icon are named `pwsafe.app`
 - [ ] #4 Given the change, when QA reads its diff, then it touches only `install/macosx/Makefile` and the fork's dmg workflow; `RESOURCES` and the `.xcent` path still name `pwsafe.app`; and `PRODUCT_NAME`, the executable name and the bundle ID are unchanged
