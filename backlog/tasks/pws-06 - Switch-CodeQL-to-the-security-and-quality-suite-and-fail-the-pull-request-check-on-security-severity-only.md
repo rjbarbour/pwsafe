@@ -40,6 +40,8 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 
 <!-- SECTION:NOTES:BEGIN -->
 2026-10-08 14:32 BST: Dependency PWS-03 is Done; moved from To Do to Ready by Fred Brooks (DoR passed earlier).
+
+2026-10-08 14:35 BST: DoR re-check after AC edit b7f3de5 (Fred Brooks): pass, stays Ready. Non-blocking: AC 1 diffs the other three workflows against 3996b15, which would fail if PWS-12 (macos-latest.yml) or PWS-14 (macos-cmake-latest.yml) lands first; diffing all four against the commit before this task's change avoids the ordering dependency.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
