@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 15:48'
+updated_date: '2026-10-08 15:50'
 labels: []
 dependencies: []
 type: chore
@@ -51,6 +51,15 @@ The macOS run the push triggered (mac-pwsafe 37788601663) was cancelled on the t
 The throwaway branch was deleted unmerged at 15:09 BST. The branches API returns 404 for it. No workflow file on master was changed by this task.
 
 Review 2026-10-08 (Fred Brooks): spike evidence recorded in 0097aea (both Ubuntu workflows green on ubuntu-26.04; CodeQL ran 58 rules; throwaway branch deleted; no master workflow change). No decision needed. Next: QA (Edsger) against the ACs.
+
+QA 2026-10-08 16:50 BST (Edsger Dijkstra):
+
+Verdicts (AC checkboxes left unticked; status unchanged):
+- AC 1 PASS. Throwaway commit c2162e2 on branch pws-15-ubuntu-2604-check (parent ceaa038) changed only the ubuntu-latest matrix cell in cmake-build.yml to ubuntu-26.04 and CodeQL runs-on to ubuntu-26.04; windows-latest and ubuntu-22.04 unchanged (gh api commits/c2162e2). Both workflows ran before 19 October 2026 and succeeded: CMake Build https://github.com/rjbarbour/pwsafe/actions/runs/37788601781 (conclusion success; job build (ubuntu-26.04) labels ubuntu-26.04, Image ubuntu-26.04 Version 20260927.149; Test 2/2 passed; cpack produced passwordsafe-ubuntu26-1.25-amd64.deb; dpkg -i and artefact upload succeeded). CodeQL https://github.com/rjbarbour/pwsafe/actions/runs/37788601678 (conclusion success; Analyze-Linux labels ubuntu-26.04, Image ubuntu-26.04; "Running queries for cpp"). Analysis 1916308919 on c2162e2: CodeQL 2.27.1, 58 rules, 2 results. Notes already recorded the run URLs and results; independently confirmed.
+- AC 2 PASS (failure branch not exercised). Both runs succeeded, so the "either run fails" path does not apply. Notes correctly state no failure and that nothing went back to Fred Brooks; no failing step or first error to name.
+- AC 3 PASS. Branch API for pws-15-ubuntu-2604-check returns 404; branches list has no pws-15/ubuntu-2604 name. Master cmake-build.yml and codeql-analysis.yml blob SHAs match parent ceaa038 (df9765c… / 9bc1ae0…); neither file on master contains ubuntu-26. No workflow change from this task on master.
+
+Non-blocking (already in Grace's notes, confirmed in logs): apt "E: Unable to locate package dpkg-sig" on 26.04; cpack "Couldn't find dpkg-sig or debsigs"; .deb built unsigned; step still succeeded.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
