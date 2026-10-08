@@ -1,11 +1,11 @@
 ---
 id: PWS-13
 title: Skip CodeQL on pushes that change only backlog files
-status: Ready
+status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 15:59'
+updated_date: '2026-10-08 16:38'
 labels: []
 dependencies:
   - PWS-03
@@ -38,6 +38,8 @@ Exclusions: fork-only, never part of an upstream pull request; the `pull_request
 
 <!-- SECTION:NOTES:BEGIN -->
 DoR re-check after standard merge AC: pass. AC 5 is testable (two recorded code reviews, and a stated disposition for each automated-check finding), and it doesn't conflict with AC 1-4 or the paths-ignore-only scope. Any finding is recorded by disposition, and a CodeQL alert by alert number only. Stays in Ready.
+
+2026-10-08 (Fred Brooks): returned from Ready to To Do to keep Ready within the limit of 1 to 3 when PWS-22 was prioritised. Its DoR pass still stands.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
