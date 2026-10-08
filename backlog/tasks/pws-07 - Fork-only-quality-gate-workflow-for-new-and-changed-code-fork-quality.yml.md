@@ -4,7 +4,7 @@ title: Fork-only quality gate workflow for new and changed code (fork-quality.ym
 status: To Do
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:46'
+updated_date: '2026-10-08 15:50'
 labels:
   - quality
 dependencies:
@@ -47,7 +47,7 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #7 Given a pull request that adds an include edge not in the layering check's edge-list file, when the gate runs, then the job fails and lists the edge as NEW; and given a pull request that edits the edge-list file, then its review records the design-change approval of the architect or Fred Brooks required by the PWS-04 decision record
 - [ ] #8 Given the edge-list file the layering check reads, when QA compares it with the PWS-04 decision record, then both list the same 39 edges
 - [ ] #9 Given the pull request that adds the gate, when QA reads its diff, then every changed file is `.github/workflows/fork-quality.yml` or under `tools/quality/`, no file under `src/` changes, no `NOLINT` or `cppcheck-suppress` comment is added, and the workflow neither installs nor runs PMD, CPD, include-what-you-use, CodeChecker or SonarQube
-- [ ] #10 Given `src/core/PWSversion.cpp` includes the generated `"version.h"`, which is produced in the build directory from the `src/ui/*/version.in` templates, when the layering check runs, then it resolves that include to the build directory rather than to `src/ui`, does not report it as a `src/ui` include or a NEW edge, and the edge-list file still lists exactly the 39 edges of the PWS-04 decision record
+- [ ] #10 Given `src/core/PWSversion.cpp` includes the generated `"version.h"`, which is built from the `src/ui/*/version.in` templates into the build directory by CMake and Xcode but into `src/ui/wxWidgets` by `Makefile.macos`, when the layering check runs, then it resolves includes against `git ls-files` rather than the filesystem, so that include is never counted as a `src/core` to `src/ui` edge on any build; the check's allow list has exactly one entry for it, naming `src/core/PWSversion.cpp`; it is not reported as a NEW edge; and the edge-list file still lists exactly the 39 edges of the PWS-04 decision record
 - [ ] #11 Given `tools/quality/clang-tidy-new-files.yaml` enables the `readability-` and `modernize-` groups, with each rule it disables carrying a comment that gives the reason, when a pull request adds a C++ source or header file, then clang-tidy runs that configuration on the whole of each file `git diff --diff-filter=A` lists against the pull request's base, any finding fails the job, and the job summary names the file, line and rule
 - [ ] #12 Given a pull request that adds a new file with a `readability-` finding, when the gate runs, then the job fails; and given a pull request whose only `readability-` finding is the same finding on a changed line of an existing file, when the gate runs, then that finding does not fail the job
 <!-- AC:END -->
