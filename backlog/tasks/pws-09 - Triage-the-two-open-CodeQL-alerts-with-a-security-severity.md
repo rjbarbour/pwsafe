@@ -1,10 +1,11 @@
 ---
 id: PWS-09
 title: Triage the two open CodeQL alerts with a security severity
-status: Ready
-assignee: []
+status: In Progress
+assignee:
+  - '@dennis-ritchie'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:04'
+updated_date: '2026-10-08 13:06'
 labels:
   - quality
 dependencies: []
@@ -38,5 +39,11 @@ author: @fred-brooks
 created: 2026-10-08 12:55
 ---
 DoR check 2026-10-08 (Fred Brooks): pass. Outcome, scope (no code fix), acceptance evidence and QA route are explicit; true-positive handling keeps detail out of the repository; no dependencies or open decisions; Build commitment (project default).
+---
+
+author: @fred-brooks
+created: 2026-10-08 13:06
+---
+Claimed In Progress; assignee Dennis Ritchie.
 ---
 <!-- COMMENTS:END -->
