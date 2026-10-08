@@ -17,7 +17,8 @@
 // draw(n) returns a uniform value in [0, n). n is never zero.
 typedef unsigned int (*PassphraseDraw)(size_t n);
 
-// Default word count for the bundled EFF long list. Not a preference.
+// Default word count for the bundled EFF long list, and the default of the
+// PassphraseWordCount preference.
 const size_t kDefaultPassphraseWords = 6;
 
 // Lowercase words, joined by a single hyphen, drawn with replacement.
@@ -33,6 +34,11 @@ double PassphraseEntropyBits(size_t wordCount, size_t nWords);
 // "6 x log2(7776) = 77.5 bits". Empty when wordCount or nWords is zero.
 // This line does not say whether the result is strong.
 StringX PassphraseEntropyLine(size_t wordCount, size_t nWords);
+
+// True when Generate should make a passphrase rather than a password: only
+// when this computer's passphrase policy is switched on and the entry uses
+// the safe's default policy. An entry's own policy or a named policy wins.
+bool GenerateMakesPassphrase(bool useLocalPolicy, bool entryOnSafeDefault);
 
 // Bundled EFF long list: 7776 lowercase words. See docs/EFF/EFF-LONG-WORDLIST-NOTICE.txt.
 const char * const *EffLongWords();

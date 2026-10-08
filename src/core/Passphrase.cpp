@@ -83,3 +83,8 @@ StringX PassphraseEntropyLine(size_t wordCount, size_t nWords)
   line += L" bits";
   return line;
 }
+
+bool GenerateMakesPassphrase(bool useLocalPolicy, bool entryOnSafeDefault)
+{
+  return useLocalPolicy && entryOnSafeDefault;
+}

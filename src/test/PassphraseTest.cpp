@@ -76,3 +76,11 @@ TEST(PassphraseTest, empty_word_fails_closed)
   EXPECT_TRUE(MakePassphrase(words, 3, 1, FixedDraw).empty());
   EXPECT_EQ(g_i, 1u);
 }
+
+TEST(PassphraseTest, generate_decision)
+{
+  EXPECT_TRUE(GenerateMakesPassphrase(true, true));
+  EXPECT_FALSE(GenerateMakesPassphrase(true, false));  // entry or named policy wins
+  EXPECT_FALSE(GenerateMakesPassphrase(false, true));  // switch off: existing generator
+  EXPECT_FALSE(GenerateMakesPassphrase(false, false));
+}
