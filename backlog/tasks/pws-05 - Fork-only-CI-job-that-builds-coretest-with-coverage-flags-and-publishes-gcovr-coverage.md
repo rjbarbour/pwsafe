@@ -7,7 +7,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 15:51'
+updated_date: '2026-10-08 15:54'
 labels:
   - quality
 dependencies: []
@@ -55,6 +55,14 @@ Verdicts (AC checkboxes left unticked; status unchanged):
 Non-blocking: CMAKE_EXPORT_COMPILE_COMMANDS appears as UNINITIALIZED=ON in CMakeCache (still ON). PR coverage figures (src/core 7656/19423 lines, 927/1493 functions; src/os/unix 431/1988, 54/196) differ slightly from the f24fd88 baseline cited in AC 4; re-check on the first master run. Fred's nits (branch name; actions pinned by tag not SHA) stand.
 
 PR #6 squash-merged 2026-10-08 as 35c62e7 by Fred Brooks under Robert's standing rule for fork-only platform PRs (CI green, Fred review, Edsger QA 6ce79a0 AC 1-3 and 5). Stays in Review until Grace records AC 4 from the first master run.
+
+AC #4 - first master run 2026-10-08 (Grace Hopper):
+Run https://github.com/rjbarbour/pwsafe/actions/runs/37804161642 (job 113403925079, "Coverage (coretest, gcovr)"), event push, master commit 35c62e7 (the PR #6 squash merge), conclusion success, finished 16:54 BST. Coretests passed (1/1); gcovr 8.6; artefact coverage-35c62e7bad1502db631b3c86effdd1da0066de3d. Figures from its coverage_summary.txt (per-directory table, same counting as the baseline):
+- src/core lines: 7656/19423 = 39.4% (baseline f24fd88 7659/19424 = 39.4%; delta -3 covered, -1 total, -0.01 pp)
+- src/core functions: 927/1493 = 62.1% (baseline 930/1495 = 62.2%; delta -3 covered, -2 total, -0.12 pp)
+- src/os/unix lines: 431/1988 = 21.7% (baseline 430/1988 = 21.6%; delta +1 covered, 0 total, +0.05 pp)
+- src/os/unix functions: 54/196 = 27.6% (baseline 54/196 = 27.6%; no change)
+Same figures as the PR #6 run 37787860322 that Edsger read, so CI is stable run to run. No file under src/ changed between f24fd88 and 35c62e7 (git diff --stat f24fd88 35c62e7 -- src is empty). Comparing per-file lines in the two coverage.json files, the differences sit in three files only: src/core/Command.cpp (baseline 349/760, CI 348/759), src/core/PWSprefs.cpp (261/979 vs 259/979) and src/os/unix/utf8conv.cpp (33/48 vs 34/48). Likely cause is the toolchain and environment: baseline built on the team box (Debian 13, GCC 14.2), CI on ubuntu-24.04 (g++ 13.2). Not a code change. AC 4 checkbox left for QA and Fred; status unchanged.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
