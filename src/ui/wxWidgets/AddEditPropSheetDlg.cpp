@@ -3683,11 +3683,9 @@ void AddEditPropSheetDlg::OnUpdateUI(wxUpdateUIEvent& event)
       m_BasicShowHideCtrl->SetLabel(m_IsPasswordHidden ? _("&Show") : _("&Hide"));
       break;
     case ID_BUTTON_GENERATE:
-      event.Enable(!dbIsReadOnly && !m_Item.IsAlias()); // Do not generate password for alias entry
-      break;
     case ID_BUTTON_PASSPHRASE:
     case ID_SPINCTRL_PASSPHRASE_WORDS:
-      event.Enable(!dbIsReadOnly && !m_Item.IsAlias());
+      event.Enable(!dbIsReadOnly && !m_Item.IsAlias()); // Do not generate password for alias entry
       break;
     case ID_TEXTCTRL_TITLE:
     case ID_TEXTCTRL_USERNAME:

@@ -70,7 +70,7 @@ StringX PassphraseEntropyLine(size_t wordCount, size_t nWords)
 
   const double bits = PassphraseEntropyBits(wordCount, nWords);
   // One decimal place. 6 * log2(7776) is 77.549, which is 77.5.
-  const unsigned long tenths = static_cast<unsigned long>(bits * 10.0 + 0.5);
+  const unsigned long tenths = static_cast<unsigned long>(std::lround(bits * 10.0));
 
   StringX line;
   AppendUnsigned(line, wordCount);
