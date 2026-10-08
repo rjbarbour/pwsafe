@@ -1211,8 +1211,6 @@ void OptionsPropertySheetDlg::PropSheetToPrefs()
   prefs->SetPref(PWSprefs::DefaultExpiryDays, m_PasswordHistory_DefaultExpiryDays);
 
   // Password Generation preferences
-  m_PasswordGeneration_WordCount = PassphraseWordCountFromText(tostdstring(m_PasswordGeneration_WordCountSB->GetTextValue()),
-                                                               m_PasswordGeneration_WordCount);
   prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, m_PasswordGeneration_LocalPolicyRB->GetValue());
   prefs->SetPref(PWSprefs::PassphraseWordCount, static_cast<unsigned int>(m_PasswordGeneration_WordCount));
 
@@ -1480,10 +1478,9 @@ void OptionsPropertySheetDlg::OnPWHistApply(wxCommandEvent& WXUNUSED(evt))
  * wxEVT_SPINCTRL event handler for ID_PWGENWORDCOUNT
  */
 
-void OptionsPropertySheetDlg::OnPassphraseWordCountSpin(wxSpinEvent& WXUNUSED(evt))
+void OptionsPropertySheetDlg::OnPassphraseWordCountSpin(wxSpinEvent& evt)
 {
-  m_PasswordGeneration_WordCount = PassphraseWordCountFromText(tostdstring(m_PasswordGeneration_WordCountSB->GetTextValue()),
-                                                               m_PasswordGeneration_WordCount);
+  m_PasswordGeneration_WordCount = ClampPassphraseWords(evt.GetPosition());
   UpdatePassphraseBits();
 }
 
