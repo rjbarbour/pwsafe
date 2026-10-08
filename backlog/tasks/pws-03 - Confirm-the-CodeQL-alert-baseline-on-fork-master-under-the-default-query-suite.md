@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:31'
+updated_date: '2026-10-08 15:55'
 labels:
   - quality
 dependencies: []
@@ -47,6 +47,8 @@ Open alerts on refs/heads/master: total 2. Without a security severity: 0. With 
 2026-10-08 14:30 BST: Moved to Review by Fred Brooks. QA (Edsger Dijkstra) checks AC 4 against analysis 1915953522 on 293d1bf; AC 3 does not apply (total is 2, not 0).
 
 2026-10-08 14:32 BST: QA (Edsger Dijkstra) passed AC 4 independently: 2 open alerts on refs/heads/master, both CodeQL critical, none without a security severity, last seen at 293d1bf; analysis 1915953522 (CodeQL 2.27.1, 58 rules, 2 results) matches the notes. AC 3 not applicable (total is 2). Non-blocking for PWS-06 and PWS-13: later master analyses (27ad593, fba2350, 1f0128b, 390051d) show 0 rules and 0 results, so a listed analysis with 0 results does not prove a real scan. Accepted and moved to Done by Fred Brooks (tracker-only task, no PR).
+
+DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass: AC 1, 2 and 4 are ticked on objective evidence (run 37781946022, analysed commit 293d1bf, CodeQL 2.27.1, analysis 1915953522), and Edsger Dijkstra matched AC 4 independently; AC 3 is left unticked as not applicable, because the total is not zero; DD-02 pass (tracker only): no code or workflow change, and the baseline is in these notes on master; DD-03 pass: Edsger Dijkstra's independent QA plus Fred Brooks's acceptance, proportionate for a measurement task with no pull request; DD-04 pass: no documentation, configuration or decision record needed to change; DD-05 pass: follow-up is PWS-09 and PWS-06, and the next gate is PWS-06's suite change, measured against this baseline; residual risk that an analysis with 0 results does not prove a real scan is RAID R-06; overlay DO-02 (measurement spike: the learning, a baseline for one named commit, is recorded). Result: meets DoD.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
