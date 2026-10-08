@@ -5,6 +5,7 @@ status: To Do
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
+updated_date: '2026-10-08 13:13'
 labels: []
 dependencies:
   - PWS-03
@@ -24,7 +25,7 @@ Low priority: no rebuild is needed now; it ships with the next fork-only CI chan
 
 Requested by Robert Barbour in the pwsafe platform room, relayed and narrowed by Fred Brooks, 2026-10-08.
 
-Out of scope: changing `PRODUCT_NAME`, the executable name or the bundle ID; signing or notarisation (the dmg stays ad hoc signed, so macOS still asks before first opening it). Residual risk: if Huvisoft's app uses the same bundle ID, macOS may treat the two apps as one for preferences and "Open With".
+Out of scope: changing `PRODUCT_NAME`, the executable name or the bundle ID; signing or notarisation (the dmg stays ad hoc signed, so macOS still asks before first opening it). Residual risk: our bundle ID stays `org.pwsafe.pwsafe` (from the Xcode project's `org.pwsafe.${PRODUCT_NAME:rfc1034identifier}`). Only if Huvisoft's app has that same ID might macOS treat the two apps as one for preferences and "Open With"; Robert can check with `defaults read "/Applications/<Huvisoft app>.app/Contents/Info" CFBundleIdentifier`.
 
 Exclusions: fork-only, never part of an upstream pull request; no file under `src/` changes; no secrets; no `*.psafe3` file is committed.
 <!-- SECTION:DESCRIPTION:END -->
