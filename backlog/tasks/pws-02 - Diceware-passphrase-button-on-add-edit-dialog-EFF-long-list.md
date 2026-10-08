@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 11:42'
+updated_date: '2026-10-08 12:00'
 labels: []
 dependencies: []
 references:
@@ -36,10 +36,10 @@ Outcome: in the add/edit entry dialog, a Passphrase button beside Generate fills
 Agreed design:
 - `MakePassphrase(list, count, draw)` returns StringX and draws with replacement; it does not call RangeRand itself.
 - The button on AddEditPropSheetDlg uses DrawWithRangeRand on the EFF long list (7776 words, CC BY notice in src/core) and writes the password and confirmation fields, never the clipboard.
-- A word-count spin sits beside Generate, default 6, range 1 to 99.
+- The word-count spin and the entropy line sit on their own row in the existing add/edit dialog, aligned like the other fields, not on the password row (Robert Barbour, 2026-10-04). Spin default 6, range 1 to 99.
 - An entropy line shows count x log2(7776) (6 words = 77.5 bits).
 
-Exclusions: Generate, CPasswordCharPool and PWPolicy untouched; no file-format change; no new crypto or RNG; no clipboard write.
+Exclusions: Generate, the password field, CPasswordCharPool and PWPolicy unchanged; no new dialog or toolkit; no file-format change; no new crypto or RNG; no clipboard write; no dialog test on the branch.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
@@ -49,6 +49,7 @@ Exclusions: Generate, CPasswordCharPool and PWPolicy untouched; no file-format c
 - [ ] #3 Given the spin is at 6, then the entropy line shows 6 x log2(7776), not a larger figure that assumes the word list is secret
 - [ ] #4 Given Pronounceable is selected, when the user clicks Generate Password, then the existing pronounceable generator runs, unaffected by this change
 - [ ] #5 Given Easy Vision is selected, when the user clicks Generate Password, then the existing easy-vision generator runs, unaffected by this change
+- [ ] #6 Given the add/edit dialog is open, then the word-count spin and the entropy line sit on their own row, aligned like the other fields in that dialog, and not on the password row; Generate, the password field and the policy controls are where they were; no new dialog is opened
 <!-- AC:END -->
 
 ## Implementation Notes
