@@ -1,10 +1,10 @@
 ---
 id: PWS-07
 title: Fork-only quality gate workflow for new and changed code (fork-quality.yml)
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 12:50'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies:
@@ -33,3 +33,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #5 Given a pull request whose changed lines overlap a block that PMD CPD reports as duplicated at the 100-token minimum, when the gate runs, then the job fails and the summary names both locations
 - [ ] #6 Given a pull request that adds an include edge not listed in `tools/quality/layering_baseline.txt` (39 edges), when the gate runs, then the job fails and lists the edge as NEW; and given a pull request that edits `tools/quality/layering_baseline.txt`, then its review records the architect's design-change approval required by the PWS-04 decision record
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Awaiting content update for owner's tooling ruling (PMD dropped); re-check after.
+---
+<!-- COMMENTS:END -->
