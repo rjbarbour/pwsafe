@@ -1,10 +1,11 @@
 ---
 id: PWS-13
 title: Skip CodeQL on pushes that change only backlog files
-status: To Do
-assignee: []
+status: Ready
+assignee:
+  - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 13:33'
+updated_date: '2026-10-08 13:43'
 labels: []
 dependencies:
   - PWS-03
@@ -31,3 +32,13 @@ Exclusions: fork-only, never part of an upstream pull request; the `pull_request
 - [ ] #3 Given a push to `master` that changes a file outside `backlog/`, when it lands, then a CodeQL run starts as before and its uploaded analysis lists a non-zero rule count (an analysis with 0 rules and 0 results is not a real scan)
 - [ ] #4 Given the task notes, when QA reads them, then they give the run URLs or commit SHAs for both checks above
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 13:43
+---
+DoR check 2026-10-08 (Fred Brooks): pass. Outcome, paths-ignore scope, acceptance evidence (including a non-zero rule count on a real scan) and QA route are explicit; PWS-03 is Done; Build commitment (project default).
+---
+<!-- COMMENTS:END -->
