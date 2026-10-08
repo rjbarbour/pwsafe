@@ -7,7 +7,7 @@ status: Shaping
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 11:40'
-updated_date: '2026-10-08 16:40'
+updated_date: '2026-10-08 16:41'
 labels: []
 dependencies: []
 references:
@@ -142,4 +142,6 @@ Gap 2, blocking (RD-02, conflicting boundaries): the description excludes 'no ch
 Non-blocking: (1) AC 1 says 'the task notes name both commits', but it now runs at three points; 'name the characterisation commit and the pull request head commit' would be clearer. (2) 3b7afd068 is still only on the local passphrase branch in /workspace/pwsafe; push it to the PR #2 branch before handover.
 Robert's Mac-run scope for AC 8 to AC 10: Edsger Dijkstra's GUI checks on Linux and Robert Barbour's Mac run on the pull request build artefact both exercise these GUI behaviours. The Mac run is the evidence for Mac-only behaviour: native spin-control events, the macOS location of pwsafe.cfg, and the clipboard. Edsger records which ACs each run covered.
 Moves not made because of the two gaps: PWS-06 stays in Ready, PWS-02 stays in Shaping, and RAID D-03 stays open.
+
+DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 27630d3c2: pass, no blocking gap. Gap 1 (file list) is closed. modified_files adds src/test/FileV3Test.cpp and the new src/test/PWPolicyTest.cpp and src/test/PWSprefsTest.cpp. The 'Test files:' paragraph maps each file to its ACs: FileV3Test.cpp to AC 1(b) and AC 5, PWPolicyTest.cpp to AC 1(a) and AC 2, and PWSprefsTest.cpp to AC 3 and AC 4. It also names the coretest build lists: CMakeLists.txt, coretest-15.vcxproj(.filters), coretest-16.vcxproj and the Xcode project, which already lists the test sources one by one. Checked: src/test/Makefile (line 21) and src/test/Makefile.macos (line 36) both use $(wildcard *Test.cpp), so they pick up the new files without changes. Gap 2 (conflicting boundaries) is closed. The exclusion now reads 'no change to EffLongWordlist.* or to the existing functions in Passphrase.* (MakePassphrase, PassphraseEntropyBits, PassphraseEntropyLine); AC 18 adds the generate decision to Passphrase.*', and the carried-over bullet reads 'Passphrase.* (plus the AC 18 generate decision)'. ACs 1 to 20 are unchanged from f16635133. RD-01 to RD-07 are met. The non-blocking points from my f16635133 note still apply: the AC 1 'both commits' wording, and pushing 3b7afd068 to the PR #2 branch at handover.
 <!-- SECTION:NOTES:END -->
