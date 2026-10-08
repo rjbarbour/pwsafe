@@ -3,10 +3,10 @@ id: PWS-06
 title: >-
   Switch CodeQL to the security-and-quality suite and fail the pull request
   check on security severity only
-status: Ready
+status: To Do
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 15:59'
+updated_date: '2026-10-08 16:41'
 labels:
   - quality
 dependencies:
@@ -45,6 +45,8 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 2026-10-08 14:35 BST: DoR re-check after AC edit b7f3de5 (Fred Brooks): pass, stays Ready. Non-blocking: AC 1 diffs the other three workflows against 3996b15, which would fail if PWS-12 (macos-latest.yml) or PWS-14 (macos-cmake-latest.yml) lands first; diffing all four against the commit before this task's change avoids the ordering dependency.
 
 DoR re-check after standard merge AC: pass. AC 8 is testable (two recorded code reviews, and a stated disposition for each automated-check finding), and it doesn't conflict with AC 4-6, because the test pull requests are closed unmerged and AC 8 covers only this task's pull request. Note for execution: the suite switch may show alerts on existing code as new on this pull request; each still needs a disposition, and in public notes alerts are referred to by code-scanning alert number only, with no file, line or rule name. Stays in Ready.
+
+2026-10-08 (Fred Brooks): returned from Ready to To Do to keep Ready within the limit of 1 to 3 when PWS-02 became Ready. Its DoR pass still stands.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
