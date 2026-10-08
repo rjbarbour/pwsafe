@@ -19,9 +19,10 @@ its section of the job summary.
 | Check | Script | Fails the job when |
 |---|---|---|
 | Include layering | `layering.py`, `layering-edges.txt`, `layering-allow.txt` | an include edge from `src/core` or `src/os` breaks decision-01 and is not in the edge list (NEW) |
-| Complexity, CRAP | `complexity_gate.py` (lizard 1.24.1) | a new function has CCN > 10, cognitive complexity > 15, or (under `src/core`, `src/os`) CRAP > 30; an existing function's modified CCN or cognitive complexity rises above the limit (ratchet failure); a changed source file under `src/core`/`src/os` is missing from the coverage report |
-| Duplication | `complexity_gate.py` (lizard `-Eduplicate`) | never: report only |
-| Changed-line coverage | diff-cover 10.6.0 (workflow step) | less than 80% of the changed lines under `src/core` and `src/os` are covered by Coretests |
+| Complexity, CRAP | `gate_changed.py` (lizard 1.24.1) | a new function has CCN > 10, cognitive complexity > 15, or (under `src/core`, `src/os`) CRAP > 30; an existing function's modified CCN or cognitive complexity rises above the limit (ratchet failure) |
+| Changed-line coverage | `gate_changed.py`, `coverage-gate.toml` (gcovr JSON from the `coverage` job) | line coverage of the changed lines in `src/core`, `src/os/unix` and the top-level `src/os` headers is below the threshold in `coverage-gate.toml` (80% today); or a changed or new source file there is missing from the coverage report. Branch and condition figures are reported when gcovr has them and enforced only once given a threshold. Changes under `src/ui`, `src/os/mac` and `src/os/windows` are listed as "not measured: reviewed by hand" |
+| Coverage listing | diff-cover 10.6.0 (workflow step) | never: report only (annotated uncovered changed lines) |
+| Duplication | `gate_changed.py` (lizard `-Eduplicate`) | never: report only |
 | clang-tidy | `clang_tidy_gate.py`, `clang-tidy-gate.yaml`, `clang-tidy-new-files.yaml` | any finding on a changed line (bugprone-, cert-, clang-analyzer-), or any finding in a file the pull request adds (readability-, modernize-) |
 | cppcheck | `cppcheck_gate.py` (cppcheck 2.17.1, built from source in the job) | a finding of severity error or warning on a changed line (diff-quality) |
 
@@ -53,8 +54,8 @@ From the root of a clone, on the branch to check, with a coverage build of coret
 
     BASE=origin/master
     python3 tools/quality/layering.py
-    LIZARD=lizard python3 tools/quality/complexity_gate.py --base $BASE --coverage coverage/coverage.json --build build
-    diff-cover coverage/coverage.cobertura.xml --compare-branch=$BASE --include 'src/core/*' 'src/os/*' --fail-under=80
+    LIZARD=lizard python3 tools/quality/gate_changed.py --base $BASE --coverage coverage/coverage.json
+    diff-cover coverage/coverage.cobertura.xml --compare-branch=$BASE --include 'src/core/*' 'src/os/*'
     CLANG_TIDY=clang-tidy CLANG_TIDY_DIFF=clang-tidy-diff.py python3 tools/quality/clang_tidy_gate.py --base $BASE --build build --out q
     CPPCHECK=cppcheck DIFF_QUALITY=diff-quality python3 tools/quality/cppcheck_gate.py --base $BASE --build build --out q
 

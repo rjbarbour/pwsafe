@@ -179,26 +179,24 @@ jobs:
         { echo '### Include layering (decision-01)'; echo; } >> "$GITHUB_STEP_SUMMARY"
         python3 tools/quality/layering.py | tee -a "$GITHUB_STEP_SUMMARY"
 
-    - name: Complexity, CRAP and duplication (lizard)
+    - name: Complexity, CRAP, changed-line coverage and duplication
       if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
       run: |
-        python3 tools/quality/complexity_gate.py --base "$BASE" --coverage coverage/coverage.json --build build \
+        # Coverage thresholds live in tools/quality/coverage-gate.toml (line coverage enforced).
+        python3 tools/quality/gate_changed.py --base "$BASE" --coverage coverage/coverage.json \
           | tee -a "$GITHUB_STEP_SUMMARY"
 
-    - name: Changed-line coverage (diff-cover, at least 80% under src/core and src/os)
+    - name: Changed-line coverage report (diff-cover, report only)
       if: ${{ !cancelled() && steps.configure.outcome == 'success' }}
       run: |
-        status=0
+        # Annotated listing of uncovered changed lines; the gate itself is gate_changed.py above.
         "$DIFF_COVER" coverage/coverage.cobertura.xml --compare-branch="$BASE" \
-          --include 'src/core/*' 'src/os/*' --fail-under=80 --format "markdown:q/diff-cover.md" || status=$?
+          --include 'src/core/*' 'src/os/*' --format "markdown:q/diff-cover.md"
         {
-          echo '### Changed-line coverage (diff-cover, limit 80% under src/core and src/os)'
-          echo
-          if [ "$status" -ne 0 ]; then echo '**Changed-line coverage: FAIL** (below 80%; files and missing lines below)'; else echo '**Changed-line coverage: PASS**'; fi
+          echo '### Changed-line coverage listing (diff-cover, report only)'
           echo
           sed 's/^# /#### /; s/^## /#### /' q/diff-cover.md
         } >> "$GITHUB_STEP_SUMMARY"
-        exit "$status"
 
     - name: clang-tidy (changed lines; whole added files)
       if: ${{ !cancelled() && steps.configure.outcome == 'success' }}

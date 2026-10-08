@@ -1,0 +1,24 @@
+# PWS-07: changed-line coverage gate settings, read by tools/quality/gate_changed.py (fork-only).
+#
+# Thresholds are percentages of the pull request's changed lines (or of the branches and conditions
+# on them) that Coretests execute, in the measured scope below. A metric set to a number is
+# enforced; a metric left out is reported when gcovr's JSON has the data, but never fails the job.
+#
+# Today only line coverage is enforced, at 80% (PWS-07 AC 2). The proposed new-code bar, pending
+# approval of PWS-22, is 100% line, branch and condition coverage; branch and condition figures
+# would then come from gcovr run with its throw and unreachable branch exclusions
+# (--exclude-throw-branches, --exclude-unreachable-branches) and, for conditions, GCC 14 or later
+# with -fcondition-coverage. Raising the bar is a change to this file plus tools/quality/coverage.sh.
+[thresholds]
+line = 80
+# branch = 100
+# condition = 100
+
+[scope]
+# Changed files under these prefixes are measured by Coretests. A changed source file here that is
+# missing from the coverage report fails the gate: none of its changed lines can be covered.
+measured = ["src/core/", "src/os/unix/"]
+# Top-level headers of src/os (src/os/*.h) are also measured; gate_changed.py adds them.
+# Changed files under these prefixes are listed as "not measured: reviewed by hand" (GUI code the
+# Linux coretest build does not instrument, and platform code it does not compile).
+not_measured = ["src/ui/", "src/os/mac/", "src/os/windows/"]
