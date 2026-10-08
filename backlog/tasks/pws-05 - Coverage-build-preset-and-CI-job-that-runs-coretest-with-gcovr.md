@@ -1,9 +1,10 @@
 ---
 id: PWS-05
 title: Coverage build preset and CI job that runs coretest with gcovr
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:49'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies: []
@@ -29,3 +30,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #4 Given the first job run on `master`, when QA reads the task notes, then they record its line and function coverage for `src/core` and `src/os/unix` next to Grace Hopper's baseline at f24fd88 (`src/core` lines 7659/19424 = 39.4%, functions 930/1495 = 62.2%; `src/os/unix` lines 430/1988 = 21.6%, functions 54/196 = 27.6%)
 - [ ] #5 Given the same workflow runs in any repository other than rjbarbour/pwsafe, when it is triggered, then the coverage job is skipped and no coverage artefact is produced
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Decision to add: coverage flags (--coverage -O0 and the coverage linker flags) are set in the fork-only workflow's configure step; CMakePresets.json and other upstream files are not edited. The title, description and AC #1 still call for a coverage preset; reword AC #1 to the workflow's configure step. Also record where the drafts (coverage.sh, fork-quality.yml) are, as they are not in the repository.
+---
+<!-- COMMENTS:END -->
