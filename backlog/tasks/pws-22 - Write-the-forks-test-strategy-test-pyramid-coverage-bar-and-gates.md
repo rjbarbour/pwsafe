@@ -5,6 +5,7 @@ status: To Do
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
+updated_date: '2026-10-08 16:33'
 labels:
   - docs
   - test
@@ -33,3 +34,11 @@ Robert Barbour set the fork's test policy on 2026-10-08. New code needs 100% lin
 - [ ] #10 Given the document, when Robert Barbour has read it, then the task notes record his approval, or the changes he asked for and the commit that made them, with the date and the commit he approved
 - [ ] #11 Given the commits for this task, when they are inspected, then they change only `backlog/docs/test-strategy.md` and this task's file, each carries the PWS-22 ID, and no `src/`, `.github/` or `tools/` file changes
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+DoR check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 61df41203: fail on one blocking gap; status unchanged (To Do). Met: RD-01 (the fork's test strategy, for every implementer, reviewer and QA); RD-02 (tracker-only, no workflow, src/ or tools/ change, no coverage raise for existing code); RD-03 (AC 1-11 are each checkable by reading the document, the notes or the commits); RD-07 (Edsger Dijkstra writes it, and Robert Barbour approves it under AC 10). Grace Hopper's dependency for the GCC 14 point is explicit in AC 3, with her as owner of the open point. Having no standard merge AC is acceptable, because the work is tracker-only with no pull request. Nothing about generator internals or CodeQL appears. RD-05: low risk, Build commitment (project default).
+Blocking gap (RD-04, dependencies, and AC 9): the description and AC 9 send gate implementation to 'PWS-18 or a new task'. But PWS-18 only raises gcovr's suspicious-hits threshold. The changed-line coverage gate is PWS-07 (Ready), whose AC 2 sets 80% of changed lines, which conflicts with Robert's new 100% bar. Proposed AC 9 wording for Margaret: 'Given the document, when it is read, then it maps each policy to a gate (the check, whether it blocks or advises, and the workflow it belongs in) and names the task that implements each gate: PWS-07 for the changed-line coverage, complexity and static-analysis gates (its AC 2 coverage limit to be raised from 80% of changed lines to the new bar), PWS-18 for coverage accuracy, or a new task.' Change the description's '(PWS-18 or a new task does that)' to '(PWS-07, PWS-18 or a new task does that)'.
+Non-blocking: (1) AC 3: CI uses GCC 13.3.0 today, but ubuntu-latest moves to 26.04 with GCC 15.2.0 on 19 October 2026 (PWS-15; RAID R-09), which may settle the condition-coverage point without any change. Worth naming as one of the options Grace confirms. (2) AC 11 and the docs rule: backlog doc create names the file 'doc-02 - ...' and backlog doc update renames it. Keeping the path backlog/docs/test-strategy.md makes it a second hand-edited document, while PWS-20 AC 3 records the RAID log as the one exception. Either extend PWS-20 AC 3 to name test-strategy.md as well, or accept the CLI's file name.
+<!-- SECTION:NOTES:END -->
