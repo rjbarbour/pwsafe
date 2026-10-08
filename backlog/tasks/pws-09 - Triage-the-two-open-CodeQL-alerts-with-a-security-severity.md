@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@dennis-ritchie'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:06'
+updated_date: '2026-10-08 13:12'
 labels:
   - quality
 dependencies: []
@@ -31,6 +31,17 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #4 Given a true-positive verdict, when QA opens that alert on the repository's code-scanning page, then it is still open, and the task, its commits and any pull request contain no file path, line number, rule name or other detail of it
 - [ ] #5 Given the task's commits, when QA lists the files they change, then no file under `src/` is changed
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Triage by Dennis Ritchie, reviewed by Barbara Liskov, against codex/PWS-02-diceware-passphrase at 5beca97 (the flagged code is identical at db9dab1).
+
+- Alert #2: false positive. Comes from existing upstream code; the PR #2 diff from 3996b15 to db9dab1 does not change the file it is in. To be dismissed in CodeQL as False positive once Robert Barbour agrees.
+- Alert #1: no defect reachable from current callers. Comes from existing upstream code; the PR #2 diff from 3996b15 to db9dab1 does not change the file it is in. To be dismissed in CodeQL as Won't fix, reason "upstream code, not reachable from current callers, out of scope for this fork", once Robert Barbour agrees.
+
+Both alerts are in existing upstream code that PR #2 doesn't change. Review found no defect reachable from current callers. No file under src/ changed.
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
