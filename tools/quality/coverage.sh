@@ -29,35 +29,38 @@ cd "$REPO"
   --filter 'src/core/' --filter 'src/os/' \
   --exclude 'src/core/pugixml/' --exclude 'src/core/crypto/external/' \
   --json "$OUT/coverage.json" \
+  --json-summary "$OUT/coverage_files_summary.json" \
   --cobertura "$OUT/coverage.cobertura.xml" \
   --txt "$OUT/coverage_files.txt" \
   --txt-summary > "$OUT/coverage_totals.txt"
 
-# Per-directory totals from coverage.json. Same method as the f24fd88 baseline: a line counts once per
-# file (highest hit count), a function once per (name, line).
-python3 - "$OUT/coverage.json" > "$OUT/coverage_dirs.txt" <<'PY'
+# Per-directory totals.
+# Lines: from coverage.json, counted as in the f24fd88 baseline (each line once per file, at its
+#   highest hit count). gcovr's own totals count repeated line entries, so they read slightly higher.
+# Functions: gcovr's per-file function counts from its JSON summary. The function records inside
+#   coverage.json differ between gcov versions; these counts match the baseline's method locally.
+python3 - "$OUT/coverage.json" "$OUT/coverage_files_summary.json" > "$OUT/coverage_dirs.txt" <<'PY'
 import collections, json, sys
 cov = json.load(open(sys.argv[1]))
+summary = {f['filename']: f for f in json.load(open(sys.argv[2]))['files']}
 lines = collections.defaultdict(dict)
-funcs = collections.defaultdict(dict)
 for f in cov['files']:
     for l in f['lines']:
         n = l['line_number']
-        lines[f['file']][n] = max(lines[f['file']].get(n, 0), l['count'])
-    for fn in f['functions']:
-        # gcovr omits the mangled 'name' when gcov gives only demangled names (seen with the runner's GCC).
-        k = (fn.get('name') or fn.get('demangled_name'), fn.get('lineno'))
-        funcs[f['file']][k] = max(funcs[f['file']].get(k, 0), fn['execution_count'])
+        lines[f['file']][n] = max(lines[f['file']].get(n, 0), l.get('count', 0))
 def pct(c, t):
     return f'{c}/{t} = {c / t:.1%}' if t else f'{c}/{t} = n/a'
+names = set(lines) | set(summary)
 print('Per-directory coverage (coretest, gcovr; vendored code excluded, see tools/quality/coverage.sh)')
 print(f"{'Directory':<14}{'Files':>6}  {'Lines':<24}{'Functions':<24}")
 for d in ('src/core', 'src/os/unix', 'src/os'):
-    fs = [n for n in lines if n.startswith(d + '/')]
-    lt = sum(len(lines[n]) for n in fs); lc = sum(1 for n in fs for c in lines[n].values() if c > 0)
-    ft = sum(len(funcs[n]) for n in fs); fc = sum(1 for n in fs for c in funcs[n].values() if c > 0)
+    fs = sorted(n for n in names if n.startswith(d + '/'))
+    lt = sum(len(lines[n]) for n in fs)
+    lc = sum(1 for n in fs for c in lines[n].values() if c > 0)
+    ft = sum(summary[n]['function_total'] for n in fs if n in summary)
+    fc = sum(summary[n]['function_covered'] for n in fs if n in summary)
     print(f'{d:<14}{len(fs):>6}  {pct(lc, lt):<24}{pct(fc, ft):<24}')
-other = sorted(n for n in lines if not n.startswith(('src/core/', 'src/os/')))
+other = sorted(n for n in names if not n.startswith(('src/core/', 'src/os/')))
 if other:
     print('UNEXPECTED files outside src/core and src/os:', *other, sep='\n  ')
 PY
@@ -70,6 +73,7 @@ PY
   echo
   cat "$OUT/coverage_files.txt"
 } > "$OUT/coverage_summary.txt"
-rm -f "$OUT/coverage_dirs.txt" "$OUT/coverage_totals.txt" "$OUT/coverage_files.txt"
+rm -f "$OUT/coverage_dirs.txt" "$OUT/coverage_totals.txt" "$OUT/coverage_files.txt" \
+  "$OUT/coverage_files_summary.json"
 
 sed -n '1,/^branches:/p' "$OUT/coverage_summary.txt"
