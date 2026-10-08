@@ -4,6 +4,7 @@ title: Retry Create DMG on hdiutil Resource busy in the macOS CMake workflow
 status: To Do
 assignee: []
 created_date: '2026-10-08 13:11'
+updated_date: '2026-10-08 13:40'
 labels: []
 dependencies: []
 modified_files:
@@ -15,7 +16,7 @@ ordinal: 14000
 ## Description
 
 <!-- SECTION:DESCRIPTION:BEGIN -->
-The "Create DMG" step in `.github/workflows/macos-cmake-latest.yml` (`cpack -G DragNDrop`) sometimes fails with `hdiutil: Resource busy`. The step retries on that failure, so a runner flake no longer fails the job. A failure with any other error still fails the job at once.
+The "Create DMG" step in `.github/workflows/macos-cmake-latest.yml` (`cpack -G DragNDrop`) sometimes fails with `hdiutil: Resource busy`. The step retries that command up to 3 times on that failure, so a runner flake no longer fails the job. A failure with any other error still fails the job at once.
 
 Requested by Grace Hopper, relayed by Fred Brooks, 2026-10-08.
 
@@ -24,7 +25,7 @@ Exclusions: fork-only, never part of an upstream pull request; no other step or 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the change, when QA reads the "Create DMG" step of `.github/workflows/macos-cmake-latest.yml`, then it retries `cpack -G DragNDrop` a fixed number of times, stated in the task notes, only when the output contains `hdiutil: Resource busy`, and no other step changes
+- [ ] #1 Given the change, when QA reads the "Create DMG" step of `.github/workflows/macos-cmake-latest.yml`, then it retries `cpack -G DragNDrop` up to 3 times, only when the output contains `hdiutil: Resource busy`, and no other step changes
 - [ ] #2 Given a run where the first attempt fails with `hdiutil: Resource busy` and a later attempt succeeds, when the job finishes, then it passes and the log shows the retry; the task notes give that run's URL, or say a simulated failure on a throwaway branch was used instead
 - [ ] #3 Given a run where the step fails with any other error, when the job finishes, then it fails without retrying
 <!-- AC:END -->
