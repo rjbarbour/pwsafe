@@ -1,3 +1,12 @@
+/*
+* Copyright (c) 2026 Robert John Barbour.
+* All rights reserved. Use of the code is allowed under the
+* Artistic License 2.0 terms, as specified in the LICENSE file
+* distributed with this code, or available from
+* http://www.opensource.org/licenses/artistic-license-2.0.php
+*/
+// PassphraseTest.cpp: Unit tests for Diceware passphrase generation
+
 #ifdef WIN32
 #include "../ui/Windows/stdafx.h"
 #endif
@@ -43,13 +52,27 @@ TEST(PassphraseTest, entropy_line)
 TEST(PassphraseTest, fail_closed)
 {
   const char *words[] = {"one"};
+  g_n = 1; g_i = 0;
   EXPECT_TRUE(MakePassphrase(words, 0, 3, FixedDraw).empty());
   EXPECT_TRUE(MakePassphrase(nullptr, 1, 3, FixedDraw).empty());
   EXPECT_TRUE(MakePassphrase(words, 1, 0, FixedDraw).empty());
   EXPECT_TRUE(MakePassphrase(words, 1, 1, nullptr).empty());
+  EXPECT_EQ(g_i, 0u); // invalid input never draws
   EXPECT_TRUE(PassphraseEntropyLine(0, 7776).empty());
   EXPECT_TRUE(PassphraseEntropyLine(4, 0).empty());
   EXPECT_DOUBLE_EQ(PassphraseEntropyBits(0, 7776), 0.0);
   g_seq[0] = 5; g_n = 1; g_i = 0;
   EXPECT_TRUE(MakePassphrase(words, 1, 1, FixedDraw).empty());
+}
+
+TEST(PassphraseTest, empty_word_fails_closed)
+{
+  const char *words[] = {"one", "", nullptr};
+  g_n = 3;
+  g_seq[0] = 0; g_seq[1] = 1; g_i = 0;
+  EXPECT_TRUE(MakePassphrase(words, 3, 2, FixedDraw).empty());
+  EXPECT_EQ(g_i, 2u);
+  g_seq[0] = 2; g_i = 0;
+  EXPECT_TRUE(MakePassphrase(words, 3, 1, FixedDraw).empty());
+  EXPECT_EQ(g_i, 1u);
 }
