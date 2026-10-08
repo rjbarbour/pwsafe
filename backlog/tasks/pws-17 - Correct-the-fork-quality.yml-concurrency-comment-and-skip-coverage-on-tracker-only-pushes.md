@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 15:57'
+updated_date: '2026-10-08 15:59'
 labels:
   - quality
 dependencies:
@@ -38,3 +39,9 @@ Exclusions: fork-only, never part of an upstream pull request; no change to the 
 - [ ] #4 Given the pull request, when QA reads its diff, then it changes only `.github/workflows/fork-quality.yml`, and only its comment and `on.push` block
 - [ ] #5 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+DoR check 2026-10-08 (Fred Brooks, Definition of Ready v1.3): pass. RD-01: the outcome is explicit (an accurate concurrency comment, and no coverage run on tracker-only pushes), and the benefit is to platform operations (master coverage runs are not cancelled by tracker commits; RAID I-04). RD-02: scope, exclusions and the required-check escalation are explicit. RD-03: AC 1-5 are concrete and deterministic, with run URLs or SHAs for AC 3. RD-04: depends on PWS-05 (Done). PWS-07 edits the same fork-quality.yml, so whichever merges second rebases on the other; this does not block either. RD-05: low risk, reversible, Build commitment (project default). RD-06: one file changes; QA by Edsger Dijkstra; two code reviews (AC 5); the gate after is Done and closing RAID I-04. RD-07: project defaults; making the coverage job a required check is Robert's decision and is covered by AC 2's comment. Observation, not a gap: PWS-13 ignores backlog/** only for CodeQL, while this task also ignores backlog.config.yml. Stays in To Do while Ready holds 3 (PWS-06, PWS-07, PWS-13).
+<!-- SECTION:NOTES:END -->
