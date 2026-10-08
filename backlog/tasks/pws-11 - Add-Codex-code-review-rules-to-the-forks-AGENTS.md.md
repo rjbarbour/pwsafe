@@ -5,7 +5,7 @@ status: Shaping
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:59'
-updated_date: '2026-10-08 13:11'
+updated_date: '2026-10-08 15:58'
 labels:
   - quality
 dependencies: []
@@ -43,6 +43,7 @@ Exclusions: fork `master` only, never part of an upstream pull request; root `AG
 - [ ] #5 Given Robert Barbour has agreed to an `@codex review` comment being posted under his name, and a representative pull request to fork `master` from a branch based on upstream master that breaks at least one rule, when Codex reviews it, then Grace Hopper records in the task notes the pull request URL, the review URL, and whether Codex flagged the break with reference to the rule
 - [ ] #6 Given Codex does not apply the rules on that pull request, when Grace Hopper records the result, then the task notes say so and the task goes back to Fred Brooks for a decision rather than adding a nested or branch copy of `AGENTS.md`
 - [ ] #7 Given the representative pull request, when the check is finished, then it is closed unmerged and its branch deleted
+- [ ] #8 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
