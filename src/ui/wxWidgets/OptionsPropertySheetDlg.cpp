@@ -30,8 +30,6 @@
 #include <wx/debug.h>
 #include <wx/taskbar.h>
 
-#include <algorithm>
-
 #include "core/PWSprefs.h"
 #include "core/Util.h" // for datetime string
 #include "core/PWSAuxParse.h" // for DEFAULT_AUTOTYPE
@@ -81,9 +79,10 @@ BEGIN_EVENT_TABLE( OptionsPropertySheetDlg, wxPropertySheetDialog )
   EVT_CHECKBOX(    ID_CHECKBOX24,      OptionsPropertySheetDlg::OnUseDefaultUserClick )
   EVT_BUTTON(      ID_BUTTON8,         OptionsPropertySheetDlg::OnBrowseLocationClick )
   EVT_BUTTON(      ID_PWHISTAPPLY,     OptionsPropertySheetDlg::OnPWHistApply )
+////@end OptionsPropertySheetDlg event table entries
+
   EVT_SPINCTRL(    ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnPassphraseWordCountSpin )
   EVT_TEXT(        ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnPassphraseWordCountText )
-////@end OptionsPropertySheetDlg event table entries
 
   EVT_BOOKCTRL_PAGE_CHANGING(wxID_ANY, OptionsPropertySheetDlg::OnPageChanging)
   EVT_BOOKCTRL_PAGE_CHANGING(wxID_ANY, OptionsPropertySheetDlg::OnPageChanging)
@@ -111,6 +110,7 @@ BEGIN_EVENT_TABLE( OptionsPropertySheetDlg, wxPropertySheetDialog )
   EVT_UPDATE_UI(   ID_PWHISTSETMAX,    OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_PWHISTCLEAR,     OptionsPropertySheetDlg::OnUpdateUI )
 
+  EVT_UPDATE_UI(   ID_PWGENWORDSLABEL, OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_PWGENWORDCOUNT,  OptionsPropertySheetDlg::OnUpdateUI )
   EVT_UPDATE_UI(   ID_PWGENBITS,       OptionsPropertySheetDlg::OnUpdateUI )
 
@@ -762,6 +762,9 @@ wxPanel* OptionsPropertySheetDlg::CreatePasswordGenerationPanel(const wxString& 
   auto *wordCountSizer = new wxBoxSizer(wxHORIZONTAL);
   panelSizer->Add(wordCountSizer, 0, wxEXPAND|wxLEFT, 20);
 
+  wxStaticText* wordCountLabel = new wxStaticText( panel, ID_PWGENWORDSLABEL, _("Passphrase words:"), wxDefaultPosition, wxDefaultSize, 0 );
+  wordCountSizer->Add(wordCountLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
   m_PasswordGeneration_WordCountSB = new wxSpinCtrl(
     panel, ID_PWGENWORDCOUNT, _T("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
     PWSprefs::GetInstance()->GetPrefMinVal(PWSprefs::PassphraseWordCount),
@@ -1100,8 +1103,9 @@ void OptionsPropertySheetDlg::PrefsToPropSheet()
   const bool useLocalPolicy = prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy);
   m_PasswordGeneration_SafePolicyRB->SetValue(!useLocalPolicy);
   m_PasswordGeneration_LocalPolicyRB->SetValue(useLocalPolicy);
-  m_PasswordGeneration_WordCountSB->SetValue(prefs->GetPref(PWSprefs::PassphraseWordCount));
-  UpdatePassphraseBits(m_PasswordGeneration_WordCountSB->GetValue());
+  m_PasswordGeneration_WordCount = ClampPassphraseWords(static_cast<int>(prefs->GetPref(PWSprefs::PassphraseWordCount)));
+  m_PasswordGeneration_WordCountSB->SetValue(m_PasswordGeneration_WordCount);
+  UpdatePassphraseBits();
 
   // Security Preferences
   m_Security_ClearClipboardOnMinimize   = prefs->GetPref(PWSprefs::ClearClipboardOnMinimize);
@@ -1208,7 +1212,7 @@ void OptionsPropertySheetDlg::PropSheetToPrefs()
 
   // Password Generation preferences
   prefs->SetPref(PWSprefs::UseLocalPassphrasePolicy, m_PasswordGeneration_LocalPolicyRB->GetValue());
-  prefs->SetPref(PWSprefs::PassphraseWordCount, m_PasswordGeneration_WordCountSB->GetValue());
+  prefs->SetPref(PWSprefs::PassphraseWordCount, static_cast<unsigned int>(m_PasswordGeneration_WordCount));
 
   // Security Preferences
   prefs->SetPref(PWSprefs::ClearClipboardOnMinimize   , m_Security_ClearClipboardOnMinimize);
@@ -1476,25 +1480,27 @@ void OptionsPropertySheetDlg::OnPWHistApply(wxCommandEvent& WXUNUSED(evt))
 
 void OptionsPropertySheetDlg::OnPassphraseWordCountSpin(wxSpinEvent& evt)
 {
-  UpdatePassphraseBits(evt.GetPosition());
+  m_PasswordGeneration_WordCount = ClampPassphraseWords(evt.GetPosition());
+  UpdatePassphraseBits();
 }
 
 /*!
  * wxEVT_TEXT event handler for ID_PWGENWORDCOUNT, so that a typed count
- * updates the bits line before the spin control commits it
+ * updates the bits line, and is what OK saves, before the spin control
+ * commits it
  */
 
 void OptionsPropertySheetDlg::OnPassphraseWordCountText(wxCommandEvent& evt)
 {
-  UpdatePassphraseBits(evt.GetInt());
+  m_PasswordGeneration_WordCount = PassphraseWordCountFromText(tostdstring(evt.GetString()),
+                                                               m_PasswordGeneration_WordCount);
+  UpdatePassphraseBits();
 }
 
-void OptionsPropertySheetDlg::UpdatePassphraseBits(int wordCount)
+void OptionsPropertySheetDlg::UpdatePassphraseBits()
 {
-  // Show the count the spin control will commit, which is clamped to its range
-  wordCount = std::clamp(wordCount, m_PasswordGeneration_WordCountSB->GetMin(),
-                                    m_PasswordGeneration_WordCountSB->GetMax());
-  m_PasswordGeneration_BitsST->SetLabel(PassphraseEntropyLine(wordCount, EffLongWordCount()).c_str());
+  m_PasswordGeneration_BitsST->SetLabel(
+    PassphraseEntropyLine(static_cast<size_t>(m_PasswordGeneration_WordCount), EffLongWordCount()).c_str());
 }
 
 /*!
@@ -1587,6 +1593,7 @@ void OptionsPropertySheetDlg::OnUpdateUI(wxUpdateUIEvent& evt)
   /////////////////////////////////////////////////////////////////////////////
   // Tab: "Password Generation"
   /////////////////////////////////////////////////////////////////////////////
+    case ID_PWGENWORDSLABEL:
     case ID_PWGENWORDCOUNT:
     case ID_PWGENBITS:
       evt.Enable(m_PasswordGeneration_LocalPolicyRB->GetValue());

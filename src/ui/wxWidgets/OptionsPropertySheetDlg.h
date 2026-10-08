@@ -137,6 +137,7 @@ class wxBookCtrlEvent;
 #define ID_PWGENLOCALPOLICY 10253
 #define ID_PWGENWORDCOUNT 10254
 #define ID_PWGENBITS 10255
+#define ID_PWGENWORDSLABEL 10256
 #define SYMBOL_COPTIONS_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxDIALOG_MODAL
 #define SYMBOL_COPTIONS_TITLE _("Options")
 #define SYMBOL_COPTIONS_IDNAME ID_OPTIONS
@@ -228,7 +229,7 @@ private:
   void PrefsToPropSheet();
   void PropSheetToPrefs();
   int GetRequiredPWLength() const;
-  void UpdatePassphraseBits(int wordCount);
+  void UpdatePassphraseBits();
 
   wxPanel* CreateHeaderPanel(wxWindow* parent, const wxString& title);
   wxPanel* CreateBackupsPanel(const wxString& title);
@@ -364,6 +365,7 @@ private:
   bool m_PasswordHistory_Save;
   int  m_PasswordHistory_NumDefault;
   int  m_PasswordHistory_DefaultExpiryDays;
+  int  m_PasswordGeneration_WordCount;
 
   PWScore &m_core;
 ////@end OptionsPropertySheetDlg member variables
