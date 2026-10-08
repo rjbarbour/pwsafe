@@ -5,11 +5,9 @@
 * distributed with this code, or available from
 * http://www.opensource.org/licenses/artistic-license-2.0.php
 */
-#include <charconv>
 #include <cmath>
 #include <limits>
 #include <string>
-#include <system_error>
 
 #include "Passphrase.h"
 
@@ -112,18 +110,17 @@ int PassphraseWordCountFromText(const stringT &text, int current)
   if (i > last)
     return current;
 
-  std::string number(negative ? "-" : "");
+  // Stop accumulating once past the maximum, so the value cannot overflow
+  int count = 0;
   for (; i <= last; ++i) {
     if (text[i] < L'0' || text[i] > L'9')
       return current;
-    number.push_back(static_cast<char>(text[i]));
+    if (count <= kMaxPassphraseWords)
+      count = count * 10 + (text[i] - L'0');
   }
 
-  int count = 0;
-  const std::from_chars_result r =
-    std::from_chars(number.data(), number.data() + number.size(), count);
-  if (r.ec == std::errc::result_out_of_range)
-    return negative ? kMinPassphraseWords : kMaxPassphraseWords;
+  if (negative)
+    return kMinPassphraseWords;
   return ClampPassphraseWords(count);
 }
 
