@@ -90,6 +90,10 @@ def main():
         hit_rules = {res.get('ruleId') for res in results}
         driver_rules = run.get('tool', {}).get('driver', {}).get('rules', [])
         for rule in driver_rules:
+            # Code scanning requires security-severity as a string; cppcheck writes a number.
+            props = rule.get('properties', {})
+            if isinstance(props.get('security-severity'), (int, float)):
+                props['security-severity'] = f"{props['security-severity']:.1f}"
             if rule.get('id') not in hit_rules:
                 for key in ('shortDescription', 'fullDescription', 'help'):
                     if key in rule:
