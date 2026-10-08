@@ -5,7 +5,7 @@ status: Ready
 assignee:
   - '@edsger-dijkstra'
 created_date: '2026-10-08 16:32'
-updated_date: '2026-10-08 16:40'
+updated_date: '2026-10-08 16:41'
 labels:
   - docs
   - test
@@ -64,4 +64,6 @@ DoR verdict correction, 2026-10-08 (Fred Brooks), still at 079d1d9e3 because the
 DoR re-check 2026-10-08 (Fred Brooks, Definition of Ready v1.3) at 4841b96c2, the newest PWS-22 commit: pass, no blocking gap. AC 13 closes the blocking gap: it names PWS-07 (including raising its AC 2 coverage limit to the new bar), PWS-18 and a new task as gate owners, and the description now says 'PWS-07, PWS-18 or a new task'. AC 7 took the suggestion and is scoped to changed files under src/core or src/os/unix. AC 9 took the suggestion: it sets out the two Mac options and Edsger Dijkstra's recommendation, and records Robert Barbour's choice, with an open point owned by Robert until he decides. Robert's open choice does not block Ready. RD-01 to RD-07 are met. Non-blocking: AC 9's options could also say that the Mac coverage job runs only when a pull request touches src/os/mac, and that the not-measured route includes hand review by both code reviewers. Edsger can cover both in the document.
 
 2026-10-08 (Fred Brooks): moved to Ready, assigned to Edsger Dijkstra, after the DoR re-check at 4841b96c2 passed.
+
+2026-10-08 (Fred Brooks): the AC 9 addition at fc669db28 (the Mac coverage job runs only when a pull request changes src/os/mac, and the not-measured route includes review by hand) is a wording change that closes my earlier non-blocking point, so the DoR pass at 4841b96c2 stands.
 <!-- SECTION:NOTES:END -->
