@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-10-08 15:57'
-updated_date: '2026-10-08 15:59'
+updated_date: '2026-10-08 16:06'
 labels:
   - quality
 dependencies:
@@ -31,7 +31,7 @@ Exclusions: fork-only, never part of an upstream pull request; no change to the 
 <!-- AC:BEGIN -->
 - [ ] #1 Given the change, when QA reads `tools/quality/coverage.sh`, then it passes `--gcov-suspicious-hits-threshold` set to the smallest power of ten above the highest hit count observed on the currently suspicious lines, and the task notes record that highest count and the threshold chosen
 - [ ] #2 Given a Fork quality coverage run after the change, when QA reads the gcovr output in its log, then there is no suspicious hits warning
-- [ ] #3 Given the gcovr JSON from the last coverage run before the change and from the first run after it, both on the same commit of `src/`, when QA compares them line by line, then the only lines that differ are the ones gcovr reported as suspicious before the change, and the task notes list those lines and the before and after totals for `src/core` and `src/os`
+- [ ] #3 Given the gcovr JSON from the last coverage run before the change and from the first run after it, both on the same commit of `src/`, the same runner image and the same compiler version, when QA compares them line by line, then the only lines that differ are the ones gcovr reported as suspicious before the change, and the task notes list those lines, the before and after totals for `src/core` and `src/os`, and the runner image and compiler version of both runs as their job logs show them
 - [ ] #4 Given the pull request, when QA reads its diff, then it changes only `tools/quality/coverage.sh`
 - [ ] #5 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
