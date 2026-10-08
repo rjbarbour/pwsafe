@@ -3,10 +3,10 @@ id: PWS-06
 title: >-
   Switch CodeQL to the security-and-quality suite and fail the pull request
   check on security severity only
-status: To Do
+status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:07'
+updated_date: '2026-10-08 13:31'
 labels:
   - quality
 dependencies:
@@ -35,6 +35,12 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 - [ ] #6 Given both test pull requests, when the task is finished, then they are closed unmerged and their run URLs are in the task notes
 - [ ] #7 Given Robert Barbour has changed the code-scanning check-failure setting on rjbarbour/pwsafe, when QA reads the task notes, then they record that security alerts fail the check at high or above and that quality-only alerts never fail it, with the date Robert confirmed it
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+2026-10-08 14:32 BST: Dependency PWS-03 is Done; moved from To Do to Ready by Fred Brooks (DoR passed earlier).
+<!-- SECTION:NOTES:END -->
 
 ## Comments
 
