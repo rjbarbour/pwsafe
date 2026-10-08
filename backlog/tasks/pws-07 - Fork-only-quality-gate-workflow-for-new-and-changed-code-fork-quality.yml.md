@@ -5,7 +5,7 @@ status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 18:43'
+updated_date: '2026-10-08 19:02'
 labels:
   - quality
 dependencies:
@@ -107,6 +107,12 @@ Nits:
 8. Squash-merge recommended: aa542afb7 (notes) + fd4129b9c (its revert) otherwise linger in history.
 
 Still ahead: Fred's review, the RAID entries, and Edsger's QA.
+
+2026-10-08 20:00 BST, Fred Brooks: delta re-check of PR #7 fd4129b9c..a40131b56 - pass, no blockers. The four quality-job actions are pinned to commit SHAs that each match their tag (codeql-action upload-sarif v4.38.2's annotated tag peeled to its commit); the coverage job's tag pins remain under R-07. clang_tidy_gate.py and gate_changed.py now fail with tool name, exit code and stderr when clang-tidy-diff, clang-tidy or lizard exits non-zero with no findings parsed. I reproduced this locally with fake tools for each call site, and controls behaved normally. The vendored exclusions now take effect (8817 to 8062 functions). README line 58 uses the recursive patterns, and the nits are in. The net diff still touches only fork-quality.yml and tools/quality/, all 18 check runs on a40131b56 succeeded, the PR is mergeable, and the merge ref has no open code-scanning alerts. Non-blocking follow-up: the gate_changed.py docstring and README tool table still say duplication "never fails", though a lizard crash now fails the job. Remaining before merge: Dennis's sign-off on the delta and Edsger's QA.
+
+2026-10-08 20:02 BST, Grace Hopper: failure-path evidence for RAID (Dennis's review item 2). CI on PR #7 exercises no C/C++ change, so the failure paths have local evidence only. Local dry-runs (never pushed): (1) final1 under /workspace/pws07-scratch — layering FAIL (NEW os→core edge), complexity/CRAP FAIL (ratchet plus new-function limits), diff-cover FAIL, clang-tidy FAIL (changed-line findings plus readability on an added header), cppcheck FAIL via diff-quality; each EXIT non-zero as expected. (2) wx-only and src/os/mac-only changes PASS as not-measured. (3) a new src/core .cpp missing from the coverage report FAILs and names the file. (4) an unused inline in a new src/core header fails coverage (<80%); a declaration-only header PASSes. Crash-path negative tests at a40131b56: fake clang-tidy, clang-tidy-diff and lizard each exiting 1 with no output make the gate fail with tool name and exit code; a non-zero exit with parsed findings still takes the findings path. Lizard duplication scan: 8817 functions before exclusions, 8062 after (755 vendored excluded: pugixml 751, crypto/external 4).
+
+2026-10-08 20:02 BST, Grace Hopper (housekeeping, at Dennis's request): Dennis's 19:46 review entry (cc944ff41) closes with a 'still ahead' line that predates Fred's review and RAID entries in cad23dcfa; those have landed. Dennis's item-1 blocker (fail-open on tool crash) was fixed in code at a40131b56. Follow-up for the next tools/quality change (likely PWS-23): update the gate_changed.py docstring and README tool table, which still say duplication 'never fails'.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
