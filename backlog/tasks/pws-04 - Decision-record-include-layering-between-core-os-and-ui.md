@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@barbara-liskov'
 created_date: '2026-10-08 12:49'
-updated_date: '2026-10-08 13:31'
+updated_date: '2026-10-08 15:55'
 labels:
   - quality
 dependencies: []
@@ -42,6 +42,8 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 
 2026-10-08 14:32 BST: QA (Edsger Dijkstra) passed AC 1-6 against decision-01 (1f90a0b) and f24fd88: all 39 edges checked and regenerated with an exact match, counts 30/7/1/1. Non-blocking for PWS-07: src/core/PWSversion.cpp includes generated "version.h" (from src/ui/*/version.in, resolved in the build directory); the layering check's path resolution must handle it. Accepted and moved to Done by Fred Brooks (tracker-only task, no PR).
 2026-10-08 16:55 BST (Barbara Liskov), DoD v1.1 DD-05, residual risk and next step: (1) An upstream sync can bring in new include edges; the PWS-07 layering check fails on any edge not in decision-01, and each such edge is reviewed as a design change, per decision-01's consequences. (2) Generated header: src/core/PWSversion.cpp includes "version.h", generated from src/ui/*/version.in. CMake and Xcode write it to the build directory, but Makefile.macos writes it into src/ui/wxWidgets, so resolution by filesystem would count a core-to-ui edge. Agreed handling in PWS-07: resolve includes against git ls-files, with one allow-list entry for PWSversion.cpp; decision-01 unchanged (Fred Brooks, 2026-10-08). Next step: PWS-07 adopts the edge-list file, which must equal decision-01's 39 edges.
+
+DoD v1.1 check 2026-10-08 (Fred Brooks): DD-01 pass: AC 1-6 are ticked after Edsger Dijkstra's QA, which regenerated all 39 edges at f24fd88 with an exact match (counts 30/7/1/1); DD-02 pass: decision-01 is on fork master in 1f90a0b, the commit QA checked; no code change; DD-03 pass: Edsger Dijkstra's independent QA plus Fred Brooks's acceptance review of the record, proportionate for a tracker-only decision record with no pull request; DD-04 pass: decision-01 is the deliverable, status accepted, with alternatives, consequences and reversal conditions, and later changes go by supersession; DD-05 pass: Barbara Liskov's note (ceeaa88) records the residual risks, logged as RAID R-01 (an upstream sync brings new edges) and R-02 (generated version.h under Makefile.macos), and the next gate is PWS-07, whose edge-list file must equal decision-01's 39 edges (PWS-07 AC 8 and AC 10); overlay DO-05 (decision record: authority, terminology and edge references checked by QA, no build needed), and DO-03's 'record any new boundary rule' is met by decision-01. Result: meets DoD.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
