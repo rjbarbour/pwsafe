@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 16:47'
+updated_date: '2026-10-08 18:00'
 labels:
   - quality
 dependencies:
@@ -64,6 +64,20 @@ DoR re-check 2026-10-08 (Fred Brooks): pass. 65fd69c (readability/modernize on a
 Robert's 2026-10-08 rule applies: two code reviews (Fred Brooks, Dennis Ritchie); every automated-check finding addressed before merge or logged in backlog/docs/raid-log.md.
 
 2026-10-08 (Fred Brooks, board sync): moved Ready to In Progress. Grace Hopper opened PR #7 (branch pws-07-quality-gate, head 89f1783) at 17:46 BST; CI still queued and the PR body says evidence follows, so not yet Review. In Progress now holds PWS-02, PWS-09 and PWS-07, above the one-task limit proposed in PWS-20; flagged to Robert.
+
+2026-10-08 (Grace Hopper, verification resume): Independent check of PR #7 head 03e9a4e16 against the ACs. No rebuild; no AC boxes ticked; status unchanged.
+
+CI on head: Fork quality run 37816745452 (Coverage and Quality gate passed; configure log shows CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON); CMake Build 37816745480 (ubuntu-22.04, ubuntu-latest, windows-latest) passed; CodeQL 37816745961 Analyze-Linux passed; Socket passed. macOS runs 37816745424 (macos-latest) and 37816745594 (macos-cmake) still queued at verification time (~40+ minutes), never started.
+
+Code scanning for refs/pull/7/merge: clang-tidy analysis 1917858718 (312 rules, 0 results); cppcheck analysis 1917859503 (58 rules, 0 results); CodeQL analysis 1917833477 (58 rules, 0 results). Open alerts on the PR merge ref: 0. The two open CodeQL alerts on master/branch head are the existing baseline (PWS-09), not new to this PR.
+
+Gate behaviour (local dry runs on local-only branches, never pushed): (1) earlier final1 run under /workspace/pws07-scratch fails layering (NEW os->core edge), ratchet, CCN/cognitive/CRAP, diff-cover ~2%, clang-tidy on changed lines plus readability on an added header, and one cppcheck warning via diff-quality; untouched upstream findings are not gated. (2) wx-only and src/os/mac-only changes PASS and are listed as "Not measured: reviewed by hand". (3) a new src/core .cpp missing from the coverage report FAILs and names the file. (4) an unused inline in a new src/core header counts as uncovered (0/6 < 80%, FAIL); a declaration-only header is listed and PASSes.
+
+Fred's coverage-gate points in gate_changed.py / coverage-gate.toml: single threshold line=80; per-metric hooks for branch and condition (commented); not_measured lists src/ui/, src/os/mac/, src/os/windows/; missing measured source fails; no exemption file (none of the ACs needs one).
+
+Finding dispositions (also in the PR body): Codex P1 (diff-cover include did not recurse) fixed in 03e9a4e16; Codex P2 (uninstrumented header skipped) fixed in 03e9a4e16; first-run CI: core_st generation (868a89294) and SARIF security-severity string (8678778d7). clang-tidy, cppcheck, CodeQL and Socket: no new findings on this PR. AC 13 reviews by Fred Brooks and Dennis Ritchie are still outstanding; proposed residual risks remain in the PR body for Fred to log.
+
+Recorded on master rather than the PR branch: first committed on the PR branch as aa542afb7, reverted there in fd4129b9c so PR #7 touches only .github/workflows/fork-*.yml and tools/quality/ (PR head content equals 03e9a4e16).
 <!-- SECTION:NOTES:END -->
 
 ## Comments
