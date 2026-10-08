@@ -6,7 +6,7 @@ title: >-
 status: Ready
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:43'
+updated_date: '2026-10-08 15:58'
 labels:
   - quality
 dependencies:
@@ -34,6 +34,7 @@ Exclusions: `cmake-build.yml`, `macos-latest.yml` and `macos-cmake-latest.yml` s
 - [ ] #5 Given a test pull request to `master` that introduces an alert with security severity high or critical, when CodeQL runs, then the CodeQL check fails
 - [ ] #6 Given both test pull requests, when the task is finished, then they are closed unmerged and their run URLs are in the task notes
 - [ ] #7 Given Robert Barbour has changed the code-scanning check-failure setting on rjbarbour/pwsafe, when QA reads the task notes, then they record that security alerts fail the check at high or above and that quality-only alerts never fail it, with the date Robert confirmed it
+- [ ] #8 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Implementation Notes
