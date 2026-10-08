@@ -11,8 +11,9 @@ Complexity and CRAP (lizard), for the functions that changed lines touch:
     counts once) or its cognitive complexity rises and ends above the limit. Legacy functions above
     a limit that the diff leaves alone, or edits that raise neither figure, do not fail.
   CRAP = CCN^2 * (1 - cov)^3 + CCN, with cov the share of the function's instrumented lines that
-  Coretests executed. A function with no instrumented lines (not compiled into the coverage build)
-  has no CRAP score; the summary says so and it does not fail.
+  Coretests executed. A new function in the measured coverage scope with no instrumented lines (an
+  inline or template function that Coretests never uses, or a file outside the coverage build) counts
+  as 0% covered; elsewhere under src/core or src/os such a function has no CRAP score and is listed.
 
 Changed-line coverage (gcovr JSON from tools/quality/coverage.sh; settings in coverage-gate.toml):
   * every changed C/C++ file under src/ is classified: measured (src/core, src/os/unix and the
@@ -20,6 +21,9 @@ Changed-line coverage (gcovr JSON from tools/quality/coverage.sh; settings in co
     "not measured: reviewed by hand"), or outside the coverage scope (tests, tools);
   * a changed or new source file in the measured scope that is missing from the coverage report
     fails (none of its changed lines can be covered by Coretests);
+  * a changed line inside a function (as lizard finds it) that has no instrumented line in the
+    report, such as an unused inline or template function in a header, counts as an uncovered
+    changed line; declaration-only header changes have no executable lines and are listed only;
   * per-metric figures over the measured changed lines: line, and branch and condition when gcovr's
     JSON has them. A metric with a threshold in coverage-gate.toml is enforced; today that is line
     coverage only, at 80% (PWS-07 AC 2).
@@ -107,7 +111,7 @@ def load_coverage(path):
     return cov
 
 
-def complexity(repo, mb, changed, cov, a):
+def complexity(repo, mb, changed, cov, a, scope):
     rows, fails, unmeasured = [], [], []
     for path, lines in sorted(changed.items()):
         full = os.path.join(repo, path)
@@ -124,6 +128,9 @@ def complexity(repo, mb, changed, cov, a):
                 if inst:
                     covered = sum(cov[path][n]['count'] > 0 for n in inst) / len(inst)
                     crap = fn['ccn'] ** 2 * (1 - covered) ** 3 + fn['ccn']
+                elif prev is None and classify(path, scope) == 'measured':
+                    covered = 0.0   # never compiled or instantiated by Coretests
+                    crap = fn['ccn'] ** 2 + fn['ccn']
                 elif prev is None:
                     unmeasured.append(f"`{path}:{fn['start']}` `{fn['name']}`")
             why = []
@@ -173,7 +180,27 @@ def classify(path, scope):
     return 'outside'
 
 
-def coverage(changed, cov, config):
+def code_like(text):
+    t = text.strip()
+    return bool(t) and not t.startswith(('//', '/*', '*')) and t not in ('{', '}', '};', '});')
+
+
+def uninstrumented(repo, path, lines, inst):
+    """Changed code lines inside functions with no instrumented line in the coverage report."""
+    full = os.path.join(repo, path)
+    if not os.path.isfile(full):
+        return set()
+    with open(full, encoding='utf-8', errors='replace') as fh:
+        text = fh.read().split('\n')
+    out = set()
+    for fn in lizard_functions(full):
+        body = set(range(fn['start'], fn['end'] + 1))
+        if lines & body and not inst & body:
+            out |= {n for n in lines & body if n <= len(text) and code_like(text[n - 1])}
+    return out
+
+
+def coverage(repo, changed, cov, config):
     thresholds = config.get('thresholds', {})
     unknown = set(thresholds) - set(METRICS)
     if unknown:
@@ -184,14 +211,20 @@ def coverage(changed, cov, config):
     fails, missing = [], []
     totals = {m: [0, 0] for m in METRICS}
     per_file = []
+    declarations = []
     for path in groups['measured']:
-        if path not in cov:
-            if path.endswith(SOURCES):
-                missing.append(path)
-            continue   # a header with no executable code is not in the report
+        if path not in cov and path.endswith(SOURCES):
+            missing.append(path)
+            continue
+        report = cov.get(path, {})
+        dark = uninstrumented(repo, path, changed[path], set(report))
+        if path not in cov and not dark:
+            declarations.append(path)   # no changed line inside a function body
+            continue
         f = {m: [0, 0] for m in METRICS}
+        f['line'][1] += len(dark)       # counted as uncovered
         for n in changed[path]:
-            e = cov[path].get(n)
+            e = report.get(n)
             if e is None:
                 continue   # not an executable line
             f['line'][0] += e['count'] > 0
@@ -202,8 +235,8 @@ def coverage(changed, cov, config):
         for m in METRICS:
             totals[m][0] += f[m][0]
             totals[m][1] += f[m][1]
-        uncovered = sorted(n for n in changed[path] if n in cov[path] and cov[path][n]['count'] == 0)
-        per_file.append((path, f, uncovered))
+        uncovered = sorted(n for n in changed[path] if n in report and report[n]['count'] == 0)
+        per_file.append((path, f, uncovered, sorted(dark)))
 
     enforced = ', '.join(f'{m} {v:g}%' for m, v in thresholds.items()) or 'none'
     print('\n### Changed-line coverage (Coretests, gcovr; settings in tools/quality/coverage-gate.toml)\n')
@@ -228,10 +261,14 @@ def coverage(changed, cov, config):
         if limit is not None and pct < limit:
             fails.append(f'{metric} coverage of changed code {pct:.1f}% < {limit:g}%')
     if per_file:
-        print('\n| File | Lines covered | Uncovered changed lines |\n|---|---|---|')
-        for path, f, uncovered in per_file:
+        print('\n| File | Lines covered | Uncovered changed lines | In functions with no instrumented line (counted as uncovered) |')
+        print('|---|---|---|---|')
+        for path, f, uncovered, dark in per_file:
             c, t = f['line']
-            print(f"| `{path}` | {c}/{t} | {compress(uncovered) or '-'} |")
+            print(f"| `{path}` | {c}/{t} | {compress(uncovered) or '-'} | {compress(dark) or '-'} |")
+    if declarations:
+        print('\nChanged headers in the measured scope with no changed line inside a function body '
+              '(declarations only; nothing to cover): ' + ', '.join(f'`{p}`' for p in declarations))
     if groups['not measured']:
         print('\nNot measured: reviewed by hand (GUI or platform code the Linux coretest build does not '
               'instrument): ' + ', '.join(f'`{p}`' for p in groups['not measured']))
@@ -294,9 +331,9 @@ def main():
 
     mb, changed = changed_cxx(a.repo, a.base)
     cov = load_coverage(a.coverage)
-    fails = complexity(a.repo, mb, changed, cov, a)
+    fails = complexity(a.repo, mb, changed, cov, a, config['scope'])
     if cov is not None:
-        fails += coverage(changed, cov, config)
+        fails += coverage(a.repo, changed, cov, config)
     duplicates(a.repo, changed)
     if fails:
         print(f'\n**Complexity, CRAP and coverage: FAIL** ({len(fails)} problem(s))\n')

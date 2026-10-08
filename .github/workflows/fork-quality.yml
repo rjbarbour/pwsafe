@@ -194,7 +194,7 @@ jobs:
       run: |
         # Annotated listing of uncovered changed lines; the gate itself is gate_changed.py above.
         "$DIFF_COVER" coverage/coverage.cobertura.xml --compare-branch="$BASE" \
-          --include 'src/core/*' 'src/os/*' --format "markdown:q/diff-cover.md"
+          --include 'src/core/**' 'src/os/**' --format "markdown:q/diff-cover.md"
         {
           echo '### Changed-line coverage listing (diff-cover, report only)'
           echo
