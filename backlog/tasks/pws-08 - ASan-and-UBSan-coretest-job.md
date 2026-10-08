@@ -4,7 +4,7 @@ title: ASan and UBSan coretest job
 status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
-updated_date: '2026-10-08 13:06'
+updated_date: '2026-10-08 15:58'
 labels:
   - quality
 dependencies: []
@@ -35,6 +35,7 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #5 Given the pull request that adds the job, when QA reads its diff, then the only changed file is `.github/workflows/fork-sanitizers.yml`, and `CMakePresets.json`, `CMakeLists.txt` and every file under `src/` are unchanged
 - [ ] #6 Given the first sanitiser run of Coretests on `master`, made on Grace Hopper's machine with the workflow's flags before the workflow is pushed anywhere in rjbarbour/pwsafe, when it reports an AddressSanitizer or UBSan error, then the workflow is not pushed, no file under `src/` is changed for this task, and the task notes say only that a sanitiser error already on `master` stopped the work and that it was escalated to Fred Brooks, with no file, line, test name or stack details
 - [ ] #7 Given that first run on Grace Hopper's machine is clean, when QA reads the task notes, then they record the `master` commit it ran on, the sanitiser flags and the clean result, dated before the workflow's first GitHub Actions run
+- [ ] #8 Given the pull request for this task, when it is merged, then Fred Brooks and Dennis Ritchie have each recorded a code review, and every automated-check finding on it (CI, CodeQL, the fork quality gate or any other check) has been addressed by disabling or tuning the rule, suppressing it in code within this task's limits, mitigating or fixing it, or recording the residual risk in `backlog/docs/raid-log.md`, and the pull request or task notes say which for each finding
 <!-- AC:END -->
 
 ## Comments
