@@ -1,9 +1,10 @@
 ---
 id: PWS-08
 title: ASan and UBSan coretest job
-status: To Do
+status: Shaping
 assignee: []
 created_date: '2026-10-08 12:50'
+updated_date: '2026-10-08 12:55'
 labels:
   - quality
 dependencies: []
@@ -28,3 +29,13 @@ Exclusions: the upstream workflows (`cmake-build.yml`, `codeql-analysis.yml`, `m
 - [ ] #3 Given a throwaway branch that adds one Coretests case with a heap buffer overflow and another with signed integer overflow, when the job runs on it, then the job fails, the log shows an AddressSanitizer report and a `runtime error:` report, and the branch is deleted unmerged with its run URL in the task notes
 - [ ] #4 Given the same workflow in any repository other than rjbarbour/pwsafe, when it is triggered, then the sanitiser job is skipped
 <!-- AC:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @fred-brooks
+created: 2026-10-08 12:55
+---
+DoR check 2026-10-08 (Fred Brooks): fail. Decision supplied: sanitiser flags (-fsanitize=address,undefined) are set in the fork-only workflow; CMakePresets.json and CMakeLists.txt are not edited, and the linux-ubsan-debug preset gap is out of scope. Gap: state what happens if Coretests on master already reports an AddressSanitizer or UBSan error (escalation and stop condition, given src/ fixes are not in scope), and name the workflow file the job goes in.
+---
+<!-- COMMENTS:END -->
