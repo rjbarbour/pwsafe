@@ -89,7 +89,7 @@ The 100% bar applies only to the measured tree in §2.
 
 The strategy must not be read as if GUI or platform code meets the 100% bar.
 
-**Missing-file rule.** A changed measured `.c` or `.cpp` file (under `src/core`, `src/os/unix` or directly under `src/os`) that is missing from the coverage report fails the gate. A changed measured `.h` that is missing is listed as "not in coverage report: no executable code, confirm in review", and both code reviewers (Fred Brooks and Dennis Ritchie) confirm it holds only declarations, constants and trivial accessors; a header found holding a real branch or condition (inline function, template, class body) is a gate failure and goes back to move the logic into a measured `.cpp`.
+**Missing-file rule.** A changed measured `.c` or `.cpp` file (under `src/core`, `src/os/unix` or directly under `src/os`) that is missing from the coverage report fails the gate. A changed measured `.h` that is missing is listed as "not in coverage report: no executable code, confirm in review", and both code reviewers (Fred Brooks and Dennis Ritchie) confirm that its new or changed lines add only declarations, constants and trivial accessors. A header whose **new or changed lines** add a real branch or condition (inline function, template, class body) is a gate failure and goes back to move that logic into a measured `.cpp`. Logic already in an upstream header is existing code and carries no obligation (§10).
 
 ## 6. Layering policy (testability)
 
