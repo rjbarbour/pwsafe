@@ -1,11 +1,11 @@
 ---
 id: PWS-15
 title: Check the Ubuntu workflows on the Ubuntu 26.04 runner image before 19 October
-status: Ready
+status: Review
 assignee:
   - '@grace-hopper'
 created_date: '2026-10-08 13:11'
-updated_date: '2026-10-08 14:09'
+updated_date: '2026-10-08 15:48'
 labels: []
 dependencies: []
 type: chore
@@ -49,6 +49,8 @@ Observation, not a failure: on 26.04, apt cannot find dpkg-sig ("E: Unable to lo
 
 The macOS run the push triggered (mac-pwsafe 37788601663) was cancelled on the throwaway branch only, because it is out of scope.
 The throwaway branch was deleted unmerged at 15:09 BST. The branches API returns 404 for it. No workflow file on master was changed by this task.
+
+Review 2026-10-08 (Fred Brooks): spike evidence recorded in 0097aea (both Ubuntu workflows green on ubuntu-26.04; CodeQL ran 58 rules; throwaway branch deleted; no master workflow change). No decision needed. Next: QA (Edsger) against the ACs.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
