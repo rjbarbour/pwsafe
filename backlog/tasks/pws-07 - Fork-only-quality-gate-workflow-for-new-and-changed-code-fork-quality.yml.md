@@ -81,6 +81,32 @@ Recorded on master rather than the PR branch: first committed on the PR branch a
 2026-10-08 (Fred Brooks, board sync): moved In Progress to Review. PR #7 is open at head fd4129b9c, every check on that head has passed (fork quality gate, coverage, clang-tidy, cppcheck, CodeQL, CMake builds on Ubuntu and Windows, both macOS builds, Socket), and Grace Hopper's verification evidence and finding dispositions are recorded above (1ed0a28). Still open before merge: AC 13 code reviews by Fred Brooks and Dennis Ritchie, residual risks from the PR body into backlog/docs/raid-log.md, then Edsger Dijkstra's QA.
 
 2026-10-08 19:42 BST, Fred Brooks: code review of PR #7 at fd4129b9c - pass, with no blocking findings. The PR's net change against master (three-dot diff from merge base 07ee21502) is `.github/workflows/fork-quality.yml` plus 12 new files under `tools/quality/`. No `src/`, upstream workflow, `coverage.sh` or `backlog/` file changes; no inline suppression comment is added; nothing installs PMD, CPD, include-what-you-use, CodeChecker or SonarQube; and GitHub reports the PR merges cleanly. All 18 checks on fd4129b9c passed, and the merge ref has no open code-scanning alerts. Both Codex findings and the two first-run CI failures are fixed. The edge list matches decision-01's 39 edges, and `layering.py` passes with the single `PWSversion.cpp` allow entry. I checked the gate locally. Only line coverage is enforced, at 80%; branch and condition stay with PWS-23. `src/ui`, `src/os/mac` and `src/os/windows` are listed as not measured. A neutral edit to an existing function over the limit passes, and an edit that raises its complexity fails as a ratchet failure. Required before merge (sent to Grace): (1) pin the quality job's actions to commit SHAs, because it now holds `security-events: write` and that meets R-07's revisit condition; (2) make the gate scripts fail when clang-tidy, clang-tidy-diff or lizard exits non-zero and no findings were parsed; (3) drop the leading `./` from the duplication scan's vendored-code exclusions; (4) use the recursive `src/core/**` and `src/os/**` patterns in the README's local diff-cover command. Follow-up, not blocking: split the larger gate-script functions before PWS-23 extends `gate_changed.py`. RAID: R-07 and R-09 updated, and three new risks logged (macOS/Windows-only code unchecked on Linux; non-self-contained headers; platform-#ifdef code in measured core files). Still needed before merge: Dennis Ritchie's code review, Grace's four fixes with my re-check, and Edsger Dijkstra's QA.
+
+PWS-07 code review (Dennis Ritchie) on fd4129b9c — 2026-10-08
+
+Result: well-scoped and clean on security, layering and secrets; two fail-open defects in the gate scripts to address before merge, plus residual risks for the RAID log. Per Robert's rule each finding is fix-or-RAID, so this is a review with blockers, not a clean pass yet.
+
+What holds:
+- Scope (AC 9): confined to .github/workflows/fork-quality.yml and tools/quality/; no src/ change, no other workflow, no NOLINT/cppcheck-suppress added. 13 files, +1192/-1.
+- Security: no pull_request_target, no secrets.*/token use; security-events: write (quality job only) is the one broad scope, needed for upload-sarif; checkout uses persist-credentials: false; cppcheck is tag-pinned and SHA-256-checked (checksum reproduced), not piped to a shell. Secret scan over all added lines clean.
+- Layering: layering-edges.txt matches decision-01's 39 edges E1-E39 exactly; allow-list is the single PWSversion.cpp -> version.h. Local run at head passes.
+- CI: all 18 checks green on fd4129b9c; code scanning 0 alerts across clang-tidy, cppcheck and CodeQL.
+
+Address before merge (fix, or log in RAID with explicit acceptance):
+1. Fail-open on tool crash. clang_tidy_gate.py never checks the exit codes of clang-tidy-diff/clang-tidy (only parses stdout); gate_changed.py never checks lizard's exit code. A crash or unparseable output yields no findings and the gate goes green. Should fail closed: check return codes and fail on non-zero.
+
+RAID (residual risks to record, acceptable if logged):
+2. CI has not exercised the failure paths — this PR changes no C/C++, so clang-tidy-diff, the added-file run, the coverage threshold, CRAP and the ratchet never ran with real input in CI; only evidence is local runs on unpushed branches. Capture that evidence or a canary in notes/RAID.
+3. Coverage scope vs AC 2: AC 2 says src/core and src/os; the gate measures src/core, src/os/unix and top-level src/os/*.h, with src/os/mac and src/os/windows hand-reviewed (not compiled on Linux). Reconcile AC 2 wording or record the deviation.
+4. Outside-fork PRs get a read-only token, so upload-sarif would fail and redden the job for outside contributors. Known limitation for a personal fork.
+5. Dependency pinning: clang-tidy-18 via apt unpinned, pip exact versions without hashes, actions tag-pinned not SHA-pinned (matches the rest of the repo). Note as accepted.
+
+Nits:
+6. cppcheck_gate.py: if a SARIF file has no runs, rules is unset and the step NameErrors — fails closed (job red) so benign, but worth a guard.
+7. README line 58 local example uses 'src/core/*' 'src/os/*' (non-recursive); the workflow uses **. Align the doc.
+8. Squash-merge recommended: aa542afb7 (notes) + fd4129b9c (its revert) otherwise linger in history.
+
+Still ahead: Fred's review, the RAID entries, and Edsger's QA.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
