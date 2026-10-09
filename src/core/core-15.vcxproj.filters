@@ -53,6 +53,12 @@
     <ClCompile Include="PWCharPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Passphrase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EffLongWordlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="PWHistory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -230,6 +236,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PWCharPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Passphrase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EffLongWordlist.inc">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PWHistory.h">

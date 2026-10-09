@@ -8,3 +8,11 @@ Copyright:
 License: Artistic
  On Debian GNU/Linux systems, the complete text of the Artistic
  license can be found in `/usr/share/common-licenses/Artistic'.
+
+Files: src/core/EffLongWordlist.inc docs/EFF/*
+Copyright: Electronic Frontier Foundation
+License: CC-BY-4.0
+ The EFF long wordlist is licensed under the Creative Commons Attribution
+ 4.0 International licence, per EFF's copyright policy at
+ https://www.eff.org/copyright. The full licence text is at
+ https://creativecommons.org/licenses/by/4.0/legalcode

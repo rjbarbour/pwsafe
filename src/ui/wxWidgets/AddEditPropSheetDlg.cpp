@@ -30,6 +30,8 @@
 #include "Clipboard.h"
 
 #include "core/PWCharPool.h"
+#include "core/PWSrand.h"
+#include "core/Passphrase.h"
 #include "core/PWHistory.h"
 #include "core/PWSAuxParse.h"
 
@@ -2046,6 +2048,13 @@ void AddEditPropSheetDlg::OnGoButtonClick(wxCommandEvent& WXUNUSED(evt))
   }
 }
   
+namespace {
+unsigned int DrawWithRangeRand(size_t n)
+{
+  return PWSrand::GetInstance()->RangeRand(n);
+}
+}
+
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_GENERATE
  */
@@ -2053,8 +2062,18 @@ void AddEditPropSheetDlg::OnGoButtonClick(wxCommandEvent& WXUNUSED(evt))
 void AddEditPropSheetDlg::OnGenerateButtonClick(wxCommandEvent& WXUNUSED(evt))
 {
   if (Validate() && TransferDataFromWindow() && !m_Item.IsAlias()) {
-    PWPolicy pwp = GetSelectedPWPolicy();
-    StringX password = pwp.MakeRandomPassword();
+    // This computer's passphrase policy replaces only the safe's default policy
+    const PWSprefs *prefs = PWSprefs::GetInstance();
+    const bool onSafeDefault = m_PasswordPolicyUseDatabaseCtrl->GetValue() &&
+                               m_PasswordPolicyNamesCtrl->GetValue() == _("Default Policy");
+    StringX password;
+    if (GenerateMakesPassphrase(prefs->GetPref(PWSprefs::UseLocalPassphrasePolicy), onSafeDefault)) {
+      password = MakePassphrase(EffLongWords(), EffLongWordCount(),
+                                prefs->GetPref(PWSprefs::PassphraseWordCount), DrawWithRangeRand);
+    } else {
+      PWPolicy pwp = GetSelectedPWPolicy();
+      password = pwp.MakeRandomPassword();
+    }
     if (password.empty()) {
       wxMessageBox(_("Couldn't generate password - invalid policy"),
                    _("Error"), wxOK|wxICON_INFORMATION, this);

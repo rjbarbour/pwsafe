@@ -16,6 +16,7 @@
 #include "StringXStream.h"
 #include "UTF8Conv.h"
 #include "PWPolicy.h"
+#include "Passphrase.h"
 #include "PWSLog.h"
 
 #include "os/typedefs.h"
@@ -142,6 +143,7 @@ const PWSprefs::boolPref PWSprefs::m_bool_prefs[NumBoolPrefs] = {
   {_T("FindToolBarActive"), false, ptApplication},          // application
   {_T("ExcludeFromScreenCapture"), true, ptDatabase},       // database
   {_T("VKShowTooltips"), true, ptApplication},             // application
+  {_T("UseLocalPassphrasePolicy"), false, ptApplication},  // application
 
 };
 
@@ -193,6 +195,8 @@ const PWSprefs::intPref PWSprefs::m_int_prefs[NumIntPrefs] = {
   {_T("DNDMaximumMemorySize"), 14000, ptApplication, -1, INT_MAX},   // application
   {_T("DisplayMode"), DisplayModeSystem, ptApplication,
                            minDisplayMode, maxDisplayMode},         // application
+  {_T("PassphraseWordCount"), static_cast<unsigned int>(kDefaultPassphraseWords),
+                           ptApplication, kMinPassphraseWords, kMaxPassphraseWords}, // application
 };
 
 const PWSprefs::stringPref PWSprefs::m_string_prefs[NumStringPrefs] = {

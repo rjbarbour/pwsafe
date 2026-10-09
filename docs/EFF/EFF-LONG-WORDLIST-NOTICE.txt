@@ -1,0 +1,7 @@
+EFF long wordlist (7776 words).
+Copyright Electronic Frontier Foundation.
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+Licence terms per EFF's copyright policy: https://www.eff.org/copyright
+Source: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
+Described at https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases
+Password Safe compiles the 7776 words into the program (src/core/EffLongWordlist.inc), without the dice-roll numbers from the source file.
